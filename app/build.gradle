@@ -1,0 +1,59 @@
+apply plugin: 'com.android.application'
+
+android {
+    // XXX: No source for 25 is released yet, so use 24 during development,
+    // hence the inspection warnings for dependencies.
+    compileSdkVersion 24
+    buildToolsVersion "25.0.1"
+    defaultConfig {
+        applicationId 'org.comixwall.pffw'
+        minSdkVersion 15
+        targetSdkVersion 24
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt')
+        }
+    }
+    productFlavors {
+    }
+    sourceSets {
+        main {
+            java.srcDirs =
+                    ['src/main/java/org/comixwall/pffw/Logs',
+                     'src/main/java/org/comixwall/pffw/Graphs',
+                     'src/main/java/org/comixwall/pffw/Stats',
+                     'src/main/java/org/comixwall/pffw/Info',
+                     'src/main/java/org/comixwall/pffw/Lib',
+                     'src/main/java']
+            res.srcDirs =
+                    ['src/main/res/layout/Logs',
+                     'src/main/res/layout/Graphs',
+                     'src/main/res/layout/Stats',
+                     'src/main/res/layout/Info',
+                     'src/main/res/layout/Lib',
+                     'src/main/res']
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile 'com.android.support:appcompat-v7:25.0.1'
+    compile 'com.android.support:design:25.0.1'
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:support-v4:25.0.1'
+    compile 'com.android.support:recyclerview-v7:25.0.1'
+    compile 'com.android.support:cardview-v7:25.0.1'
+    compile 'com.android.support.test.espresso:espresso-core:2.2.2'
+    compile files('libs/jsch-0.1.54.jar')
+    //compile files('libs/mpandroidchartlibrary-2-2-4.jar')
+    compile 'com.github.PhilJay:MPAndroidChart:v3.0.1'
+}

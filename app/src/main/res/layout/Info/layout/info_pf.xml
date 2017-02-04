@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2017 Soner Tari
+
+This file is part of PFFW.
+
+PFFW is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+PFFW is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbarAlwaysDrawVerticalTrack="true"
+            android:scrollbars="vertical"
+            app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginStart="@dimen/activity_vertical_smallmargin"
+                    android:text="@string/pf_status_allcaps" />
+
+                <android.support.v7.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginLeft="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginRight="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginTop="1dp"
+                    card_view:cardCornerRadius="4dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:id="@+id/imageViewPfStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"
+                            android:layout_marginLeft="@dimen/activity_vertical_smallmargin"
+                            android:layout_marginStart="@dimen/activity_vertical_smallmargin"
+                            android:contentDescription="@string/status"
+                            app:srcCompat="@drawable/block" />
+
+                        <TextView
+                            android:id="@+id/pfStatus"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/activity_vertical_smallmargin"
+                            android:paddingEnd="@dimen/activity_vertical_smallmargin"
+                            android:paddingRight="@dimen/activity_vertical_smallmargin"
+                            android:text="@string/pf_status"
+                            android:textSize="12sp"
+                            android:typeface="monospace"
+                            card_view:ignore="RtlSymmetry" />
+                    </LinearLayout>
+                </android.support.v7.widget.CardView>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginLeft="@dimen/activity_vertical_smallmargin"
+                        android:layout_marginStart="@dimen/activity_vertical_smallmargin"
+                        android:text="@string/pf_info_allcaps" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginEnd="@dimen/activity_vertical_smallmargin"
+                        android:layout_marginRight="@dimen/activity_vertical_smallmargin"
+                        android:text="@string/touch_contents_to_resize"
+                        android:textSize="8sp" />
+
+                </RelativeLayout>
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/pfInfoCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginLeft="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginRight="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginTop="1dp"
+                    card_view:cardCornerRadius="4dp">
+
+                    <HorizontalScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content">
+
+                        <android.support.v4.widget.NestedScrollView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:scrollbarAlwaysDrawVerticalTrack="true"
+                            android:scrollbars="vertical"
+                            app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+                            <TextView
+                                android:id="@+id/pfInfo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_margin="@dimen/activity_vertical_smallmargin"
+                                android:text="@string/pf_info"
+                                android:textSize="12sp"
+                                android:typeface="monospace" />
+                        </android.support.v4.widget.NestedScrollView>
+                    </HorizontalScrollView>
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginStart="@dimen/activity_vertical_smallmargin"
+                    android:text="@string/pf_memory_allcaps" />
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/pfMemCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginLeft="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginRight="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginTop="1dp"
+                    card_view:cardCornerRadius="4dp">
+
+                    <TextView
+                        android:id="@+id/pfMem"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/activity_vertical_smallmargin"
+                        android:text="@string/pf_memory"
+                        android:textSize="12sp"
+                        android:typeface="monospace" />
+                </android.support.v7.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginStart="@dimen/activity_vertical_smallmargin"
+                    android:text="@string/pf_timeouts_allcaps" />
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/pfTimeoutCardView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginLeft="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginRight="@dimen/activity_vertical_smallmargin"
+                    android:layout_marginTop="1dp"
+                    card_view:cardCornerRadius="4dp">
+
+                    <android.support.v4.widget.NestedScrollView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scrollbarAlwaysDrawVerticalTrack="true"
+                        android:scrollbars="vertical"
+                        app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">
+
+                        <TextView
+                            android:id="@+id/pfTimeout"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/activity_vertical_smallmargin"
+                            android:text="@string/pf_timeouts"
+                            android:textSize="12sp"
+                            android:typeface="monospace" />
+                    </android.support.v4.widget.NestedScrollView>
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</android.support.design.widget.CoordinatorLayout>

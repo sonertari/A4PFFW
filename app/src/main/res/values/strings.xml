@@ -1,0 +1,142 @@
+<!--
+Copyright (C) 2017 Soner Tari
+
+This file is part of PFFW.
+
+PFFW is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+PFFW is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+    <string name="app_name" translatable="false">PFFW</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="refresh">Refresh</string>
+    <string name="logout">Logout</string>
+    <string name="info">Info</string>
+    <string name="packet_filter">Packet Filter</string>
+    <string name="system">System</string>
+    <string name="hosts">Hosts</string>
+    <string name="interfaces">Interfaces</string>
+    <string name="rules">Rules</string>
+    <string name="states">States</string>
+    <string name="queues">Queues</string>
+    <string name="statistics">Statistics</string>
+    <string name="general">General</string>
+    <string name="daily">Daily</string>
+    <string name="hourly">Hourly</string>
+    <string name="live">Live</string>
+    <string name="graphs">Graphs</string>
+    <string name="transfer">Transfer</string>
+    <string name="mbufs">Mbufs</string>
+    <string name="logs">Logs</string>
+    <string name="archives">Archives</string>
+    <string name="graph">Graph</string>
+    <string name="select_log_file">SELECT LOG FILE</string>
+    <string name="label">Label</string>
+    <string name="comixwall_logo" translatable="false">ComixWall logo</string>
+    <string name="pf_firewall">PF Firewall</string>
+    <string name="v5_9">v5.9</string>
+    <string name="a" translatable="false">A</string>
+    <string name="i" translatable="false">I</string>
+    <string name="l" translatable="false">L</string>
+    <string name="p" translatable="false">P</string>
+    <string name="q" translatable="false">Q</string>
+    <string name="r" translatable="false">R</string>
+    <string name="s" translatable="false">S</string>
+    <string name="b" translatable="false">B</string>
+    <string name="total">Total</string>
+    <string name="external_interface">EXTERNAL INTERFACE</string>
+    <string name="mbuf_statistics">MBUF STATISTICS</string>
+    <string name="state_statistics">STATE STATISTICS</string>
+    <string name="data_transfer">DATA TRANSFER</string>
+    <string name="dhcp_status">DHCP STATUS</string>
+    <string name="interfaces_allcaps">INTERFACES</string>
+    <string name="pf_status_allcaps">PF STATUS</string>
+    <string name="queues_allcaps">QUEUES</string>
+    <string name="rules_allcaps">RULES</string>
+    <string name="symon_status_allcaps">SYMON STATUS</string>
+    <string name="selection">SELECTION</string>
+    <string name="user">user</string>
+    <string name="live_statistics">LIVE STATISTICS</string>
+    <string name="state_searches_vs_packets">STATE SEARCHES vs PACKETS</string>
+    <string name="system_datetime">System datetime</string>
+    <string name="password">password</string>
+    <string name="status">Status</string>
+    <string name="source_addresses">Source addresses</string>
+    <string name="internal_interface">INTERNAL INTERFACE</string>
+    <string name="regexp">Regexp:</string>
+    <string name="selected_log_file">Selected log file</string>
+    <string name="pf_status">Pf Status</string>
+    <string name="dhcpd_status">Dhcpd Status</string>
+    <string name="symon_status">Symon Status</string>
+    <string name="host">host</string>
+    <string name="line">Line:</string>
+    <string name="destination_addresses">Destination addresses</string>
+    <string name="selected_month_day">Selected month day</string>
+    <string name="lines_per_page">Lines per page:</string>
+    <string name="pf_info_allcaps">PF INFO</string>
+    <string name="port">port</string>
+    <string name="pass">Pass</string>
+    <string name="loopback_interface">LOOPBACK INTERFACE</string>
+    <string name="destination_ports">Destination ports</string>
+    <string name="touch_contents_to_resize">Touch contents to resize</string>
+    <string name="dns_status">DNS STATUS</string>
+    <string name="symux_status_allcaps">SYMUX STATUS</string>
+    <string name="hour">hour</string>
+    <string name="general_statistics_allcaps">GENERAL STATISTICS</string>
+    <string name="log_in">LOG IN</string>
+    <string name="packets">packets</string>
+    <string name="live_logs">LIVE LOGS</string>
+    <string name="touch_tables_to_resize">Touch tables to resize</string>
+    <string name="all_months">All Months</string>
+    <string name="bytes">bytes</string>
+    <string name="pf_info">Pf Info</string>
+    <string name="named_status">Named Status</string>
+    <string name="symux_status">Symux Status</string>
+    <string name="all_days">All Days</string>
+    <string name="block">Block</string>
+    <string name="pf_memory_allcaps">PF MEMORY</string>
+    <string name="general_statistics">General statistics</string>
+    <string name="defaults">Defaults</string>
+    <string name="active_ip_addresses">ACTIVE IP ADDRESSES</string>
+    <string name="pf_memory">Pf Memory</string>
+    <string name="system_allcaps">SYSTEM</string>
+    <string name="pf_timeouts_allcaps">PF TIMEOUTS</string>
+    <string name="daily_statistics">DAILY STATISTICS</string>
+    <string name="requests_by_date">Requests by date</string>
+    <string name="lt_lt_first"><![CDATA[<< First]]></string>
+    <string name="leases">LEASES</string>
+    <string name="lt_previous"><![CDATA[< Previous]]></string>
+    <string name="pf_timeouts">Pf Timeouts</string>
+    <string name="next_gt"><![CDATA[Next >]]></string>
+    <string name="last_gt_gt"><![CDATA[Last >>]]></string>
+    <string name="states_allcaps">STATES</string>
+    <string name="logs_allcaps">LOGS</string>
+    <string name="packet_types">Packet types</string>
+    <string name="hourly_statistics">HOURLY STATISTICS</string>
+    <string name="on_if">on %1$s</string>
+    <string name="proc_is_running">%1$s is running</string>
+    <string name="proc_is_not_running">%1$s is not running</string>
+    <string name="states_rules">states: %1$s, rules: %2$s</string>
+    <string name="cleared">cleared: %1$s</string>
+    <string name="packets_bytes">pkts: %1$s, bytes: %2$s</string>
+    <string name="dropped_packets_bytes">dropped pkts: %1$s, bytes: %2$s</string>
+    <string name="length">length: %1$s</string>
+    <string name="log_file">Log file: %1$s</string>
+    <string name="total_smallcaps">total: %1$s</string>
+    <string name="in4" translatable="false">In4</string>
+    <string name="out4" translatable="false">Out4</string>
+    <string name="in6" translatable="false">In6</string>
+    <string name="out6" translatable="false">Out6</string>
+</resources>

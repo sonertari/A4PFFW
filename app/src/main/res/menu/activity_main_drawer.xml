@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2017 Soner Tari
+
+This file is part of PFFW.
+
+PFFW is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+PFFW is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/info">
+            <menu>
+                <item
+                    android:id="@+id/menuInfoPf"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/packet_filter" />
+                <item
+                    android:id="@+id/menuInfoSystem"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/system" />
+                <item
+                    android:id="@+id/menuInfoHosts"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/hosts" />
+                <item
+                    android:id="@+id/menuInfoIfs"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/interfaces" />
+                <item
+                    android:id="@+id/menuInfoRules"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/rules" />
+                <item
+                    android:id="@+id/menuInfoStates"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/states" />
+                <item
+                    android:id="@+id/menuInfoQueues"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/queues" />
+            </menu>
+        </item>
+        <item
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/statistics">
+            <menu>
+                <item
+                    android:id="@+id/menuStatsGeneral"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/general" />
+                <item
+                    android:id="@+id/menuStatsDaily"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/daily" />
+                <item
+                    android:id="@+id/menuStatsHourly"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/hourly" />
+                <item
+                    android:id="@+id/menuStatsLive"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/live" />
+            </menu>
+        </item>
+        <item
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/graphs">
+            <menu>
+                <item
+                    android:id="@+id/menuGraphsInterfaces"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/interfaces" />
+                <item
+                    android:id="@+id/menuGraphsTransfer"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/transfer" />
+                <item
+                    android:id="@+id/menuGraphsStates"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/states" />
+                <item
+                    android:id="@+id/menuGraphsMbufs"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/mbufs" />
+            </menu>
+        </item>
+        <item
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/logs">
+            <menu>
+                <item
+                    android:id="@+id/menuLogsArchives"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/archives" />
+                <item
+                    android:id="@+id/menuLogsLive"
+                    android:icon="@drawable/ic_menu_gallery"
+                    android:title="@string/live" />
+            </menu>
+        </item>
+    </group>
+</menu>

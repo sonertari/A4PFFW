@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2017 Soner Tari
+
+This file is part of PFFW.
+
+PFFW is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+PFFW is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
+    android:focusable="true"
+    android:orientation="vertical"
+    android:paddingBottom="4dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="4dp"
+    android:paddingTop="4dp">
+
+    <TextView
+        android:id="@+id/image"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@drawable/match"
+        android:gravity="center_vertical|center_horizontal|center"
+        android:text="@string/i"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="normal|bold" />
+
+    <TextView
+        android:id="@+id/number"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@id/image"
+        android:textAlignment="center"
+        android:textSize="12sp" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@id/image"
+        android:layout_toRightOf="@id/image"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/statesRules"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tableHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/name"
+        android:layout_toEndOf="@id/image"
+        android:layout_toRightOf="@id/image"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/rowHeader"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:text=""
+            android:textSize="10sp" />
+
+        <Space
+            android:id="@+id/rowHeaderSep"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/rowHeader"
+            android:layout_toRightOf="@+id/rowHeader" />
+
+        <TextView
+            android:layout_width="121dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/rowHeaderSep"
+            android:layout_toRightOf="@+id/rowHeaderSep"
+            android:background="@android:color/darker_gray"
+            android:padding="1dp"
+            android:text="@string/pass"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/passPacketsHeader"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tableBlockRowSep"
+            android:layout_toEndOf="@+id/rowHeaderSep"
+            android:layout_toRightOf="@+id/rowHeaderSep"
+            android:background="@android:color/darker_gray"
+            android:padding="1dp"
+            android:text="@string/packets"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
+
+        <Space
+            android:id="@+id/passPacketsSep"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/passPacketsHeader"
+            android:layout_toRightOf="@+id/passPacketsHeader" />
+
+        <TextView
+            android:id="@+id/passBytesHeader"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tableBlockRowSep"
+            android:layout_toEndOf="@+id/passPacketsSep"
+            android:layout_toRightOf="@+id/passPacketsSep"
+            android:background="@android:color/darker_gray"
+            android:padding="1dp"
+            android:text="@string/bytes"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
+
+        <Space
+            android:id="@+id/tableColumnSep"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/passBytesHeader"
+            android:layout_toRightOf="@+id/passBytesHeader" />
+
+        <TextView
+            android:id="@+id/blockHeader"
+            android:layout_width="121dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/tableColumnSep"
+            android:layout_toRightOf="@+id/tableColumnSep"
+            android:background="@android:color/darker_gray"
+            android:padding="1dp"
+            android:text="@string/block"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
+
+        <Space
+            android:id="@+id/tableBlockRowSep"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/blockHeader" />
+
+        <TextView
+            android:id="@+id/blockPacketsHeader"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tableBlockRowSep"
+            android:layout_toEndOf="@+id/tableColumnSep"
+            android:layout_toRightOf="@+id/tableColumnSep"
+            android:background="@android:color/darker_gray"
+            android:padding="1dp"
+            android:text="@string/packets"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
+
+        <Space
+            android:id="@+id/blockPacketsSep"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@+id/blockPacketsHeader"
+            android:layout_toRightOf="@+id/blockPacketsHeader" />
+
+        <TextView
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tableBlockRowSep"
+            android:layout_toEndOf="@+id/blockPacketsSep"
+            android:layout_toRightOf="@+id/blockPacketsSep"
+            android:background="@android:color/darker_gray"
+            android:padding="1dp"
+            android:text="@string/bytes"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="10sp" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/rowHeader" />
+    </RelativeLayout>
+
+    <TableLayout
+        android:id="@+id/table"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tableHeader"
+        android:layout_toEndOf="@id/image"
+        android:layout_toRightOf="@id/image" />
+
+    <TextView
+        android:id="@+id/cleared"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/table"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="10sp" />
+
+</RelativeLayout>

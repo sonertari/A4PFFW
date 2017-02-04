@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2017 Soner Tari
+
+This file is part of PFFW.
+
+PFFW is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+PFFW is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <!-- @todo Set all layout_width dynamically in Java code, not to a constant (?) -->
+        <TextView
+            android:id="@+id/rowHeader"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:background="@android:color/darker_gray"
+            android:padding="1dp"
+            android:text="type"
+            android:textAlignment="textEnd"
+            android:textColor="@android:color/white"
+            android:textSize="10sp"
+            tools:ignore="HardcodedText" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/passPackets"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="1dp"
+            android:text="pp"
+            android:textAlignment="center"
+            android:textSize="10sp"
+            tools:ignore="HardcodedText" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/passBytes"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:text="pb"
+            android:textAlignment="center"
+            android:textSize="10sp"
+            tools:ignore="HardcodedText" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/blockPackets"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:text="bp"
+            android:textAlignment="center"
+            android:textSize="10sp"
+            tools:ignore="HardcodedText" />
+
+        <Space
+            android:layout_width="1dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/blockBytes"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content"
+            android:padding="1dp"
+            android:text="bb"
+            android:textAlignment="center"
+            android:textSize="10sp"
+            tools:ignore="HardcodedText" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="274dp"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:layout_width="274dp"
+        android:layout_height="1dp" />
+</LinearLayout>

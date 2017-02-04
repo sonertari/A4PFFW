@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2017 Soner Tari
+
+This file is part of PFFW.
+
+PFFW is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+PFFW is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<resources>
+    <string name="active_ip_addresses">AKTİF IP ADRESLERİ</string>
+    <string name="all_days">Tüm Günler</string>
+    <string name="all_months">Tüm Aylar</string>
+    <string name="archives">Arşivler</string>
+    <string name="block">Engellenen</string>
+    <string name="bytes">baytlar</string>
+    <string name="cleared">%1$s tarihinde silindi</string>
+    <string name="comixwall_logo"></string>
+    <string name="daily">Günlük</string>
+    <string name="daily_statistics">GÜNLÜK İSTATİSTİKLER</string>
+    <string name="data_transfer">VERİ AKTARIMI</string>
+    <string name="defaults">ÖNTANIMLAR</string>
+    <string name="destination_addresses">Hedef adresler</string>
+    <string name="destination_ports">Hedef portlar</string>
+    <string name="dhcp_status">DHCP DURUMU</string>
+    <string name="dhcpd_status">Dhcpd Durumu</string>
+    <string name="dns_status">DNS DURUMU</string>
+    <string name="dropped_packets_bytes">engellenen paketler: %1$s, baytlar: %2$s</string>
+    <string name="external_interface">DIŞ ARAYÜZ</string>
+    <string name="general">Genel</string>
+    <string name="general_statistics">Genel istatistikler</string>
+    <string name="general_statistics_allcaps">GENEL İSTATİSTİKLER</string>
+    <string name="graph">Grafik</string>
+    <string name="graphs">Grafikler</string>
+    <string name="host">cihaz</string>
+    <string name="hosts">Cihazlar</string>
+    <string name="hour">saat</string>
+    <string name="hourly">Saatlik</string>
+    <string name="hourly_statistics">SAATLİK İSTATİSTİKLER</string>
+    <string name="i"></string>
+    <string name="info">Bilgi</string>
+    <string name="interfaces">Arayüzler</string>
+    <string name="interfaces_allcaps">ARAYÜZLER</string>
+    <string name="internal_interface">YEREL ARAYÜZ</string>
+    <string name="label">Etiket</string>
+    <string name="last_gt_gt"><![CDATA[Son >>]]></string>
+    <string name="leases">KİRALANAN IP ADRESLERİ</string>
+    <string name="length">boy: %1$s</string>
+    <string name="line">Satır:</string>
+    <string name="lines_per_page">Satır sayısı:</string>
+    <string name="live">Canlı</string>
+    <string name="live_logs">CANLI KAYITLAR</string>
+    <string name="live_statistics">CANLI İSTATİSTİKLER</string>
+    <string name="log_file">Kayıt dosyası: %1$s</string>
+    <string name="log_in">GİR</string>
+    <string name="logout">Çıkış</string>
+    <string name="logs">Kayıtlar</string>
+    <string name="logs_allcaps">KAYITLAR</string>
+    <string name="loopback_interface">DÖNGÜ ARAYÜZÜ</string>
+    <string name="lt_lt_first"><![CDATA[<< İlk]]></string>
+    <string name="lt_previous"><![CDATA[< Önceki]]></string>
+    <string name="mbufs">Mbuf\'lar</string>
+    <string name="named_status">Named Durumu</string>
+    <string name="navigation_drawer_close">Gezinti çekmecesini kapa</string>
+    <string name="navigation_drawer_open">Gezinti çekmecesini aç</string>
+    <string name="next_gt"><![CDATA[Sonraki >]]></string>
+    <string name="on_if">%1$s üzerinde</string>
+    <string name="packet_filter">Paket Eleği</string>
+    <string name="packet_types">Paket türleri</string>
+    <string name="packets">paketler</string>
+    <string name="packets_bytes">paketler: %1$s, baytlar: %2$s</string>
+    <string name="pass">İzin verilen</string>
+    <string name="password">parola</string>
+    <string name="pf_firewall">PF Güvenlik Duvarı</string>
+    <string name="pf_info">Pf Bilgisi</string>
+    <string name="pf_info_allcaps">PF BİLGİSİ</string>
+    <string name="pf_memory">Pf Bellek Bilgisi</string>
+    <string name="pf_memory_allcaps">PB BELLEK BİLGİSİ</string>
+    <string name="pf_status">Pf Durumu</string>
+    <string name="pf_status_allcaps">PF DURUMU</string>
+    <string name="pf_timeouts">Pf Zaman Aşım Ayarları</string>
+    <string name="pf_timeouts_allcaps">PF ZAMAN AŞIM AYARLARI</string>
+    <string name="port">kapı</string>
+    <string name="proc_is_not_running">%1$s çalışmıyor</string>
+    <string name="proc_is_running">%1$s çalışıyor</string>
+    <string name="queues">Kuyruklar</string>
+    <string name="queues_allcaps">KUYRUKLAR</string>
+    <string name="r"></string>
+    <string name="refresh">Yenile</string>
+    <string name="regexp">Düzenli ifade:</string>
+    <string name="requests_by_date">Tarihe göre istekler</string>
+    <string name="rules">Kurallar</string>
+    <string name="rules_allcaps">KURALLAR</string>
+    <string name="select_log_file">KAYIT DOSYASI SEÇ</string>
+    <string name="selected_log_file">Seçilmiş kayıt dosyası</string>
+    <string name="selected_month_day">Seçilmiş ay gün</string>
+    <string name="selection">SEÇENEKLER</string>
+    <string name="source_addresses">Kaynak adresleri</string>
+    <string name="state_searches_vs_packets">DURUM ARAMALARI ve PAKETLER</string>
+    <string name="state_statistics">DURUM İSTATİSTİKLERİ</string>
+    <string name="states">Durumlar</string>
+    <string name="states_allcaps">DURUMLAR</string>
+    <string name="states_rules">durumlar: %1$s, kurallar: %2$s</string>
+    <string name="statistics">İstatistikler</string>
+    <string name="status">Durum</string>
+    <string name="symon_status">Symon Durumu</string>
+    <string name="symon_status_allcaps">SYMON DURUMU</string>
+    <string name="symux_status">Symux Durumu</string>
+    <string name="symux_status_allcaps">SYMUX DURUMU</string>
+    <string name="system">Sistem</string>
+    <string name="system_allcaps">SİSTEM</string>
+    <string name="system_datetime">Sistem tarih-saati</string>
+    <string name="total">Toplam</string>
+    <string name="total_smallcaps">toplam: %1$s</string>
+    <string name="touch_contents_to_resize">Boyut ayarlamak için içeriğe dokun</string>
+    <string name="touch_tables_to_resize">Boyut ayarlamak için tablolara dokun</string>
+    <string name="transfer">Aktarım</string>
+    <string name="user">kullanıcı</string>
+    <string name="v5_9">sürüm 5.9</string>
+    <string name="mbuf_statistics">MBUF İSTATİSTİKLERİ</string>
+</resources>
