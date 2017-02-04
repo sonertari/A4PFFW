@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 Copyright (C) 2017 Soner Tari
 
 This file is part of PFFW.
@@ -37,6 +36,20 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="pffw.comixwall.org"
+                    android:scheme="http" />
+                <data
+                    android:host="pffw"
+                    android:scheme="comixwall" />
+                <data
+                    android:host="a4pffw"
+                    android:scheme="comixwall" />
             </intent-filter>
         </activity>
         <service android:name="org.comixwall.pffw.Controller" />
