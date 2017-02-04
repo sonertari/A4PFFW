@@ -194,22 +194,22 @@ public class StatsGeneral extends StatsBase {
     @Override
     protected boolean fetchStats() {
         try {
-            String output = controller.execute("SelectLogFile", mLogFile);
+            String output = controller.execute("pf", "SelectLogFile", mLogFile);
 
             mLogFile = new JSONArray(output).get(0).toString();
 
             String collect = isDailyChart() ? "''" : "'COLLECT'";
-            output = controller.execute("GetAllStats", mLogFile, collect);
+            output = controller.execute("pf", "GetAllStats", mLogFile, collect);
 
             mJsonAllStats = new JSONObject(new JSONArray(output).get(0).toString());
             mJsonBriefStats = new JSONObject(mJsonAllStats.getString("briefstats"));
             mJsonStats = new JSONObject(mJsonAllStats.getString("stats")).optJSONObject("Date");
 
-            output = controller.execute("GetProcStatLines", mLogFile);
+            output = controller.execute("pf", "GetProcStatLines", mLogFile);
 
             mJsonGeneralStats = new JSONObject(new JSONArray(output).get(0).toString());
 
-            output = controller.execute("GetLogFilesList");
+            output = controller.execute("pf", "GetLogFilesList");
 
             mJsonLogFileList = new JSONObject(new JSONArray(output).get(0).toString());
 
@@ -480,7 +480,7 @@ public class StatsGeneral extends StatsBase {
     }
 
     protected boolean isDailyChart() {
-        return tvDaily.getText().toString().compareTo("Daily") == 0;
+        return tvDaily.getText().toString().compareTo(getString(R.string.daily)) == 0;
     }
 
     void setChartType(String type) {
@@ -497,7 +497,7 @@ public class StatsGeneral extends StatsBase {
                 switch (id) {
                     case R.id.hourly:
 
-                        setChartType(isDailyChart() ? "Hourly" : "Daily");
+                        setChartType(isDailyChart() ? getString(R.string.hourly) : getString(R.string.daily));
                         break;
 
                     case R.id.statsGeneralStats:

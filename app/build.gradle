@@ -1,7 +1,7 @@
 apply plugin: 'com.android.application'
 
 android {
-    // XXX: No source for 25 is released yet, so use 24 during development,
+    // XXX: No source for 25 has been released yet, so use version 24 during development,
     // hence the inspection warnings for dependencies.
     compileSdkVersion 24
     buildToolsVersion "25.0.1"
@@ -24,19 +24,19 @@ android {
     sourceSets {
         main {
             java.srcDirs =
-                    ['src/main/java/org/comixwall/pffw/Logs',
-                     'src/main/java/org/comixwall/pffw/Graphs',
-                     'src/main/java/org/comixwall/pffw/Stats',
+                    ['src/main/java',
                      'src/main/java/org/comixwall/pffw/Info',
-                     'src/main/java/org/comixwall/pffw/Lib',
-                     'src/main/java']
+                     'src/main/java/org/comixwall/pffw/Stats',
+                     'src/main/java/org/comixwall/pffw/Graphs',
+                     'src/main/java/org/comixwall/pffw/Logs',
+                     'src/main/java/org/comixwall/pffw/Lib']
             res.srcDirs =
-                    ['src/main/res/layout/Logs',
-                     'src/main/res/layout/Graphs',
-                     'src/main/res/layout/Stats',
+                    ['src/main/res',
                      'src/main/res/layout/Info',
-                     'src/main/res/layout/Lib',
-                     'src/main/res']
+                     'src/main/res/layout/Stats',
+                     'src/main/res/layout/Graphs',
+                     'src/main/res/layout/Logs',
+                     'src/main/res/layout/Lib']
         }
     }
 }

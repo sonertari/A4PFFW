@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -44,6 +43,7 @@ import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.Utils.processException;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         RefreshTimer.OnTimeoutListener, RecyclerTouchListener.OnItemClickListener,
@@ -182,33 +182,30 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
     public boolean executeTask() {
         Boolean retval = true;
         try {
-            controller.model = "symon";
-            String output = controller.execute("IsRunning");
+            String output = controller.execute("symon", "IsRunning");
 
             mSymonStatus = new JSONArray(output).get(2).toString();
 
-            output = controller.execute("GetProcList");
+            output = controller.execute("symon", "GetProcList");
 
             JSONArray jsonArray = new JSONArray(output);
             mSymonJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            controller.model = "symux";
-            output = controller.execute("IsRunning");
+            output = controller.execute("symux", "IsRunning");
 
             mSymuxStatus = new JSONArray(output).get(2).toString();
 
-            output = controller.execute("GetProcList");
+            output = controller.execute("symux", "GetProcList");
 
             jsonArray = new JSONArray(output);
             mSymuxJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            controller.model = "system";
-            output = controller.execute("GetProcList");
+            output = controller.execute("system", "GetProcList");
 
             jsonArray = new JSONArray(output);
             mSystemJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            output = controller.execute("GetReloadRate");
+            output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
             mRefreshTimeout = timeout < 10 ? 10 : timeout;
@@ -216,9 +213,6 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
         } catch (Exception e) {
             mLastError = processException(e);
             retval = false;
-        } finally {
-            // Do not forget to reset the controller model to pf, on exception or not
-            controller.model = "pf";
         }
         return retval;
     }
@@ -228,7 +222,7 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
         if (result) {
             updateInfo();
         } else {
-            Toast.makeText(getContext(), "Error: " + mLastError, Toast.LENGTH_SHORT).show();
+            showMessage(this, "Error: " + mLastError);
         }
 
         swipeRefresh.setRefreshing(false);
@@ -388,7 +382,7 @@ class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter
 
         Process proc = procsList.get(position);
 
-        holder.cpuMemTime.setText("cpu: " + proc.cpu + ", mem: " + proc.mem + ", time: " + proc.time);
+        holder.cpuMemTime.setText(String.format(holder.cpuMemTime.getResources().getString(R.string.cpu_mem_time), proc.cpu, proc.mem, proc.time));
         holder.command.setText(proc.command);
         holder.pid.setText(proc.pid);
         holder.others.setText("rss: " + proc.rss + ", vsz: " + proc.vsz + ", " + proc.user + ":" + proc.group + ", stat: " + proc.stat + ", pri: " + proc.pri + ", ni: " + proc.ni);

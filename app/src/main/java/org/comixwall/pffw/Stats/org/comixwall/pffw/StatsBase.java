@@ -19,7 +19,6 @@
 
 package org.comixwall.pffw;
 
-import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.RectF;
@@ -34,7 +33,6 @@ import android.widget.DatePicker;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.Legend;
@@ -62,6 +60,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.comixwall.pffw.MainActivity.cache;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public abstract class StatsBase extends Fragment implements OnChartValueSelectedListener,
         SwipeRefreshLayout.OnRefreshListener, LogFilePickerDialog.LogFilePickerDialogListener,
@@ -101,12 +100,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
 
     HashMap<String, CardView> mCardViews;
 
-    private static final HashMap<String, String> mChartLabels = new HashMap<String, String>() {{
-        put("Total", "All Requests");
-        put("Pass", "Allowed Requests");
-        put("Block", "Blocked Requests");
-        put("Match", "Matched Requests");
-    }};
+    private static HashMap<String, String> mChartLabels;
 
     private static final HashMap<String, Integer> mColors = new HashMap<String, Integer>() {{
         put("Total", Color.BLUE);
@@ -136,6 +130,8 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
 
     static {
         monthNames = new HashMap<>();
+
+        /// @attention Do not translate month names, they are used to match the strings in log files in English
         monthNames.put("01", "Jan");
         monthNames.put("02", "Feb");
         monthNames.put("03", "Mar");
@@ -176,6 +172,12 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
     String mLastError;
 
     void init() {
+        mChartLabels = new HashMap<String, String>() {{
+            put("Total", getString(R.string.all_requests));
+            put("Pass", getString(R.string.allowed_requests));
+            put("Block", getString(R.string.blocked_requests));
+            put("Match", getString(R.string.matched_requests));
+        }};
 
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
@@ -307,7 +309,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
         if (result) {
             updateStats();
         } else {
-            Toast.makeText(getContext(), "Error: " + mLastError, Toast.LENGTH_SHORT).show();
+            showMessage(this, "Error: " + mLastError);
         }
 
         swipeRefresh.setRefreshing(false);
@@ -482,7 +484,6 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
 
     private final RectF mOnValueSelectedRectF = new RectF();
 
-    @SuppressLint("NewApi")
     @Override
     public void onValueSelected(Entry e, Highlight h) {
         if (e == null)

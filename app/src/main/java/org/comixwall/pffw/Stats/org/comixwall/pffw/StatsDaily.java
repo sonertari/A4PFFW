@@ -116,12 +116,12 @@ public class StatsDaily extends StatsGeneral {
     @Override
     protected boolean fetchStats() {
         try {
-            String output = controller.execute("SelectLogFile", mLogFile);
+            String output = controller.execute("pf", "SelectLogFile", mLogFile);
 
             mLogFile = new JSONArray(output).get(0).toString();
 
             if (isLogFileChanged()) {
-                output = controller.execute("GetLogStartDate", mLogFile);
+                output = controller.execute("pf", "GetLogStartDate", mLogFile);
 
                 // Dec 09 21:03:54
                 Pattern p = Pattern.compile("^(\\w+)\\s+(\\d+)\\s+(\\d+):\\d+:\\d+$");
@@ -139,11 +139,11 @@ public class StatsDaily extends StatsGeneral {
             String day = isAllDays() ? "" : mDay;
 
             JSONObject date = new JSONObject().put("Month", month).put("Day", day);
-            output = controller.execute("GetStats", mLogFile, date, collect);
+            output = controller.execute("pf", "GetStats", mLogFile, date, collect);
 
             mJsonStats = new JSONObject(new JSONArray(output).get(0).toString()).optJSONObject("Date");
 
-            output = controller.execute("GetLogFilesList");
+            output = controller.execute("pf", "GetLogFilesList");
 
             mJsonLogFileList = new JSONObject(new JSONArray(output).get(0).toString());
 
@@ -191,7 +191,7 @@ public class StatsDaily extends StatsGeneral {
     void updateDateTimeText() {
         String month = isAllMonths() ? "-" : mMonth;
         String day = isAllDays() ? "-" : mDay;
-        tvMonthDay.setText(String.format("Month: %s Day: %s", month, day));
+        tvMonthDay.setText(String.format(getString(R.string.month_day_colon), month, day));
     }
 
     void setChartType(String type) {
@@ -203,41 +203,41 @@ public class StatsDaily extends StatsGeneral {
     }
 
     private boolean isAllMonths() {
-        return tvAllMonths.getText().toString().compareTo("All Months") == 0;
+        return tvAllMonths.getText().toString().compareTo(getString(R.string.all_months)) == 0;
     }
 
     private void setAllMonths(String type) {
         tvAllMonths.setText(type);
 
         if (!isAllMonths() && !isAllDays()) {
-            setChartType("Hourly");
+            setChartType(getString(R.string.hourly));
         }
 
         if (isAllMonths()) {
-            setAllDays("All Days");
+            setAllDays(getString(R.string.all_days));
         }
     }
 
     private boolean isAllDays() {
-        return tvAllDays.getText().toString().compareTo("All Days") == 0;
+        return tvAllDays.getText().toString().compareTo(getString(R.string.all_days)) == 0;
     }
 
     private void setAllDays(String type) {
         tvAllDays.setText(type);
 
         if (!isAllMonths() && !isAllDays()) {
-            setChartType("Hourly");
+            setChartType(getString(R.string.hourly));
         }
 
         if (!isAllDays()) {
-            setAllMonths("Single Month");
+            setAllMonths(getString(R.string.single_month));
         }
     }
 
     private void setDefaults() {
-        setAllMonths("All Months");
-        setAllDays("All Days");
-        setChartType("Daily");
+        setAllMonths(getString(R.string.all_months));
+        setAllDays(getString(R.string.all_days));
+        setChartType(getString(R.string.daily));
     }
 
     private final View.OnClickListener mLabelClickedHandler = new View.OnClickListener() {
@@ -248,15 +248,15 @@ public class StatsDaily extends StatsGeneral {
 
                 if (id == R.id.hourly) {
 
-                    setChartType(isDailyChart() ? "Hourly" : "Daily");
+                    setChartType(isDailyChart() ? getString(R.string.hourly) : getString(R.string.daily));
 
                 } else if (id == R.id.allMonths) {
 
-                    setAllMonths(isAllMonths() ? "Single Month" : "All Months");
+                    setAllMonths(isAllMonths() ? getString(R.string.single_month) : getString(R.string.all_months));
 
                 } else if (id == R.id.allDays) {
 
-                    setAllDays(isAllDays() ? "Single Day" : "All Days");
+                    setAllDays(isAllDays() ? getString(R.string.single_day) : getString(R.string.all_days));
 
                 } else if (id == R.id.defaults) {
 

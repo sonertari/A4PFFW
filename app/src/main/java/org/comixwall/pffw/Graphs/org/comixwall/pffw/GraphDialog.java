@@ -55,8 +55,9 @@ public class GraphDialog extends DialogFragment implements ImageView.OnTouchList
         mBmp = bmp;
     }
 
-    // The following code is taken from:
+    // The rest of this code is taken from:
     // @link http://stackoverflow.com/questions/10630373/android-image-view-pinch-zooming
+    // hence has its own respective license.
 
     // These matrices will be used to move and zoom image
     private final Matrix matrix = new Matrix();

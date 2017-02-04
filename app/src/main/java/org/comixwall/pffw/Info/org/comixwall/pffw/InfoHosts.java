@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -45,6 +44,7 @@ import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.Utils.processException;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         RefreshTimer.OnTimeoutListener, RecyclerTouchListener.OnItemClickListener,
@@ -237,48 +237,35 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
     public boolean executeTask() {
         Boolean retval = true;
         try {
-            controller.model = "dhcpd";
-            String output = controller.execute("IsRunning");
-
+            String output = controller.execute("dhcpd", "IsRunning");
             mDhcpdStatus = new JSONArray(output).get(2).toString();
 
-            output = controller.execute("GetProcList");
-
+            output = controller.execute("dhcpd", "GetProcList");
             JSONArray jsonArray = new JSONArray(output);
             mDhcpdJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            controller.model = "named";
-            output = controller.execute("IsRunning");
-
+            output = controller.execute("named", "IsRunning");
             mNamedStatus = new JSONArray(output).get(2).toString();
 
-            output = controller.execute("GetProcList");
-
+            output = controller.execute("named", "GetProcList");
             jsonArray = new JSONArray(output);
             mNamedJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            controller.model = "dhcpd";
-            output = controller.execute("GetArpTable");
-
+            output = controller.execute("dhcpd", "GetArpTable");
             jsonArray = new JSONArray(output);
             mArpTableJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            output = controller.execute("GetLeases");
-
+            output = controller.execute("dhcpd", "GetLeases");
             jsonArray = new JSONArray(output);
             mLeasesJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            output = controller.execute("GetReloadRate");
-
+            output = controller.execute("pf", "GetReloadRate");
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
             mRefreshTimeout = timeout < 10 ? 10 : timeout;
 
         } catch (Exception e) {
             mLastError = processException(e);
             retval = false;
-        } finally {
-            // Do not forget to reset the controller model to pf, on exception or not
-            controller.model = "pf";
         }
         return retval;
     }
@@ -288,7 +275,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         if (result) {
             updateInfo();
         } else {
-            Toast.makeText(getContext(), "Error: " + mLastError, Toast.LENGTH_SHORT).show();
+            showMessage(this, "Error: " + mLastError);
         }
 
         swipeRefresh.setRefreshing(false);
@@ -305,12 +292,12 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     private void updateInfo() {
 
-        Utils.updateStatusViews(mDhcpdStatus, ivDhcpdStatus, tvDhcpdStatus, "DHCP Server");
+        Utils.updateStatusViews(mDhcpdStatus, ivDhcpdStatus, tvDhcpdStatus, getString(R.string.dhcp_server));
 
         updateProcList(mDhcpdJsonArray, mDhcpdList);
         mDhcpdAdapter.notifyDataSetChanged();
 
-        Utils.updateStatusViews(mNamedStatus, ivNamedStatus, tvNamedStatus, "DNS Server");
+        Utils.updateStatusViews(mNamedStatus, ivNamedStatus, tvNamedStatus, getString(R.string.dns_server));
 
         updateProcList(mNamedJsonArray, mNamedList);
         mNamedAdapter.notifyDataSetChanged();

@@ -83,8 +83,6 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                             android:paddingEnd="@dimen/activity_vertical_smallmargin"
                             android:paddingRight="@dimen/activity_vertical_smallmargin"
                             android:text="@string/dhcpd_status"
-                            android:textSize="12sp"
-                            android:typeface="monospace"
                             card_view:ignore="RtlSymmetry" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>
@@ -147,8 +145,6 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                             android:paddingEnd="@dimen/activity_vertical_smallmargin"
                             android:paddingRight="@dimen/activity_vertical_smallmargin"
                             android:text="@string/named_status"
-                            android:textSize="12sp"
-                            android:typeface="monospace"
                             card_view:ignore="RtlSymmetry" />
                     </LinearLayout>
                 </android.support.v7.widget.CardView>

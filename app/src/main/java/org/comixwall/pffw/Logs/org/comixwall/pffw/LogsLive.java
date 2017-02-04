@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,6 +45,7 @@ import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.Utils.processException;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         RecyclerTouchListener.OnItemClickListener, RefreshTimer.OnTimeoutListener,
@@ -168,20 +168,20 @@ public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshLi
     @Override
     public boolean executeTask() {
         try {
-            String output = controller.execute("GetDefaultLogFile");
+            String output = controller.execute("pf", "GetDefaultLogFile");
 
             mLogFile = new JSONArray(output).get(0).toString();
 
-            output = controller.execute("GetFileLineCount", mLogFile, mRegex);
+            output = controller.execute("pf", "GetFileLineCount", mLogFile, mRegex);
 
             mLogSize = new JSONArray(output).getInt(0);
 
-            output = controller.execute("GetLiveLogs", mLogFile, mLinesPerPage, mRegex);
+            output = controller.execute("pf", "GetLiveLogs", mLogFile, mLinesPerPage, mRegex);
 
             JSONArray jsonArray = new JSONArray(output);
             mLogsJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            output = controller.execute("GetReloadRate");
+            output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
             mRefreshTimeout = timeout < 10 ? 10 : timeout;
@@ -200,7 +200,7 @@ public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         if (result) {
             updateLogs();
         } else {
-            Toast.makeText(getContext(), "Error: " + mLastError, Toast.LENGTH_SHORT).show();
+            showMessage(this, "Error: " + mLastError);
         }
 
         swipeRefresh.setRefreshing(false);

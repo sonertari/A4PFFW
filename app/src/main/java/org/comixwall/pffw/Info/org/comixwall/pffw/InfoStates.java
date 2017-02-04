@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -45,6 +44,7 @@ import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.Utils.processException;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         RefreshTimer.OnTimeoutListener, RecyclerTouchListener.OnItemClickListener,
@@ -164,17 +164,17 @@ public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefresh
     @Override
     public boolean executeTask() {
         try {
-            String output = controller.execute("GetStateCount", mRegex);
+            String output = controller.execute("pf", "GetStateCount", mRegex);
 
             mStateSize = new JSONArray(output).getInt(0);
 
             computeNavigationVars();
 
-            String states = controller.execute("GetStateList", mHeadStart, mLinesPerPage, mRegex);
+            String states = controller.execute("pf", "GetStateList", mHeadStart, mLinesPerPage, mRegex);
             JSONArray jsonArray = new JSONArray(states);
             mStatesJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            output = controller.execute("GetReloadRate");
+            output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
             mRefreshTimeout = timeout < 10 ? 10 : timeout;
@@ -193,7 +193,7 @@ public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefresh
         if (result) {
             updateStates();
         } else {
-            Toast.makeText(getContext(), "Error: " + mLastError, Toast.LENGTH_SHORT).show();
+            showMessage(this, "Error: " + mLastError);
         }
 
         swipeRefresh.setRefreshing(false);
@@ -408,7 +408,7 @@ class StateRecyclerAdapter extends RecyclerView.Adapter<StateRecyclerAdapter.Sta
         holder.state.setText(state.state);
         holder.srcDst.setText(state.src + " -> " + state.dst);
         holder.ageExpr.setText(state.expr);
-        holder.others.setText(state.proto + ", " + state.dir + ", pkts: " + state.pkts + ", bytes: " + state.bytes + ", age: " + state.age);
+        holder.others.setText(String.format(holder.others.getResources().getString(R.string.proto_dir_pkts_bytes_age), state.proto, state.dir, state.pkts, state.bytes, state.age));
 
         int image;
         String caption;

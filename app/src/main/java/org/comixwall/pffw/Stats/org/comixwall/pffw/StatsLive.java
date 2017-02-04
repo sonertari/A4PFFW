@@ -102,11 +102,11 @@ public class StatsLive extends StatsHourly implements RefreshTimer.OnTimeoutList
     @Override
     protected boolean fetchStats() {
         try {
-            String output = controller.execute("GetDefaultLogFile");
+            String output = controller.execute("pf", "GetDefaultLogFile");
 
             mLogFile = new JSONArray(output).get(0).toString();
 
-            output = controller.execute("GetDateTime");
+            output = controller.execute("pf", "GetDateTime");
 
             JSONObject jsonDateTime = new JSONObject(new JSONArray(output).get(0).toString());
             mMonth = String.format("%02d", Integer.parseInt(jsonDateTime.getString("Month")));
@@ -115,11 +115,11 @@ public class StatsLive extends StatsHourly implements RefreshTimer.OnTimeoutList
             mMinute = String.format("%02d", Integer.parseInt(jsonDateTime.getString("Minute")));
 
             JSONObject date = new JSONObject().put("Month", mMonth).put("Day", mDay).put("Hour", mHour);
-            output = controller.execute("GetStats", mLogFile, date, "COLLECT");
+            output = controller.execute("pf", "GetStats", mLogFile, date, "COLLECT");
 
             mJsonStats = new JSONObject(new JSONArray(output).get(0).toString()).optJSONObject("Date");
 
-            output = controller.execute("GetReloadRate");
+            output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
             mRefreshTimeout = timeout < 10 ? 10 : timeout;
@@ -136,6 +136,6 @@ public class StatsLive extends StatsHourly implements RefreshTimer.OnTimeoutList
 
     @Override
     void updateDateTimeText() {
-        tvMonthDay.setText(String.format("Date: %s %s, %s:%s", monthNames.get(mMonth), mDay, mHour, mMinute));
+        tvMonthDay.setText(String.format(getString(R.string.date), monthNames.get(mMonth), mDay, mHour, mMinute));
     }
 }

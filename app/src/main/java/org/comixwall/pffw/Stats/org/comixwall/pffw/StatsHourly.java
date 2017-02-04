@@ -110,12 +110,12 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
     @Override
     protected boolean fetchStats() {
         try {
-            String output = controller.execute("SelectLogFile", mLogFile);
+            String output = controller.execute("pf", "SelectLogFile", mLogFile);
 
             mLogFile = new JSONArray(output).get(0).toString();
 
             if (isLogFileChanged()) {
-                output = controller.execute("GetLogStartDate", mLogFile);
+                output = controller.execute("pf", "GetLogStartDate", mLogFile);
 
                 // Dec 09 21:03:54
                 Pattern p = Pattern.compile("^(\\w+)\\s+(\\d+)\\s+(\\d+):\\d+:\\d+$");
@@ -130,11 +130,11 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
             }
 
             JSONObject date = new JSONObject().put("Month", mMonth).put("Day", mDay).put("Hour", mHour);
-            output = controller.execute("GetStats", mLogFile, date, "COLLECT");
+            output = controller.execute("pf", "GetStats", mLogFile, date, "COLLECT");
 
             mJsonStats = new JSONObject(new JSONArray(output).get(0).toString()).optJSONObject("Date");
 
-            output = controller.execute("GetLogFilesList");
+            output = controller.execute("pf", "GetLogFilesList");
 
             mJsonLogFileList = new JSONObject(new JSONArray(output).get(0).toString());
 
@@ -259,8 +259,8 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
 
     @Override
     void updateDateTimeText() {
-        tvMonthDay.setText(String.format("Month: %s Day: %s", mMonth, mDay));
-        tvHour.setText(String.format("Hour: %s", mHour));
+        tvMonthDay.setText(String.format(getString(R.string.month_day_colon), mMonth, mDay));
+        tvHour.setText(String.format(getString(R.string.hour_colon), mHour));
     }
 
     private final View.OnClickListener mLabelClickedHandler = new View.OnClickListener() {

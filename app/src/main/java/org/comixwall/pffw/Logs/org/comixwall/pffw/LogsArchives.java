@@ -32,7 +32,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -46,6 +45,7 @@ import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.Utils.processException;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         RecyclerTouchListener.OnItemClickListener, LogFilePickerDialog.LogFilePickerDialogListener,
@@ -175,21 +175,21 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
     @Override
     public boolean executeTask() {
         try {
-            String output = controller.execute("SelectLogFile", mLogFile);
+            String output = controller.execute("pf", "SelectLogFile", mLogFile);
 
             mLogFile = new JSONArray(output).get(0).toString();
 
-            output = controller.execute("GetFileLineCount", mLogFile, mRegex);
+            output = controller.execute("pf", "GetFileLineCount", mLogFile, mRegex);
 
             mLogSize = new JSONArray(output).getInt(0);
 
             computeNavigationVars();
 
-            String rules = controller.execute("GetLogs", mLogFile, mHeadStart, mLinesPerPage, mRegex);
+            String rules = controller.execute("pf", "GetLogs", mLogFile, mHeadStart, mLinesPerPage, mRegex);
             JSONArray jsonArray = new JSONArray(rules);
             mLogsJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            output = controller.execute("GetLogFilesList");
+            output = controller.execute("pf", "GetLogFilesList");
 
             mJsonLogFileList = new JSONObject(new JSONArray(output).get(0).toString());
 
@@ -210,7 +210,7 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
         if (result) {
             updateLogs();
         } else {
-            Toast.makeText(getContext(), "Error: " + mLastError, Toast.LENGTH_SHORT).show();
+            showMessage(this, "Error: " + mLastError);
         }
 
         swipeRefresh.setRefreshing(false);
@@ -439,10 +439,10 @@ class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.LogView
         Log log = logsList.get(position);
 
         holder.number.setText(log.num);
-        holder.dirIf.setText(log._type + " " + log.dir + " on " + log._if);
+        holder.dirIf.setText(String.format(holder.dirIf.getResources().getString(R.string.type_dir_if), log._type, log.dir, log._if));
         holder.srcDst.setText(log.srcDst);
         holder.datetime.setText(log.datetime);
-        holder.log.setText("Rule: " + log.rule + ", Log: " + log.log);
+        holder.log.setText(String.format(holder.log.getResources().getString(R.string.rule_log), log.rule, log.log));
 
         int image;
         String caption;

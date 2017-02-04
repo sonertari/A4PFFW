@@ -31,7 +31,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -44,6 +43,7 @@ import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.Utils.processException;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         RefreshTimer.OnTimeoutListener, RecyclerTouchListener.OnItemClickListener,
@@ -134,12 +134,12 @@ public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshL
     public boolean executeTask() {
         Boolean retval = true;
         try {
-            String output = controller.execute("GetPfRulesInfo");
+            String output = controller.execute("pf", "GetPfRulesInfo");
 
             JSONArray jsonArray = new JSONArray(output);
             mRulesJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            output = controller.execute("GetReloadRate");
+            output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
             mRefreshTimeout = timeout < 10 ? 10 : timeout;
@@ -156,7 +156,7 @@ public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshL
         if (result) {
             updateInfo();
         } else {
-            Toast.makeText(getContext(), "Error: " + mLastError, Toast.LENGTH_SHORT).show();
+            showMessage(this, "Error: " + mLastError);
         }
 
         swipeRefresh.setRefreshing(false);
@@ -296,11 +296,11 @@ class RuleRecyclerAdapter extends RecyclerView.Adapter<RuleRecyclerAdapter.RuleV
 
         Rule rule = ruleList.get(position);
 
-        holder.packetsBytes.setText("pkts: " + rule.packets + ", bytes: " + rule.bytes);
+        holder.packetsBytes.setText(String.format(holder.packetsBytes.getResources().getString(R.string.packets_bytes), rule.packets, rule.bytes));
         holder.rule.setText(rule.rule);
         holder.number.setText(rule.num);
         holder.inserted.setText(rule.inserted);
-        holder.evalsStates.setText("evals: " + rule.evaluations + ", states: " + rule.states + ", state creats: " + rule.stateCreations);
+        holder.evalsStates.setText(String.format(holder.evalsStates.getResources().getString(R.string.evals_states_statecreats), rule.evaluations, rule.states, rule.stateCreations));
 
         int image;
         String caption;

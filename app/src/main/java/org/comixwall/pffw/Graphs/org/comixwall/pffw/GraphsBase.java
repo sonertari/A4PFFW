@@ -127,8 +127,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
     public boolean executeTask() {
         Boolean retval = true;
         try {
-            controller.model = "symon";
-            String output = controller.execute("RenderLayout", mLayout, mGraphWidth, mGraphHeight);
+            String output = controller.execute("symon", "RenderLayout", mLayout, mGraphWidth, mGraphHeight);
 
             JSONArray jsonArray = new JSONArray(output);
             mGraphsJsonObject = new JSONObject(jsonArray.get(0).toString());
@@ -154,7 +153,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
                 }
             }
 
-            output = controller.execute("GetReloadRate");
+            output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
             mRefreshTimeout = timeout < 10 ? 10 : timeout;
@@ -163,9 +162,6 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
             e.printStackTrace();
             logger.warning("doInBackground exception: " + e.toString());
             retval = false;
-        } finally {
-            // Do not forget to reset the controller model to pf, on exception or not
-            controller.model = "pf";
         }
         return retval;
     }

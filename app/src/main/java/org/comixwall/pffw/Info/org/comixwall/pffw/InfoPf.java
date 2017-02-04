@@ -29,7 +29,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 
@@ -38,6 +37,7 @@ import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.Utils.processException;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public class InfoPf extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         RefreshTimer.OnTimeoutListener, ControllerTask.ControllerTaskListener {
@@ -146,23 +146,23 @@ public class InfoPf extends Fragment implements SwipeRefreshLayout.OnRefreshList
     @Override
     public boolean executeTask() {
         try {
-            String output = controller.execute("IsRunning");
+            String output = controller.execute("pf", "IsRunning");
 
             mPfStatus = new JSONArray(output).get(2).toString();
 
-            output = controller.execute("GetPfInfo");
+            output = controller.execute("pf", "GetPfInfo");
 
             mPfInfo = new JSONArray(output).get(0).toString();
 
-            output = controller.execute("GetPfMemInfo");
+            output = controller.execute("pf", "GetPfMemInfo");
 
             mPfMem = new JSONArray(output).get(0).toString();
 
-            output = controller.execute("GetPfTimeoutInfo");
+            output = controller.execute("pf", "GetPfTimeoutInfo");
 
             mPfTimeout = new JSONArray(output).get(0).toString();
 
-            output = controller.execute("GetReloadRate");
+            output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
             mRefreshTimeout = timeout < 10 ? 10 : timeout;
@@ -179,7 +179,7 @@ public class InfoPf extends Fragment implements SwipeRefreshLayout.OnRefreshList
         if (result) {
             updateInfo();
         } else {
-            Toast.makeText(getContext(), "Error: " + mLastError, Toast.LENGTH_SHORT).show();
+            showMessage(this, "Error: " + mLastError);
         }
 
         swipeRefresh.setRefreshing(false);
@@ -197,7 +197,7 @@ public class InfoPf extends Fragment implements SwipeRefreshLayout.OnRefreshList
     private void updateInfo() {
 
         try {
-            Utils.updateStatusViews(mPfStatus, ivPfStatus, tvPfStatus, "Packet Filter");
+            Utils.updateStatusViews(mPfStatus, ivPfStatus, tvPfStatus, getString(R.string.packet_filter));
 
             tvPfInfo.setText(mPfInfo);
             tvPfMem.setText(mPfMem);

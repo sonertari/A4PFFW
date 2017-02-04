@@ -25,7 +25,6 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
 import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
@@ -36,6 +35,7 @@ import java.io.InputStream;
 import java.util.Properties;
 
 import static org.comixwall.pffw.MainActivity.logger;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public class Controller extends Service {
     // Binder given to clients
@@ -69,9 +69,6 @@ public class Controller extends Service {
     private final String mPffwc = "/usr/bin/doas /var/www/htdocs/pffw/Controller/pffwc.php";
     private final String mLocale = "en_En";
 
-    /// @attention Model may change, so do not append to the command line now
-    public String model = "pf";
-
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -87,7 +84,7 @@ public class Controller extends Service {
         return session.isConnected();
     }
 
-    public String execute(String cmd, Object... args) throws Exception {
+    public String execute(String model, String cmd, Object... args) throws Exception {
         String cmdLine = mPffwc + " " + mLocale + " " + model + " " + cmd;
         for (Object a : args) {
             cmdLine += " '" + a + "'";
@@ -143,6 +140,8 @@ public class Controller extends Service {
         logger.fine("Controller channel connect");
         channel.connect();
 
+        byte[] tmp = new byte[100000];
+
         // In nanosecs for use with System.nanoTime()
         final long ONE_SEC = 1000000000;
 
@@ -150,8 +149,6 @@ public class Controller extends Service {
         final long TIMEOUT = 30 * ONE_SEC;
 
         long startTime = System.nanoTime();
-
-        byte[] tmp = new byte[100000];
 
         while (true) {
             logger.finest("Controller get data outer loop, time to timeout (millis)= " + ((TIMEOUT + startTime - System.nanoTime()) / 1000000));
@@ -167,6 +164,7 @@ public class Controller extends Service {
                 }
 
                 out += new String(tmp, 0, i);
+                // Will be set on each loop iteration unnecessarily, but ok
                 received = true;
             }
 
@@ -179,6 +177,7 @@ public class Controller extends Service {
             }
 
             if (received) {
+                // Reset timeout
                 startTime = System.nanoTime();
                 logger.finest("Controller reset output timeout");
             } else {
@@ -223,7 +222,7 @@ class ControllerTask extends AsyncTask<Void, Void, Void> {
 
     static void run(final Fragment owner, final ControllerTaskListener listener) {
         if (mIsRunning) {
-            Toast.makeText(owner.getContext(), "Controller task is running", Toast.LENGTH_SHORT).show();
+            showMessage(owner, "Controller task is running");
             logger.warning("Another controller task is running, cannot run " + owner.getClass().getSimpleName());
         } else {
             mIsRunning = true;
@@ -251,7 +250,7 @@ class ControllerTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void v) {
-        // Make sure the fragment still has a context
+        /// @attention Make sure the fragment still has a context
         if (owner.isVisible()) {
             controllerTaskListener.postExecute(result);
         } else {

@@ -33,7 +33,6 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import java.nio.charset.Charset;
 
@@ -41,6 +40,7 @@ import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.Utils.processException;
+import static org.comixwall.pffw.Utils.showMessage;
 
 public class Login extends Fragment implements ControllerTask.ControllerTaskListener {
 
@@ -118,7 +118,7 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
         if (result) {
             processLogin();
         } else {
-            Toast.makeText(getContext(), "Error: " + mLastError, Toast.LENGTH_SHORT).show();
+            showMessage(this, "Error: " + mLastError);
         }
 
         pbProgress.setVisibility(View.GONE);
@@ -130,8 +130,6 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
     }
 
     private void processLogin() {
-
-        Toast.makeText(getContext(), mLoggedIn ? "Login success" : "Login fail", Toast.LENGTH_SHORT).show();
 
         ((MainActivity) getActivity()).setLoggedIn(mLoggedIn);
 

@@ -25,6 +25,8 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="logout">Logout</string>
     <string name="info">Info</string>
     <string name="packet_filter">Packet Filter</string>
+    <string name="dhcp_server">DHCP Server</string>
+    <string name="dns_server">DNS Server</string>
     <string name="system">System</string>
     <string name="hosts">Hosts</string>
     <string name="interfaces">Interfaces</string>
@@ -35,6 +37,8 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="general">General</string>
     <string name="daily">Daily</string>
     <string name="hourly">Hourly</string>
+    <string name="single_month">Single Month</string>
+    <string name="single_day">Single Day</string>
     <string name="live">Live</string>
     <string name="graphs">Graphs</string>
     <string name="transfer">Transfer</string>
@@ -44,7 +48,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="graph">Graph</string>
     <string name="select_log_file">SELECT LOG FILE</string>
     <string name="label">Label</string>
-    <string name="comixwall_logo" translatable="false">ComixWall logo</string>
+    <string name="comixwall_logo">ComixWall logo</string>
     <string name="pf_firewall">PF Firewall</string>
     <string name="v5_9">v5.9</string>
     <string name="a" translatable="false">A</string>
@@ -132,11 +136,23 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="cleared">cleared: %1$s</string>
     <string name="packets_bytes">pkts: %1$s, bytes: %2$s</string>
     <string name="dropped_packets_bytes">dropped pkts: %1$s, bytes: %2$s</string>
+    <string name="evals_states_statecreats">evals: %1$s, states: %2$s, state creats: %3$s</string>
+    <string name="proto_dir_pkts_bytes_age">%1$s, %2$s, pkts: %3$s, bytes: %4$s, age: %5$s</string>
+    <string name="cpu_mem_time">cpu: %1$s, mem: %2$s, time: %3$s</string>
+    <string name="date">Date: %1$s %2$s, %3$s:%4$s</string>
     <string name="length">length: %1$s</string>
     <string name="log_file">Log file: %1$s</string>
+    <string name="type_dir_if">%1$s %2$s on %3$s</string>
+    <string name="rule_log">rule: %1$s, log: %2$s</string>
     <string name="total_smallcaps">total: %1$s</string>
-    <string name="in4" translatable="false">In4</string>
-    <string name="out4" translatable="false">Out4</string>
-    <string name="in6" translatable="false">In6</string>
-    <string name="out6" translatable="false">Out6</string>
+    <string name="in4">In4</string>
+    <string name="out4">Out4</string>
+    <string name="in6">In6</string>
+    <string name="out6">Out6</string>
+    <string name="month_day_colon">Month: %1$s Day: %2$s</string>
+    <string name="hour_colon">Hour: %1$s</string>
+    <string name="all_requests">All Requests</string>
+    <string name="allowed_requests">Allowed Requests</string>
+    <string name="blocked_requests">Blocked Requests</string>
+    <string name="matched_requests">Matched Requests</string>
 </resources>

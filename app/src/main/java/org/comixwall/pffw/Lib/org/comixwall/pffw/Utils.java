@@ -19,8 +19,10 @@
 
 package org.comixwall.pffw;
 
+import android.support.v4.app.Fragment;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static org.comixwall.pffw.MainActivity.logger;
 
@@ -41,7 +43,7 @@ class Utils {
         tv.setText(String.format(tv.getResources().getString(text), proc));
     }
 
-    public static String processException(Exception e) {
+    static String processException(Exception e) {
 
         String message;
         if (e.getCause() != null) {
@@ -54,5 +56,14 @@ class Utils {
         logger.warning("Exception: " + message);
 
         return message;
+    }
+
+    static void showMessage(final Fragment owner, final String message) {
+        // Make sure the fragment still has a context
+        if (owner.isVisible()) {
+            Toast.makeText(owner.getContext(), message, Toast.LENGTH_SHORT).show();
+        } else {
+            logger.info("Fragment not visible on showMessage: " + owner.getClass().getSimpleName());
+        }
     }
 }
