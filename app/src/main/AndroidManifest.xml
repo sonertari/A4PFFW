@@ -30,7 +30,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="org.comixwall.pffw.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -52,7 +52,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                     android:scheme="comixwall" />
             </intent-filter>
         </activity>
-        <service android:name="org.comixwall.pffw.Controller" />
+        <service android:name=".Controller" />
     </application>
 
 </manifest>

@@ -55,6 +55,9 @@ public class Controller extends Service {
     private static String mUser;
     private static String mPassword;
     private static String mHost;
+    public String getHost() {
+        return mHost;
+    }
     private static int mPort;
 
     public void setAuthParams(String user, String password, String host, int port) {

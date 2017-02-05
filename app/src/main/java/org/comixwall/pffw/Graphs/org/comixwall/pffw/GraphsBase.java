@@ -138,7 +138,9 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
                 String hash = mGraphsJsonObject.getString(title);
 
                 try {
-                    URL url = new URL("http://192.168.88.153/symon/graph.php?" + hash);
+                    /// @todo How to use secure http here, instead of plain http.
+                    /// Using https here gives: CertPathValidatorException: Trust anchor for certification path not found.
+                    URL url = new URL("http://" + controller.getHost() + "/symon/graph.php?" + hash);
                     URLConnection urlConn = url.openConnection();
                     /// @attention Setting a timeout value enables SocketTimeoutException
                     urlConn.setReadTimeout(5000);
