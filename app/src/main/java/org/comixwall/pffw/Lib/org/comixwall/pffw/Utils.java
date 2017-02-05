@@ -24,6 +24,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.InputStream;
+import java.security.KeyStore;
+import java.security.cert.Certificate;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManagerFactory;
+
 import static org.comixwall.pffw.MainActivity.logger;
 
 class Utils {
@@ -65,5 +74,43 @@ class Utils {
         } else {
             logger.info("Fragment not visible on showMessage: " + owner.getClass().getSimpleName());
         }
+    }
+
+    static SSLContext getSslContext(final Fragment owner) {
+        SSLContext sslContext = null;
+        try {
+            // Load our CA from an InputStream
+            CertificateFactory cf = CertificateFactory.getInstance("X.509");
+            InputStream caInput = owner.getResources().openRawResource(
+                    owner.getResources().getIdentifier("server", "raw", owner.getActivity().getPackageName()));
+
+            Certificate ca;
+            try {
+                ca = cf.generateCertificate(caInput);
+                logger.finest("ca=" + ((X509Certificate) ca).getSubjectDN());
+            } finally {
+                caInput.close();
+            }
+
+            // Create a KeyStore containing our trusted CA
+            String keyStoreType = KeyStore.getDefaultType();
+            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
+            keyStore.load(null, null);
+            keyStore.setCertificateEntry("ca", ca);
+
+            // Create a TrustManager that trusts the CA in our KeyStore
+            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
+            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
+            tmf.init(keyStore);
+
+            // Create an SSLContext that uses our TrustManager
+            sslContext = SSLContext.getInstance("TLS");
+            sslContext.init(null, tmf.getTrustManagers(), null);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            logger.severe("getSslContext exception: " + e.toString());
+        }
+        return sslContext;
     }
 }

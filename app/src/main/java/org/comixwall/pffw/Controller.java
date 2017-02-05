@@ -60,6 +60,11 @@ public class Controller extends Service {
     }
     private static int mPort;
 
+    private static String mHostName;
+    public String getHostname() {
+        return mHostName;
+    }
+
     public void setAuthParams(String user, String password, String host, int port) {
         mUser = user;
         mPassword = password;
@@ -78,12 +83,12 @@ public class Controller extends Service {
     }
 
     public Boolean login() throws Exception {
-        String output = "";
+        mHostName = "";
         if (createSession(mUser, mPassword, mHost, mPort)) {
-            output = runSSHCommand("hostname");
+            mHostName = runSSHCommand("hostname");
         }
 
-        logger.finest("Controller login output= " + output);
+        logger.finest("Controller login mHostName= " + mHostName);
         return session.isConnected();
     }
 

@@ -33,13 +33,19 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.Iterator;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 
 import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
+import static org.comixwall.pffw.Utils.getSslContext;
 
 public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         RefreshTimer.OnTimeoutListener, ControllerTask.ControllerTaskListener {
@@ -60,6 +66,15 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
     private int mGraphWidth;
     private int mGraphHeight;
 
+    private SSLContext sslContext = null;
+
+    // Create host name verifier for PFFW host
+    private HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+        public boolean verify(String hostname, SSLSession session) {
+            return hostname.equals(controller.getHost()) || hostname.equals(controller.getHostname());
+        }
+    };
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -67,6 +82,8 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
         swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
+
+        sslContext = getSslContext(this);
 
         return view;
     }
@@ -138,13 +155,46 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
                 String hash = mGraphsJsonObject.getString(title);
 
                 try {
-                    /// @todo How to use secure http here, instead of plain http.
-                    /// Using https here gives: CertPathValidatorException: Trust anchor for certification path not found.
-                    URL url = new URL("http://" + controller.getHost() + "/symon/graph.php?" + hash);
-                    URLConnection urlConn = url.openConnection();
-                    /// @attention Setting a timeout value enables SocketTimeoutException
-                    urlConn.setReadTimeout(5000);
-                    InputStream stream = urlConn.getInputStream();
+                    InputStream stream = null;
+
+                    try {
+                        // Using https here gives: CertPathValidatorException: Trust anchor for certification path not found.
+                        // So we should trust the PFFW server crt and hostname
+                        URL secureUrl = new URL("https://" + controller.getHost() + "/symon/graph.php?" + hash);
+
+                        HttpsURLConnection secureUrlConn = (HttpsURLConnection) secureUrl.openConnection();
+
+                        // Tell the URLConnection to use a SocketFactory from our SSLContext
+                        secureUrlConn.setSSLSocketFactory(sslContext.getSocketFactory());
+
+                        // Install the PFFW host verifier
+                        secureUrlConn.setHostnameVerifier(hostnameVerifier);
+
+                        logger.finest("Using secure http: " + secureUrl.toString());
+
+                        /// @attention Setting a timeout value enables SocketTimeoutException
+                        secureUrlConn.setReadTimeout(5000);
+
+                        stream = secureUrlConn.getInputStream();
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        logger.warning("Secure URL connection exception: " + e.toString());
+                    }
+
+                    // Try plain if secure fails
+                    if (stream == null) {
+                        URL plainUrl = new URL("http://" + controller.getHost() + "/symon/graph.php?" + hash);
+                        HttpURLConnection plainUrlConn = (HttpURLConnection) plainUrl.openConnection();
+
+                        logger.finest("Using plain http: " + plainUrlConn.toString());
+
+                        /// @attention Setting a timeout value enables SocketTimeoutException
+                        plainUrlConn.setReadTimeout(5000);
+
+                        stream = plainUrlConn.getInputStream();
+                    }
+
                     Bitmap bmp = BitmapFactory.decodeStream(stream);
                     setBitmap(title, bmp);
 
