@@ -59,7 +59,7 @@ public class GraphsTransfer extends GraphsBase {
 
     @Override
     public void setBitmap(String title, Bitmap bmp) {
-        if (title.compareTo("Data Transfer") == 0) {
+        if (title.equals("Data Transfer")) {
             bmpXfer = bmp;
         }
     }

@@ -159,7 +159,7 @@ public class Controller extends Service {
         long startTime = System.nanoTime();
 
         while (true) {
-            logger.finest("Controller get data outer loop, time to timeout (millis)= " + ((TIMEOUT + startTime - System.nanoTime()) / 1000000));
+            logger.finest("Controller get data outer loop, time to timeout (ms)= " + ((TIMEOUT + startTime - System.nanoTime()) / 1000000));
 
             boolean received = false;
 
@@ -258,7 +258,7 @@ class ControllerTask extends AsyncTask<Void, Void, Void> {
 
     @Override
     protected void onPostExecute(Void v) {
-        /// @attention Make sure the fragment still has a context
+        // ATTENTION: Make sure the fragment still has a context
         if (owner.isVisible()) {
             controllerTaskListener.postExecute(result);
         } else {

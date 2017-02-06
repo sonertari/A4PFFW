@@ -47,6 +47,9 @@ import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.Utils.getSslContext;
 
+/**
+ * Base class for all graphs fragments.
+ */
 public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.OnRefreshListener,
         RefreshTimer.OnTimeoutListener, ControllerTask.ControllerTaskListener {
 
@@ -59,16 +62,33 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
     private SwipeRefreshLayout swipeRefresh;
 
+    /**
+     * Return value from the controller command.
+     * This should contain KVPs from titles to graph hash names.
+     */
     private JSONObject mGraphsJsonObject;
 
+    /**
+     * This is the name of the symon layout file.
+     * Graphs are defined in such symon layout files.
+     * Hence, this var is passed to the controller command as an argument.
+     */
     String mLayout = "ifs";
 
+    /**
+     * Dimensions passed to the controller command for graph generation.
+     */
     private int mGraphWidth;
     private int mGraphHeight;
 
+    /**
+     * We create our own SSL context which trusts the PFFW server certificate.
+     */
     private SSLContext sslContext = null;
 
-    // Create host name verifier for PFFW host
+    /**
+     * This is the host name verifier used in secure HTTP connections to the PFFW hosts.
+     */
     private HostnameVerifier hostnameVerifier = new HostnameVerifier() {
         public boolean verify(String hostname, SSLSession session) {
             return hostname.equals(controller.getHost()) || hostname.equals(controller.getHostname());
@@ -88,6 +108,19 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
         return view;
     }
 
+    /**
+     * Initialize fragment layout and view vars.
+     * Graphs fragments do their initialization here. In this method the fragment should:
+     * <ul>
+     * <li>Inflate its layout
+     * <li>Assign to its view variables
+     * <li>Create its cache
+     * </ul>
+     * This method is called the first thing as the fragment view is created.
+     *
+     * @param inflater See {@link #onCreateView}
+     * @param container See {@link #onCreateView}
+     */
     protected abstract void init(LayoutInflater inflater, ViewGroup container);
 
     @Override
@@ -98,12 +131,20 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
         saveImages();
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 
     protected abstract void saveImages();
 
+    /**
+     * Resume fragment. If the mGraphsJsonObject var is null, we refresh the graphs.
+     * Otherwise, we use the graphs available in the fragment cache.
+     * <p>
+     * We also make sure the static fragment var points to the current visible fragment.
+     * <p>
+     * All graphs pages refresh periodically, so this is where we start the refresh timer too.
+     */
     @Override
     public void onResume() {
         super.onResume();
@@ -126,9 +167,16 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
     protected abstract void restoreImages();
 
+    /**
+     * Compute graph dimensions.
+     * Graph width and height is determined based on the current size of the screen.
+     * This size depends on the device and current rotation.
+     * <p>
+     * The width and height computed here are passed to the Controller to be used while creating the image.
+     */
     @Override
     public void executePreTask() {
-        /// @attention Measured width of swipeRefresh may be 0 on rotation, which gives negative w otherwise
+        // ATTENTION: Measured width of swipeRefresh may be 0 on rotation, which gives negative w otherwise
         int w = swipeRefresh.getMeasuredWidth() - 180;
         mGraphWidth = w > 0 ? w : 900;
         mGraphHeight = Math.round(mGraphWidth / 3f);
@@ -140,6 +188,15 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
         swipeRefresh.setRefreshing(true);
     }
 
+    /**
+     * Run the controller task.
+     * We fetch the graphs using secure http, or fall back to plain http if secure connection fails.
+     * <p>
+     * Note that the PFFW uses a self-signed server certificate. So the code should trust that certificate
+     * and do not reject the hostname.
+     *
+     * @return True on success, false on failure.
+     */
     @Override
     public boolean executeTask() {
         Boolean retval = true;
@@ -172,7 +229,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
                         logger.finest("Using secure http: " + secureUrl.toString());
 
-                        /// @attention Setting a timeout value enables SocketTimeoutException
+                        // ATTENTION: Setting a timeout value enables SocketTimeoutException
                         secureUrlConn.setReadTimeout(5000);
 
                         stream = secureUrlConn.getInputStream();
@@ -189,7 +246,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
                         logger.finest("Using plain http: " + plainUrlConn.toString());
 
-                        /// @attention Setting a timeout value enables SocketTimeoutException
+                        // ATTENTION: Setting a timeout value enables SocketTimeoutException
                         plainUrlConn.setReadTimeout(5000);
 
                         stream = plainUrlConn.getInputStream();
@@ -218,8 +275,20 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
         return retval;
     }
 
+    /**
+     * Update the bmp variable with the downloaded bitmap.
+     *
+     * @param title The graph title.
+     * @param bmp The graph.
+     */
     protected abstract void setBitmap(String title, Bitmap bmp);
 
+    /**
+     * Update the graphs with the downloaded bitmaps.
+     * This is where the bitmaps are really loaded to bitmap views, thus are displayed on the fragment layout.
+     *
+     * @param result Whether the graph download task was successful or not.
+     */
     @Override
     public void postExecute(boolean result) {
         if (result) {
@@ -241,6 +310,9 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
         ControllerTask.run(this, this);
     }
 
+    /**
+     * Displays the graph in a dialog which allows pinch-zooming.
+     */
     final View.OnClickListener onViewClick = (new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -254,21 +326,44 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
         }
     });
 
+    /**
+     * Return the bitmap associated with the view.
+     * Used by the graph dialog to load the bitmap the used has clicked on.
+     *
+     * @param view The view the user has clicked on.
+     * @return The bitmap to display.
+     */
     protected abstract Bitmap getBitmap(View view);
 
+    /**
+     * Refresh graphs periodically.
+     */
     @Override
     public void onTimeout() {
         getGraphs();
     }
 
+    /**
+     * Refresh graphs upon swipe gesture.
+     * <p>
+     * ATTENTION: Do not check if a task is started upon a swipe gesture: No need to implement a return value for run().
+     * Because we want the progress bar to be on if a controller task is running,
+     * whether as a result of the last swipe gesture or not.
+     */
     @Override
     public void onRefresh() {
-        /// @attention Do not check if a task is started upon a swipe gesture: No need to implement a return value for run()
-        /// Because we want the progress bar to be on if a controller task is running,
-        /// whether as a result of the last swipe gesture or not.
         getGraphs();
     }
 
+    /**
+     * Handle app bar menu clicks.
+     * This method is called by the handler of the activity, hence all fragments should implement it.
+     * <p>
+     * We currently have only refresh and logout options. Logout is handled by the activity.
+     *
+     * @param item The menu item clicked on.
+     * @return See {@link Fragment#onOptionsItemSelected(MenuItem)}.
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -282,6 +377,10 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
     }
 }
 
+/**
+ * This is the cache class of the graphs pages.
+ * Graphs fragments may have a different cache type with different vars based on their needs.
+ */
 class GraphsCache {
     JSONObject mGraphsJsonObject;
     Bitmap bmp;

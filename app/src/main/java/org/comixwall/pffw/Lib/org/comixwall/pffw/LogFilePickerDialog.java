@@ -39,7 +39,7 @@ import static org.comixwall.pffw.MainActivity.fragment;
 
 public class LogFilePickerDialog extends DialogFragment {
 
-    /// @attention Init to "", not null, because we use empty string to fetch the default file
+    // ATTENTION: Init to "", not null, because we use empty string to fetch the default file
     private String mLogFile = "";
 
     private final ArrayList<String> mLogFileOpts = new ArrayList<>();
@@ -72,7 +72,7 @@ public class LogFilePickerDialog extends DialogFragment {
     private final AdapterView.OnItemClickListener mItemClickedHandler = new AdapterView.OnItemClickListener() {
         public void onItemClick(AdapterView parent, View v, int position, long id) {
             mSelectedOpt = (String) optionsListView.getItemAtPosition(position);
-            /// @todo Check why getSelectedItem() returns null
+            // TODO: Check why getSelectedItem() returns null
             //Toast.makeText(getActivity(), "Selected: " + optionsListView.getSelectedItem(), Toast.LENGTH_SHORT).show();
         }
     };
@@ -88,17 +88,19 @@ public class LogFilePickerDialog extends DialogFragment {
         }
     });
 
-    // Defines the listener interface
+    /**
+     * Defines the listener interface
+     */
     public interface LogFilePickerDialogListener {
         void onSelection(String selectedOpt, String fileName);
     }
 
     private void sendBackResult() {
         if (mSelectedOpt != null) {
-            /// @todo Check why getParentFragment() and getTargetFragment() do not work here
+            // TODO: Check why getParentFragment() and getTargetFragment() do not work here
             //StatsHourlyDatePickerDialogListener listener = (StatsHourlyDatePickerDialogListener) getParentFragment();
             LogFilePickerDialogListener listener = (LogFilePickerDialogListener) fragment;
-            if (mLastSelectedLogFileOpt.compareTo(mSelectedOpt) != 0) {
+            if (mLastSelectedLogFileOpt.equals(mSelectedOpt)) {
                 mLogFile = mLogFileOpts2Files.get(mSelectedOpt);
                 mLastSelectedLogFileOpt = mSelectedOpt;
                 listener.onSelection(mSelectedOpt, mLogFile);
@@ -112,11 +114,19 @@ public class LogFilePickerDialog extends DialogFragment {
         mJsonLogFileList = logFileList;
     }
 
+    /**
+     * Update log files list to display to the user.
+     * We return the selection so that the main fragment displays it as the selected log file.
+     * We cannot simply return the log file name (which the fragment already know), because
+     * the selected option has an extra info about the start date of the logs in that file.
+     *
+     * @return The selected option.
+     */
     public String updateLogFileLists() {
         mLogFileOpts.clear();
         mLogFileOpts2Files.clear();
 
-        /// @attention This is not redundant.
+        // ATTENTION: This is not redundant.
         // Clone to create a local copy, because we modify this local copy below
         @SuppressWarnings("RedundantStringConstructorCall")
         String logFile = new String(mLogFile);
@@ -130,9 +140,9 @@ public class LogFilePickerDialog extends DialogFragment {
             mLogFileOpts.add(opt);
             mLogFileOpts2Files.put(opt, file);
 
-            /// XXX: Need the inverse of mLogFileOpts2Files list to get mLastSelectedLogFileOpt easily
-            /// @attention But the keys of the inverse list are not suitable, because mLogFile may refer to a tmp file: /var/tmp/pffw/logs/Pf/pflog
-            /// Hence we get a null mLastSelectedLogFileOpt with the following code.
+            // XXX: Need the inverse of mLogFileOpts2Files list to get mLastSelectedLogFileOpt easily
+            // ATTENTION: But the keys of the inverse list are not suitable, because mLogFile may refer to a tmp file: /var/tmp/pffw/logs/Pf/pflog
+            // Hence we get a null mLastSelectedLogFileOpt with the following code.
             //HashBiMap<String, String> files2LogFileOpts = HashBiMap.create(mLogFileOpts2Files);
             //mLastSelectedLogFileOpt = files2LogFileOpts.inverse().get(mLogFile);
 
@@ -140,10 +150,10 @@ public class LogFilePickerDialog extends DialogFragment {
                 // logFile does not have .gz extension, because it points to the file decompressed by the controller
                 // Update this local copy for comparison and to print it below
                 String logFileBasename = new File(logFile).getName();
-                logFile += ((logFileBasename + ".gz").compareTo(optFileBasename) == 0) ? ".gz" : "";
+                logFile += ((logFileBasename + ".gz").equals(optFileBasename)) ? ".gz" : "";
             }
 
-            if (optFileBasename.compareTo(new File(logFile).getName()) == 0) {
+            if (optFileBasename.equals(new File(logFile).getName())) {
                 mLastSelectedLogFileOpt = opt;
             }
         }

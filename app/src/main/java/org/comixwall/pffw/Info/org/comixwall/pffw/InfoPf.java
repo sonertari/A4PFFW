@@ -83,7 +83,7 @@ public class InfoPf extends Fragment implements SwipeRefreshLayout.OnRefreshList
 
         ivPfStatus = (ImageView) view.findViewById(R.id.imageViewPfStatus);
 
-        /// @todo How to resize the pf info cardview to pf memory size initially? Should be one time only.
+        // TODO: How to resize the pf info cardview to pf memory size initially? Should be one time only.
         //tvPfInfo.performClick();
 
         if (cache.logsLive == null) {
@@ -103,7 +103,7 @@ public class InfoPf extends Fragment implements SwipeRefreshLayout.OnRefreshList
         mModuleCache.bundle.putString("mPfMem", mPfMem);
         mModuleCache.bundle.putString("mPfTimeout", mPfTimeout);
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 
@@ -143,6 +143,17 @@ public class InfoPf extends Fragment implements SwipeRefreshLayout.OnRefreshList
         swipeRefresh.setRefreshing(true);
     }
 
+    /**
+     * Fetch pf status, stats, memory info, and timeout settings.
+     * <p>
+     * We also fetch the reload rate to update the page refresh timeout.
+     * <p>
+     * We save the exception message in mLastError, so that it can be displayed to the user
+     * on post execution. Otherwise, this method runs on an async task, not on the UI thread,
+     * so it cannot show messages to the user.
+     *
+     * @return True on success, false on failure.
+     */
     @Override
     public boolean executeTask() {
         try {
@@ -222,7 +233,7 @@ public class InfoPf extends Fragment implements SwipeRefreshLayout.OnRefreshList
 
                 View cv;
                 int newHeight = view.findViewById(R.id.pfMemCardView).getHeight() * 2;
-                //newHeight = newHeight > 0 ? newHeight : 332;
+
                 if (id == R.id.pfInfo) {
                     cv = view.findViewById(R.id.pfInfoCardView);
                 } else {

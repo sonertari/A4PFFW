@@ -67,9 +67,9 @@ public class GraphsStates extends GraphsBase {
 
     @Override
     public void setBitmap(String title, Bitmap bmp) {
-        if (title.compareTo("State Statistics") == 0) {
+        if (title.equals("State Statistics")) {
             bmpStates = bmp;
-        } else if (title.compareTo("State Searches vs Packets") == 0) {
+        } else if (title.equals("State Searches vs Packets")) {
             bmpSearchesPkts = bmp;
         }
     }

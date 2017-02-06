@@ -137,7 +137,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         ivNamedStatus = (ImageView) view.findViewById(R.id.imageViewNamedStatus);
 
         RecyclerView rvDhcpd = (RecyclerView) view.findViewById(R.id.recyclerViewDhcpd);
-        /// @attention Should use separate LayoutManager for each RecyclerView.
+        // ATTENTION: Should use separate LayoutManager for each RecyclerView.
         rvDhcpd.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvDhcpd.setItemAnimator(new DefaultItemAnimator());
         rvDhcpd.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -189,7 +189,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         mModuleCache.mArpTableJsonArray = mArpTableJsonArray;
         mModuleCache.mLeasesJsonArray = mLeasesJsonArray;
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 
@@ -214,7 +214,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
             updateInfo();
         }
 
-        // Schedule the timer here, not in onCreateView(), because mRefreshTimeout may be updated in getInfo()
+        // ATTENTION: Schedule the timer here, not in onCreateView(), because mRefreshTimeout may be updated in getInfo()
         mTimer = new RefreshTimer((MainActivity) getActivity(), this);
         mTimer.start(mRefreshTimeout);
     }
@@ -233,6 +233,11 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         swipeRefresh.setRefreshing(true);
     }
 
+    /**
+     * Fetch dhcpd and named status, arp table and dhcpd leases.
+     *
+     * @return True on success, false on failure.
+     */
     @Override
     public boolean executeTask() {
         Boolean retval = true;
@@ -358,6 +363,11 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         getInfo();
     }
 
+    /**
+     * Change the size of certain text views on touch if the content does not fit.
+     *
+     * @param view Container view
+     */
     @Override
     public void onItemClick(View view) {
         TextView tvCommand = (TextView) view.findViewById(R.id.command);
@@ -387,6 +397,9 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
     }
 }
 
+/**
+ * Arp table entry.
+ */
 class Arp {
     String num;
     String ip;
@@ -434,7 +447,6 @@ class ArpTableRecyclerAdapter extends RecyclerView.Adapter<ArpTableRecyclerAdapt
         }
     }
 
-
     ArpTableRecyclerAdapter(List<Arp> list) {
         this.arpList = list;
     }
@@ -447,6 +459,12 @@ class ArpTableRecyclerAdapter extends RecyclerView.Adapter<ArpTableRecyclerAdapt
         return new ArpViewHolder(itemView);
     }
 
+    /**
+     * Populate recycler view item.
+     *
+     * @param holder   Container view.
+     * @param position Item position.
+     */
     @Override
     public void onBindViewHolder(ArpViewHolder holder, int position) {
 
@@ -461,10 +479,10 @@ class ArpTableRecyclerAdapter extends RecyclerView.Adapter<ArpTableRecyclerAdapt
         int image;
         String caption;
 
-        if (arp.expire.compareTo("expired") == 0) {
+        if (arp.expire.equals("expired")) {
             image = R.drawable.block;
             caption = "E";
-        } else if (arp.expire.compareTo("permanent") == 0) {
+        } else if (arp.expire.equals("permanent")) {
             image = R.drawable.pass;
             caption = "P";
         } else {
@@ -482,6 +500,9 @@ class ArpTableRecyclerAdapter extends RecyclerView.Adapter<ArpTableRecyclerAdapt
     }
 }
 
+/**
+ * Dhcp lease entry.
+ */
 class Lease {
     String num;
     String ip;
@@ -531,7 +552,6 @@ class LeaseRecyclerAdapter extends RecyclerView.Adapter<LeaseRecyclerAdapter.Lea
         }
     }
 
-
     LeaseRecyclerAdapter(List<Lease> list) {
         this.leaseList = list;
     }
@@ -553,7 +573,7 @@ class LeaseRecyclerAdapter extends RecyclerView.Adapter<LeaseRecyclerAdapter.Lea
         holder.ip.setText(lease.ip + " - " + lease.mac);
         holder.number.setText(lease.num);
         holder.host.setText(lease.host);
-        /// @todo Check why Json assigns "null" to empty string?
+        // TODO: Check why Json assigns "null" to empty string?
         holder.status.setText(lease.status.equals("null") ? "" : lease.status);
 
     }

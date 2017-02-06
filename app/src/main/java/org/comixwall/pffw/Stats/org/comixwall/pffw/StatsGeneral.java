@@ -150,7 +150,7 @@ public class StatsGeneral extends StatsBase {
         hbc.setLayoutParams(params);
         owner.addView(hbc, 0);
 
-        /// @attention This second look up is not redundant, we set the same id to the horizontal chart above.
+        // ATTENTION: This second look up is not redundant, we set the same id to the horizontal chart above.
         @SuppressLint("CutPasteId") BarChart chart = (BarChart) cv.findViewById(R.id.chart);
         chart.setOnChartValueSelectedListener(this);
         chart.setDrawValueAboveBar(true);
@@ -198,6 +198,7 @@ public class StatsGeneral extends StatsBase {
 
             mLogFile = new JSONArray(output).get(0).toString();
 
+            // Whether to collect hourly stats too
             String collect = isDailyChart() ? "''" : "'COLLECT'";
             output = controller.execute("pf", "GetAllStats", mLogFile, collect);
 
@@ -300,7 +301,6 @@ public class StatsGeneral extends StatsBase {
                     ((TextView) row.findViewById(R.id.tableKey)).setText(((Map.Entry<String, Integer>) entry).getKey());
                     statsTable.addView(row);
 
-                    /// XXX: Need vertical ScrollView instead
                     if (++count > 100) {
                         break;
                     }
@@ -324,7 +324,7 @@ public class StatsGeneral extends StatsBase {
                 mJsonHourStats = new JSONObject();
 
                 if (mJsonStats != null) {
-                    /// @todo Is there a better way?
+                    // TODO: Is there a better way?
                     if (mJsonStats.optJSONObject(formatDate()) != null &&
                             mJsonStats.getJSONObject(formatDate()).optJSONObject("Hours") != null) {
                         mJsonHourStats = mJsonStats.getJSONObject(formatDate()).getJSONObject("Hours");
@@ -332,6 +332,7 @@ public class StatsGeneral extends StatsBase {
                 }
             }
 
+            // Recreate the stats views in case the chart type has changed.
             recreateStatsViews();
 
             String[] keys = mStats.keySet().toArray(new String[0]);
@@ -480,7 +481,7 @@ public class StatsGeneral extends StatsBase {
     }
 
     protected boolean isDailyChart() {
-        return tvDaily.getText().toString().compareTo(getString(R.string.daily)) == 0;
+        return tvDaily.getText().toString().equals(getString(R.string.daily));
     }
 
     void setChartType(String type) {
@@ -508,7 +509,7 @@ public class StatsGeneral extends StatsBase {
 
                         RelativeLayout.LayoutParams rlParamsGs = (RelativeLayout.LayoutParams) cvGs.getLayoutParams();
                         if (rlParamsGs.height == RelativeLayout.LayoutParams.WRAP_CONTENT) {
-                            /// XXX
+                            // XXX
                             rlParamsGs.height = heightGs < 332 ? heightGs : 332;
                         } else {
                             rlParamsGs.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
@@ -528,7 +529,7 @@ public class StatsGeneral extends StatsBase {
 
                         RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) cv.getLayoutParams();
                         if (rlParams.height == RelativeLayout.LayoutParams.WRAP_CONTENT) {
-                            /// XXX
+                            // XXX
                             rlParams.height = height < 332 ? height : 332;
                         } else {
                             rlParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;

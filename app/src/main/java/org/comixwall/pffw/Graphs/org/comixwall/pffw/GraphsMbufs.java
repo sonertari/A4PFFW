@@ -59,7 +59,7 @@ public class GraphsMbufs extends GraphsBase {
 
     @Override
     public void setBitmap(String title, Bitmap bmp) {
-        if (title.compareTo("Mbuf Statistics") == 0) {
+        if (title.equals("Mbuf Statistics")) {
             bmpMbufs = bmp;
         }
     }

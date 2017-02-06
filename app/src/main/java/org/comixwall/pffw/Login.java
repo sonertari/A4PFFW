@@ -161,6 +161,7 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
             if (id == R.id.button) {
                 mUser = tvUser.getText().toString();
 
+                // ATTENTION: Encrypt the password immediately.
                 HashCode hashCode = Hashing.sha1().hashString(etPassword.getText().toString(), Charset.defaultCharset());
                 mPassword = hashCode.toString();
 

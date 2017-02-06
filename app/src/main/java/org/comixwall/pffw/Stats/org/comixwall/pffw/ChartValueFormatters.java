@@ -25,6 +25,10 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
+/**
+ * This class is used to format the values printed on the axis, as well as the key on the
+ * XYMarkerView.
+ */
 class AxisValueFormatter implements IAxisValueFormatter
 {
     private final DecimalFormat mFormat;
@@ -39,6 +43,12 @@ class AxisValueFormatter implements IAxisValueFormatter
     }
 }
 
+/**
+ * This class is used to format the values printed on the axis, as well as the key on the
+ * XYMarkerView.
+ * <p>
+ * The mLabels is populated by the calling fragment using setLabels() method.
+ */
 class XAxisDailyValueFormatter implements IAxisValueFormatter
 {
     private final DecimalFormat mFormat;

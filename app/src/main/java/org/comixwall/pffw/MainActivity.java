@@ -60,18 +60,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public DrawerLayout drawer;
 
     private Boolean mLoggedIn = false;
+
     public void setLoggedIn(Boolean loggedIn) {
         mLoggedIn = loggedIn;
     }
 
     public static final Logger logger;
+
     static {
         logger = Logger.getLogger("org.comixwall.PFFW");
 
         Level mLogLevel = Level.ALL;
         logger.setLevel(mLogLevel);
 
-        /// @todo setUseParentHandlers() Does not seem to have any effect
+        // TODO: setUseParentHandlers() Does not seem to have any effect
         //logger.setUseParentHandlers(true);
 
         if (logger.getHandlers().length == 0) {
@@ -88,11 +90,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /// @todo Check why main activity is recreated on rotation
+        // TODO: Check why main activity is recreated on rotation
         logger.finest("MainActivity onCreate()");
 
         mMenuItems2Fragments = new HashMap<Integer, Class>() {{
-            /// @attention InfoPf fragment should never be instantiated using this map
+            // ATTENTION: InfoPf fragment should never be instantiated using this map
             //put(R.id.menuInfoPf, InfoPf.class);
             put(R.id.menuInfoSystem, InfoSystem.class);
             put(R.id.menuInfoHosts, InfoHosts.class);
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         FragmentManager fm = getSupportFragmentManager();
 
-        /// @attention Always load cache from the FragmentManager.
+        // ATTENTION: Always load cache from the FragmentManager.
         /// Otherwise, the cache survives even after the application is closed by the last Back button press
         cache = (Cache) fm.findFragmentByTag("cache");
         if (cache == null) {
@@ -158,13 +160,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onResume();
 
         if (!mLoggedIn) {
-            /// @attention Login fragment should be inflated only after SSH session is created first
+            // ATTENTION: Login fragment should be inflated only after SSH session is created first
             // onResume() is executed after onRestoreInstanceState().
             FragmentManager fm = getSupportFragmentManager();
             android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
 
             fragment = new Login();
-            // @attention Do not add but replace, because login page may be rotated, which brings us here again.
+            // ATTENTION: Do not add but replace, because login page may be rotated, which brings us here again.
             //transaction.add(R.id.fragmentContainer, fragment, "MainFragment");
             transaction.replace(R.id.fragmentContainer, fragment);
 
@@ -246,7 +248,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 transaction.addToBackStack(fragmentName);
             }
 
-            /// @todo Check if we need to pass any args
+            // TODO: Check if we need to pass any args
             //fragment.setArguments(getIntent().getExtras());
             transaction.replace(R.id.fragmentContainer, fragment);
 
@@ -258,7 +260,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void popAllBackStack() {
-        /// @todo What is the best way to pop all backstack items?
+        // TODO: What is the best way to pop all backstack items?
         // It does NOT help to use a special StackBottom name while adding the first InfoPf to the backstack,
         // then we could pop all items simply by:
         // fm.popBackStackImmediate("StackBottom", FragmentManager.POP_BACK_STACK_INCLUSIVE);

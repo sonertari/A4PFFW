@@ -36,8 +36,14 @@ import static org.comixwall.pffw.MainActivity.logger;
 
 public class GraphDialog extends DialogFragment implements ImageView.OnTouchListener {
 
+    /**
+     * Graph to show.
+     */
     private Bitmap mBmp;
 
+    /**
+     * Set the touch listener and bitmap of the ImageView.
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.graph, container);
@@ -51,6 +57,12 @@ public class GraphDialog extends DialogFragment implements ImageView.OnTouchList
         return view;
     }
 
+    /**
+     * Set the bitmap to show.
+     * The fragment should call this method to set the bitmap before showing the dialog.
+     *
+     * @param bmp Bitmap to show.
+     */
     public void setBitmap(Bitmap bmp) {
         mBmp = bmp;
     }

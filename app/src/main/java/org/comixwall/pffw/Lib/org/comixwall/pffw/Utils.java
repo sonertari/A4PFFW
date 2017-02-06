@@ -35,12 +35,24 @@ import javax.net.ssl.TrustManagerFactory;
 
 import static org.comixwall.pffw.MainActivity.logger;
 
+/**
+ * Utilities, common methods used by various classes.
+ */
 class Utils {
+    /**
+     * Update the status image and text.
+     * Used by process status views.
+     *
+     * @param status "0" for running, "1" for stopped.
+     * @param iv ImageView to update.
+     * @param tv TextView to update.
+     * @param proc Process name.
+     */
     static void updateStatusViews(String status, ImageView iv, TextView tv, String proc) {
         int image;
         int text;
 
-        if (status.compareTo("0") == 0) {
+        if (status.equals("0")) {
             image = R.drawable.pass;
             text = R.string.proc_is_running;
         } else {
@@ -52,6 +64,16 @@ class Utils {
         tv.setText(String.format(tv.getResources().getString(text), proc));
     }
 
+    /**
+     * Get and log the given exception message.
+     * The return value is used to update the last error to be displayed to the user.
+     * <p>
+     * We try to get the shortest message without package details, hence we check
+     * if there is a cause first.
+     *
+     * @param e Exception.
+     * @return Exception message.
+     */
     static String processException(Exception e) {
 
         String message;
@@ -67,6 +89,14 @@ class Utils {
         return message;
     }
 
+    /**
+     * Show the given message in a toast.
+     * Do not show the message if the fragment is not visible, which is possible if the user has
+     * switched to another fragment by the time this method is called.
+     *
+     * @param owner Fragment which initiated the call to this method.
+     * @param message Message to display.
+     */
     static void showMessage(final Fragment owner, final String message) {
         // Make sure the fragment still has a context
         if (owner.isVisible()) {
@@ -76,29 +106,36 @@ class Utils {
         }
     }
 
+    /**
+     * Create an SSL context which trusts the PFFW server certificate.
+     * PFFW server certificates are self signed, hence is not verified by the default SSL context.
+     *
+     * @param owner Fragment which initiated the call to this method.
+     * @return SSL context.
+     */
     static SSLContext getSslContext(final Fragment owner) {
         SSLContext sslContext = null;
         try {
-            // Load our CA from an InputStream
+            // Load our crt from an InputStream
             CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            InputStream caInput = owner.getResources().openRawResource(
+            InputStream crtInput = owner.getResources().openRawResource(
                     owner.getResources().getIdentifier("server", "raw", owner.getActivity().getPackageName()));
 
-            Certificate ca;
+            Certificate crt;
             try {
-                ca = cf.generateCertificate(caInput);
-                logger.finest("ca=" + ((X509Certificate) ca).getSubjectDN());
+                crt = cf.generateCertificate(crtInput);
+                logger.finest("server.crt=" + ((X509Certificate) crt).getSubjectDN());
             } finally {
-                caInput.close();
+                crtInput.close();
             }
 
-            // Create a KeyStore containing our trusted CA
+            // Create a KeyStore containing our trusted crt
             String keyStoreType = KeyStore.getDefaultType();
             KeyStore keyStore = KeyStore.getInstance(keyStoreType);
             keyStore.load(null, null);
-            keyStore.setCertificateEntry("ca", ca);
+            keyStore.setCertificateEntry("server.crt", crt);
 
-            // Create a TrustManager that trusts the CA in our KeyStore
+            // Create a TrustManager that trusts the crt in our KeyStore
             String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
             TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
             tmf.init(keyStore);

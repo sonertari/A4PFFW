@@ -136,7 +136,7 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
         mModuleCache.mSymuxJsonArray = mSymuxJsonArray;
         mModuleCache.mSystemJsonArray = mSystemJsonArray;
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 
@@ -159,7 +159,6 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
             updateInfo();
         }
 
-        // Schedule the timer here, not in onCreateView(), because mRefreshTimeout may be updated in getInfo()
         mTimer = new RefreshTimer((MainActivity) getActivity(), this);
         mTimer.start(mRefreshTimeout);
     }
@@ -363,7 +362,6 @@ class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter
             image = (TextView) view.findViewById(R.id.image);
         }
     }
-
 
     ProcessRecyclerAdapter(List<Process> list) {
         this.procsList = list;

@@ -95,7 +95,7 @@ public class InfoQueues extends Fragment implements SwipeRefreshLayout.OnRefresh
 
         mModuleCache.mQueuesJsonArray = mQueuesJsonArray;
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 
@@ -113,7 +113,6 @@ public class InfoQueues extends Fragment implements SwipeRefreshLayout.OnRefresh
             updateInfo();
         }
 
-        // Schedule the timer here, not in onCreateView(), because mRefreshTimeout may be updated in getInfo()
         mTimer = new RefreshTimer((MainActivity) getActivity(), this);
         mTimer.start(mRefreshTimeout);
     }
@@ -278,7 +277,6 @@ class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdapter.Que
             image = (TextView) view.findViewById(R.id.image);
         }
     }
-
 
     QueueRecyclerAdapter(List<Queue> list) {
         this.queueList = list;

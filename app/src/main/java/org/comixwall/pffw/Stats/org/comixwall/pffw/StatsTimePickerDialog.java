@@ -42,7 +42,7 @@ public class StatsTimePickerDialog extends DialogFragment {
         TimePickerDialog.OnTimeSetListener listener = (TimePickerDialog.OnTimeSetListener) fragment;
 
         // Create a new instance of TimePickerDialog and return it
-        /// @attention Do not use the 24HourFormat of the phone, we are dealing with the hours on PFFW logs.
+        // ATTENTION: Do not use the 24HourFormat of the phone, we are dealing with the hours on PFFW logs.
         //return new TimePickerDialog(getActivity(), listener, hour, minute, DateFormat.is24HourFormat(getActivity()));
         return new TimePickerDialog(getActivity(), listener, hour, minute, true);
     }

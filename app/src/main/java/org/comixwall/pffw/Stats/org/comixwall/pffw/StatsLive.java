@@ -65,7 +65,7 @@ public class StatsLive extends StatsHourly implements RefreshTimer.OnTimeoutList
         mModuleCache.bundle.putString("mHour", mHour);
         mModuleCache.bundle.putString("mMinute", mMinute);
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 
@@ -84,11 +84,11 @@ public class StatsLive extends StatsHourly implements RefreshTimer.OnTimeoutList
             updateStats();
         }
 
-        /// @todo Android SDK recommends the Handler class instead
+        // TODO: Android SDK recommends the Handler class instead
         // see http://stackoverflow.com/questions/4597690/android-timer-how
         // But the Timer class is very simple to use.
         mTimer = new RefreshTimer((MainActivity) getActivity(), this);
-        /// @attention Do not use scheduleAtFixedRate(), we don't need fixed-rate.
+        // ATTENTION: Do not use scheduleAtFixedRate(), we don't need fixed-rate.
         // If a refresh task is delayed, the rest of the ticks should delay too.
         // Schedule the timer here, not in onCreateView(), because mRefreshTimeout may be updated in getStats()
         mTimer.start(mRefreshTimeout);

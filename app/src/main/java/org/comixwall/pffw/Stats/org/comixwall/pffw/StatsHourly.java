@@ -154,7 +154,7 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
             mJsonMinutes = new JSONArray();
 
             if (mJsonStats != null) {
-                /// @todo Is there a better way?
+                // TODO: Is there a better way?
                 if (mJsonStats.optJSONObject(formatDate()) != null &&
                         mJsonStats.getJSONObject(formatDate()).optJSONObject("Hours") != null &&
                         mJsonStats.getJSONObject(formatDate()).getJSONObject("Hours").optJSONObject(mHour) != null) {

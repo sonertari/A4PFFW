@@ -62,6 +62,9 @@ import java.util.Map;
 import static org.comixwall.pffw.MainActivity.cache;
 import static org.comixwall.pffw.Utils.showMessage;
 
+/**
+ * Base class for all states fragments.
+ */
 public abstract class StatsBase extends Fragment implements OnChartValueSelectedListener,
         SwipeRefreshLayout.OnRefreshListener, LogFilePickerDialog.LogFilePickerDialogListener,
         DatePickerDialog.OnDateSetListener, ControllerTask.ControllerTaskListener {
@@ -116,6 +119,9 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
         add("Type");
     }};
 
+    /**
+     * Comparator used to sort all of the top lists in reverse order.
+     */
     final Comparator reverseComparator = new Comparator() {
         public int compare(Object o1, Object o2) {
             return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
@@ -131,7 +137,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
     static {
         monthNames = new HashMap<>();
 
-        /// @attention Do not translate month names, they are used to match the strings in log files in English
+        // ATTENTION: Do not translate month names, they are used to match the strings in log files in English
         monthNames.put("01", "Jan");
         monthNames.put("02", "Feb");
         monthNames.put("03", "Mar");
@@ -154,7 +160,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
 
     private SwipeRefreshLayout swipeRefresh;
 
-    /// @attention Init to "", not null, because we use empty string to fetch the default file
+    // ATTENTION: Init to "", not null, because we use empty string to fetch the default file
     String mLogFile = "";
     String mLastLogFile = "";
 
@@ -464,12 +470,12 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
     }
 
     boolean isLogFileChanged() {
-        return mLogFile.compareTo(mLastLogFile) != 0;
+        return !mLogFile.equals(mLastLogFile);
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-        /// @attention month is 0 based, so add one
+        // ATTENTION: month is 0 based, so add one
         mMonth = String.format("%02d", month + 1);
         mDay = String.format("%02d", dayOfMonth);
         updateDateTimeText();

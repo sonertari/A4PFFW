@@ -117,7 +117,7 @@ public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefresh
         mModuleCache.bundle.putInt("mStateSize", mStateSize);
         mModuleCache.bundle.putString("mRegex", mRegex);
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 
@@ -141,7 +141,6 @@ public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefresh
             updateStates();
         }
 
-        // Schedule the timer here, not in onCreateView(), because mRefreshTimeout may be updated in getStates()
         mTimer = new RefreshTimer((MainActivity) getActivity(), this);
         mTimer.start(mRefreshTimeout);
     }
@@ -161,6 +160,13 @@ public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefresh
         swipeRefresh.setRefreshing(true);
     }
 
+    /**
+     * Fetch state table with the number of states.
+     * The state list requested can be restricted by the start state, the number of states to fetch,
+     * and a regular expression.
+     *
+     * @return True on success, false on failure.
+     */
     @Override
     public boolean executeTask() {
         try {
@@ -248,8 +254,8 @@ public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefresh
             mStartLine = 0;
         }
         try {
-            /// @attention Never allow too large numbers here.
-            /// @bug tail(1) on OpenBSD 5.9 amd64 gets stuck with: echo soner | /usr/bin/tail -99999999
+            // ATTENTION: Never allow too large numbers here.
+            // BUG: tail(1) on OpenBSD 5.9 amd64 gets stuck with: echo soner | /usr/bin/tail -99999999
             mLinesPerPage = Math.min(999, Integer.parseInt(etLinesPerPage.getText().toString()));
         } catch (Exception e) {
             mLinesPerPage = 25;
@@ -386,7 +392,6 @@ class StateRecyclerAdapter extends RecyclerView.Adapter<StateRecyclerAdapter.Sta
         }
     }
 
-
     StateRecyclerAdapter(List<State> list) {
         this.statesList = list;
     }
@@ -413,6 +418,7 @@ class StateRecyclerAdapter extends RecyclerView.Adapter<StateRecyclerAdapter.Sta
         int image;
         String caption;
 
+        // We use contains() not equals() here, because the state field contains two states not one.
         if (state.state.contains("SYN")) {
             image = R.drawable.block;
             caption = "S";

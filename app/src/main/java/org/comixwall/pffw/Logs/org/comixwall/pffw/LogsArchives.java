@@ -140,7 +140,7 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
             getLogs();
         } else {
 
-            /// @todo Check why this does not work
+            // TODO: Check why this does not work
             //if (mModuleCache.mLogsList != null) {
             //    mLogsList = mModuleCache.mLogsList;
             //    mAdapter.notifyDataSetChanged();
@@ -172,6 +172,16 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
         swipeRefresh.setRefreshing(true);
     }
 
+    /**
+     * Get the pf logs to display.
+     * <p>
+     * The SelectLogFile command determines the correct log file, otherwise the mLogFile param
+     * may point to a compressed log file, which should be decompressed first, and the command
+     * should return the name of the decompressed file.
+     * <p>
+     * We also fetch the list of pf log files to populate the list in the log file picker dialog.
+     * @return
+     */
     @Override
     public boolean executeTask() {
         try {
@@ -261,8 +271,8 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
     private void updateSelections() {
         tvLogSize.setText(String.format(Locale.getDefault(), "/ %1$d", mLogSize));
 
-        /// @todo Check why setText() does not complain mLogSize is an int, then crashes at run-time
-        // Apparently, an int can be confused with a char sequence
+        // TODO: Check why setText() does not complain mLogSize is an int, then crashes at run-time
+        // Apparently, an int can be confused with a char sequence.
         //etStartLine.setText(mLogSize);
         etStartLine.setText(String.format(Locale.getDefault(), "%1$d", mStartLine + 1));
         etLinesPerPage.setText(String.format(Locale.getDefault(), "%1$d", mLinesPerPage));
@@ -286,6 +296,10 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
         mRegex = etRegex.getText().toString();
     }
 
+    /**
+     * Compute meaningful values for command params.
+     * This method is very similar to the PHP one.
+     */
     private void computeNavigationVars() {
 
         if (mButtonPressed) {
@@ -324,6 +338,7 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
                     ((MainActivity) getActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
                     ((MainActivity) getActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
                 } else {
+                    // Navigation buttons
                     mButtonPressed = true;
                     mButton = id;
                     getLogs();
@@ -420,7 +435,6 @@ class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.LogView
         }
     }
 
-
     LogRecyclerAdapter(List<Log> list) {
         this.logsList = list;
     }
@@ -447,10 +461,10 @@ class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.LogView
         int image;
         String caption;
 
-        if (log.action.compareTo("block") == 0) {
+        if (log.action.equals("block")) {
             image = R.drawable.block;
             caption = "B";
-        } else if (log.action.compareTo("pass") == 0) {
+        } else if (log.action.equals("pass")) {
             image = R.drawable.pass;
             caption = "P";
         } else {

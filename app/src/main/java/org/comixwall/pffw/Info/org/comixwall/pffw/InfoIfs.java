@@ -95,7 +95,7 @@ public class InfoIfs extends Fragment implements SwipeRefreshLayout.OnRefreshLis
 
         mModuleCache.mIfsJsonArray = mIfsJsonArray;
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 

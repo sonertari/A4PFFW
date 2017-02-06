@@ -93,7 +93,7 @@ public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         mModuleCache.mRulesJsonArray = mRulesJsonArray;
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 
@@ -277,7 +277,6 @@ class RuleRecyclerAdapter extends RecyclerView.Adapter<RuleRecyclerAdapter.RuleV
             image = (TextView) view.findViewById(R.id.image);
         }
     }
-
 
     RuleRecyclerAdapter(List<Rule> list) {
         this.ruleList = list;

@@ -112,7 +112,7 @@ public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         mModuleCache.bundle.putInt("mLogSize", mLogSize);
         mModuleCache.bundle.putString("mRegex", mRegex);
 
-        /// @attention It is very important to cancel the timer
+        // ATTENTION: It is very important to cancel the timer
         mTimer.cancel();
     }
 
@@ -127,7 +127,7 @@ public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             getLogs();
         } else {
 
-            /// @todo Check why this does not work
+            // TODO: Check why this does not work
             //if (mModuleCache.mLogsList != null) {
             //    mLogsList = mModuleCache.mLogsList;
             //    mAdapter.notifyDataSetChanged();

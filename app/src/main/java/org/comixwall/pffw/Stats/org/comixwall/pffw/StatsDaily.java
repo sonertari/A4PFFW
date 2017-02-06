@@ -162,7 +162,7 @@ public class StatsDaily extends StatsGeneral {
                 mJsonHourStats = new JSONObject();
 
                 if (mJsonStats != null) {
-                    /// @todo Is there a better way?
+                    // TODO: Is there a better way?
                     if (mJsonStats.optJSONObject(formatDate()) != null &&
                             mJsonStats.getJSONObject(formatDate()).optJSONObject("Hours") != null) {
                         mJsonHourStats = mJsonStats.getJSONObject(formatDate()).getJSONObject("Hours");
@@ -203,7 +203,7 @@ public class StatsDaily extends StatsGeneral {
     }
 
     private boolean isAllMonths() {
-        return tvAllMonths.getText().toString().compareTo(getString(R.string.all_months)) == 0;
+        return tvAllMonths.getText().toString().equals(getString(R.string.all_months));
     }
 
     private void setAllMonths(String type) {
@@ -219,7 +219,7 @@ public class StatsDaily extends StatsGeneral {
     }
 
     private boolean isAllDays() {
-        return tvAllDays.getText().toString().compareTo(getString(R.string.all_days)) == 0;
+        return tvAllDays.getText().toString().equals(getString(R.string.all_days));
     }
 
     private void setAllDays(String type) {

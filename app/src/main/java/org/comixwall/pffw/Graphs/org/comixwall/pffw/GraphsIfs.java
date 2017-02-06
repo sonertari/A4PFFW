@@ -74,11 +74,11 @@ public class GraphsIfs extends GraphsBase {
 
     @Override
     public void setBitmap(String title, Bitmap bmp) {
-        if (title.compareTo("Internal Interface") == 0) {
+        if (title.equals("Internal Interface")) {
             bmpIntIf = bmp;
-        } else if (title.compareTo("External Interface") == 0) {
+        } else if (title.equals("External Interface")) {
             bmpExtIf = bmp;
-        } else if (title.compareTo("Loopback Interface") == 0) {
+        } else if (title.equals("Loopback Interface")) {
             bmpLbIf = bmp;
         }
     }
@@ -98,7 +98,7 @@ public class GraphsIfs extends GraphsBase {
 
     @Override
     public void updateImages() {
-        /// @todo Check why setMaxHeight() does not work
+        // TODO: Check why setMaxHeight() does not work
         //ivExtIf.setMaxHeight(Math.round(ivExtIf.getMeasuredWidth() / 3f));
         ivExtIf.setImageBitmap(bmpExtIf);
         ivIntIf.setImageBitmap(bmpIntIf);

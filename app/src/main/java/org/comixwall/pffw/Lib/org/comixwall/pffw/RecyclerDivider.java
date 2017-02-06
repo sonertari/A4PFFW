@@ -1,5 +1,3 @@
-// This code can be found on the web as public domain.
-
 package org.comixwall.pffw;
 
 import android.content.Context;
@@ -11,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+// This code can be found on the web.
 class RecyclerDivider extends RecyclerView.ItemDecoration {
 
     private static final int[] ATTRS = new int[]{
