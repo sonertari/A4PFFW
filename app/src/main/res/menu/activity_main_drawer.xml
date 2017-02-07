@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
 Copyright (C) 2017 Soner Tari
 
 This file is part of PFFW.
@@ -29,30 +28,37 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
             <menu>
                 <item
                     android:id="@+id/menuInfoPf"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/packet_filter" />
                 <item
                     android:id="@+id/menuInfoSystem"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/system" />
                 <item
                     android:id="@+id/menuInfoHosts"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/hosts" />
                 <item
                     android:id="@+id/menuInfoIfs"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/interfaces" />
                 <item
                     android:id="@+id/menuInfoRules"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/rules" />
                 <item
                     android:id="@+id/menuInfoStates"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/states" />
                 <item
                     android:id="@+id/menuInfoQueues"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/queues" />
             </menu>
@@ -65,18 +71,22 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
             <menu>
                 <item
                     android:id="@+id/menuStatsGeneral"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/general" />
                 <item
                     android:id="@+id/menuStatsDaily"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/daily" />
                 <item
                     android:id="@+id/menuStatsHourly"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/hourly" />
                 <item
                     android:id="@+id/menuStatsLive"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/live" />
             </menu>
@@ -89,18 +99,22 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
             <menu>
                 <item
                     android:id="@+id/menuGraphsInterfaces"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/interfaces" />
                 <item
                     android:id="@+id/menuGraphsTransfer"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/transfer" />
                 <item
                     android:id="@+id/menuGraphsStates"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/states" />
                 <item
                     android:id="@+id/menuGraphsMbufs"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/mbufs" />
             </menu>
@@ -113,10 +127,12 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
             <menu>
                 <item
                     android:id="@+id/menuLogsArchives"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/archives" />
                 <item
                     android:id="@+id/menuLogsLive"
+                    android:checkable="true"
                     android:icon="@drawable/ic_menu_gallery"
                     android:title="@string/live" />
             </menu>

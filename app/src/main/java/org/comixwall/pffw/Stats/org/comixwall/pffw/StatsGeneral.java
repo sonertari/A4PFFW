@@ -171,7 +171,7 @@ public class StatsGeneral extends StatsBase {
         xAxis.setValueFormatter(xavf);
 
         YAxis leftAxis = chart.getAxisLeft();
-        /// @bug Need to set leftAxis min to 0, otherwise bars leave a gap to the X-axis and values above bars disappear
+        // BUG: Need to set leftAxis min to 0, otherwise bars leave a gap to the X-axis and values above bars disappear
         leftAxis.setAxisMinimum(0f); // this replaces setStartAtZero(true)
         leftAxis.setEnabled(false);
 

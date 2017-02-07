@@ -21,11 +21,11 @@ package org.comixwall.pffw;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.test.espresso.core.deps.guava.hash.HashCode;
 import android.support.test.espresso.core.deps.guava.hash.Hashing;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -134,17 +134,16 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
         ((MainActivity) getActivity()).setLoggedIn(mLoggedIn);
 
         if (mLoggedIn) {
-            fragment = new InfoPf();
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
-            transaction.replace(R.id.fragmentContainer, fragment);
-            transaction.commit();
-
             // Enable drawer and toggle button
             ((MainActivity) getActivity()).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             ((MainActivity) getActivity()).toggle.setDrawerIndicatorEnabled(true);
+
             // Recreate menu items, the fragment is InfoPf now
             getActivity().invalidateOptionsMenu();
+
+            // Create the InfoPf fragment and set its menu item to checked
+            NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
+            ((MainActivity) getActivity()).onNavigationItemSelected(navigationView.getMenu().findItem(R.id.menuInfoPf));
         }
     }
 

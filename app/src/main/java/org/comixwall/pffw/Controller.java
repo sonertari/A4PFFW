@@ -55,12 +55,15 @@ public class Controller extends Service {
     private static String mUser;
     private static String mPassword;
     private static String mHost;
+
     public String getHost() {
         return mHost;
     }
+
     private static int mPort;
 
     private static String mHostName;
+
     public String getHostname() {
         return mHostName;
     }
@@ -82,6 +85,17 @@ public class Controller extends Service {
         return mBinder;
     }
 
+    /**
+     * Authenticate the given user on the given host.
+     * <p>
+     * PFFW users are system users. So we try to log in to the PFFW system via SSH.
+     * If the session is successfully established, then the user must be authenticated.
+     * We also run the hostname command, the output of which we use while verifying the hostname
+     * while making secure HTTP connections to fetch graphs.
+     *
+     * @return Whether the user is authenticated or not.
+     * @throws Exception
+     */
     public Boolean login() throws Exception {
         mHostName = "";
         if (createSession(mUser, mPassword, mHost, mPort)) {
@@ -92,6 +106,20 @@ public class Controller extends Service {
         return session.isConnected();
     }
 
+    /**
+     * Execute the given command.
+     * We first establish a session if no session exists (the session established during login may
+     * have already dropped by now), then open a channel and execute the command.
+     * <p>
+     * The return value of all command on PFFW is always a json array, containing the command output,
+     * error message, and the exit status of the command execution, in that order.
+     *
+     * @param model The model class in the PHP code.
+     * @param cmd   The model command.
+     * @param args  The model arguments.
+     * @return Execution result in a json array.
+     * @throws Exception
+     */
     public String execute(String model, String cmd, Object... args) throws Exception {
         String cmdLine = mPffwc + " " + mLocale + " " + model + " " + cmd;
         for (Object a : args) {
@@ -109,13 +137,15 @@ public class Controller extends Service {
         return output;
     }
 
+    /**
+     * Establish a session if none exists.
+     */
     private Boolean createSession(String username, String password, String hostname, int port) throws Exception {
 
         if (session == null || !session.isConnected()) {
             logger.finest("Controller createSession: " + username + ", " + password + ", " + hostname + ", " + port);
 
-            JSch jsch = new JSch();
-            session = jsch.getSession(username, hostname, port);
+            session = new JSch().getSession(username, hostname, port);
 
             session.setPassword(password);
 
@@ -136,6 +166,17 @@ public class Controller extends Service {
         return session.isConnected();
     }
 
+    /**
+     * Run the command after opening a channel.
+     * Note that we use an exec channel not a shell one to run the command. This channel is
+     * closed after the output is received completely.
+     * <p>
+     * We wait for command output for a limited time only, otherwise we may get stuck here.
+     *
+     * @param cmd The command to run.
+     * @return The command output.
+     * @throws Exception
+     */
     private String runSSHCommand(String cmd) throws Exception {
         String out = "";
 
@@ -207,6 +248,11 @@ public class Controller extends Service {
     }
 }
 
+/**
+ * This task class is used to run commands asynchronously on a separate thread.
+ * ATTENTION: The most important feature of this task class is the mIsRunning field, which ensure
+ * that we do not start more than one such controller thread at one time.
+ */
 class ControllerTask extends AsyncTask<Void, Void, Void> {
     private final Fragment owner;
 

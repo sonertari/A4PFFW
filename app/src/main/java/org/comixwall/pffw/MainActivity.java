@@ -51,6 +51,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static Controller controller;
     private static boolean boundToController = false;
 
+    /**
+     * Used to get the constructor of and instantiate the fragment class referred by the menu item selected.
+     */
     private HashMap<Integer, Class> mMenuItems2Fragments;
     public static Fragment fragment = new Fragment();
 
@@ -61,6 +64,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private Boolean mLoggedIn = false;
 
+    private NavigationView navigationView;
+
+    /**
+     * Set the login status.
+     * Used by the login fragment to indicate if the authentication was successful.
+     *
+     * @param loggedIn Authentication result.
+     */
     public void setLoggedIn(Boolean loggedIn) {
         mLoggedIn = loggedIn;
     }
@@ -117,7 +128,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         FragmentManager fm = getSupportFragmentManager();
 
         // ATTENTION: Always load cache from the FragmentManager.
-        /// Otherwise, the cache survives even after the application is closed by the last Back button press
+        // Otherwise, the cache survives even after the application is closed by the last Back button press
         cache = (Cache) fm.findFragmentByTag("cache");
         if (cache == null) {
             // create the fragment and data the first time
@@ -134,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navView);
+        navigationView = (NavigationView) findViewById(R.id.navView);
         navigationView.setNavigationItemSelectedListener(this);
 
         logFilePickerDialog = new LogFilePickerDialog();
@@ -169,7 +180,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // ATTENTION: Do not add but replace, because login page may be rotated, which brings us here again.
             //transaction.add(R.id.fragmentContainer, fragment, "MainFragment");
             transaction.replace(R.id.fragmentContainer, fragment);
-
             transaction.commit();
         }
     }
@@ -199,18 +209,38 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         if (id == R.id.menuRefresh) {
+            // Refresh requests are handled by fragments
             return fragment.onOptionsItemSelected(item);
         } else if (id == R.id.menuLogout) {
             logger.finest("onOptionsItemSelected recreate()");
 
+            // TODO: Do we need to reset the backstack if we are going to recreate the activity next?
             popAllBackStack();
+
+            // Log user out by setting the mLoggedIn flag
             mLoggedIn = false;
+
+            // We recreate the activity so that onCreate() resets everything and
+            // onResume() displays Login fragment.
             recreate();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Select the fragment to display.
+     * We modify the backstack ourselves so that no fragment is pushed to the backstack twice.
+     * So if a fragment which is already in the backstack is selected, we roll back the backstack
+     * to its position.
+     * <p>
+     * We never push the InfoPf fragment to the backstack because it is always
+     * the first fragment displayed (if we push it to the backstack too, pressing the back button
+     * while InfoPf fragment is displayed causes a blank activity screen).
+     *
+     * @param item The menu item selected.
+     * @return See {@link NavigationView.OnNavigationItemSelectedListener}
+     */
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
@@ -228,18 +258,28 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // Never add InfoPf to the backstack
             add = false;
             fragment = new InfoPf();
+
+            // ATTENTION: menuInfoPf does not check initially, so we need to manage it ourselves
+            item.setChecked(true);
         } else {
+            // TODO: Check why android:checkableBehavior="single" does not uncheck menuInfoPf
+            MenuItem itemInfoPf = navigationView.getMenu().findItem(R.id.menuInfoPf);
+            if (itemInfoPf.isChecked()) {
+                itemInfoPf.setChecked(false);
+            }
+
             try {
                 fragment = (Fragment) mMenuItems2Fragments.get(id).getConstructor().newInstance();
             } catch (Exception e) {
                 e.printStackTrace();
-                logger.warning("EXCEPTION: " + e.toString());
+                logger.severe("EXCEPTION: " + e.toString());
                 return false;
             }
         }
 
         String fragmentName = fragment.getClass().getSimpleName();
 
+        // Rolls back the backstack if the fragment is already in
         if (!fm.popBackStackImmediate(fragmentName, 0)) {
             android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
