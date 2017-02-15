@@ -250,7 +250,7 @@ public class Controller extends Service {
 
 /**
  * This task class is used to run commands asynchronously on a separate thread.
- * ATTENTION: The most important feature of this task class is the mIsRunning field, which ensure
+ * ATTENTION: The most important feature of this task class is the mIsRunning field, which ensures
  * that we do not start more than one such controller thread at one time.
  */
 class ControllerTask extends AsyncTask<Void, Void, Void> {

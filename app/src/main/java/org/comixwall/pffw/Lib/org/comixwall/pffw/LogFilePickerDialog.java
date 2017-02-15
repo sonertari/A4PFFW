@@ -100,7 +100,7 @@ public class LogFilePickerDialog extends DialogFragment {
             // TODO: Check why getParentFragment() and getTargetFragment() do not work here
             //StatsHourlyDatePickerDialogListener listener = (StatsHourlyDatePickerDialogListener) getParentFragment();
             LogFilePickerDialogListener listener = (LogFilePickerDialogListener) fragment;
-            if (mLastSelectedLogFileOpt.equals(mSelectedOpt)) {
+            if (!mLastSelectedLogFileOpt.equals(mSelectedOpt)) {
                 mLogFile = mLogFileOpts2Files.get(mSelectedOpt);
                 mLastSelectedLogFileOpt = mSelectedOpt;
                 listener.onSelection(mSelectedOpt, mLogFile);
