@@ -26,6 +26,7 @@ import android.support.design.widget.TextInputEditText;
 import android.support.test.espresso.core.deps.guava.hash.HashCode;
 import android.support.test.espresso.core.deps.guava.hash.Hashing;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +56,8 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
     private String mPassword;
     private String mHost;
     private int mPort;
+
+    private static String mPreviousHost;
 
     private Boolean mLoggedIn = false;
 
@@ -134,6 +137,17 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
         ((MainActivity) getActivity()).setLoggedIn(mLoggedIn);
 
         if (mLoggedIn) {
+            if (!mHost.equals(mPreviousHost)) {
+                // Reset the cache if the host changes
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction().remove(fm.findFragmentByTag("cache")).commit();
+
+                MainActivity.cache = new Cache();
+                fm.beginTransaction().add(MainActivity.cache, "cache").commit();
+
+                mPreviousHost = mHost;
+            }
+
             // Enable drawer and toggle button
             ((MainActivity) getActivity()).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             ((MainActivity) getActivity()).toggle.setDrawerIndicatorEnabled(true);

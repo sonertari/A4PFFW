@@ -311,7 +311,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
     }
 
     /**
-     * Displays the graph in a dialog which allows pinch-zooming.
+     * Displays the graph in a dialog for pinch-zooming.
      */
     final View.OnClickListener onViewClick = (new View.OnClickListener() {
         @Override
@@ -328,7 +328,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
     /**
      * Return the bitmap associated with the view.
-     * Used by the graph dialog to load the bitmap the used has clicked on.
+     * Used by the graph dialog to load the bitmap the user has clicked on.
      *
      * @param view The view the user has clicked on.
      * @return The bitmap to display.

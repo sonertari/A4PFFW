@@ -117,7 +117,7 @@ public class LogFilePickerDialog extends DialogFragment {
     /**
      * Update log files list to display to the user.
      * We return the selection so that the main fragment displays it as the selected log file.
-     * We cannot simply return the log file name (which the fragment already know), because
+     * We cannot simply return the log file name (which the fragment already knows), because
      * the selected option has an extra info about the start date of the logs in that file.
      *
      * @return The selected option.

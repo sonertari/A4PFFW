@@ -77,7 +77,7 @@ public class Controller extends Service {
 
     private Session session = null;
 
-    private final String mPffwc = "/usr/bin/doas /var/www/htdocs/pffw/Controller/pffwc.php";
+    private final String mPffwc = "sh ctlr";
     private final String mLocale = "en_En";
 
     @Override

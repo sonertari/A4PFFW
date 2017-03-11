@@ -4,7 +4,7 @@ A4PFFW is an Android user interface for PFFW 5.9. Afaik, PFFW is the only firewa
 
 You can find a couple of screenshots on the [wiki](https://github.com/sonertari/A4PFFW/wiki).
 
-The apk file is available for download at [a4pffw59_20170215.apk](https://drive.google.com/file/d/0B3F7Ueq0mFlYRHlTWkdldG54OVU/view?usp=sharing). Make sure the md5 checksum is correct: 4eb6350d82040d8ff1511c24b12562b2.
+The apk file is available for download at [a4pffw59_20170311.apk](https://drive.google.com/file/d/0B3F7Ueq0mFlYWmJZdVd3TVV3aHM/view?usp=sharing). Make sure the md5 checksum is correct: 6cc8598d1e85558b0068db90cd2b0641.
 
 A4PFFW is part of the PFFW project.
 
