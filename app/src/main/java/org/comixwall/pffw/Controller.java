@@ -98,6 +98,13 @@ public class Controller extends Service {
      */
     public Boolean login() throws Exception {
         mHostName = "";
+
+        // ATTENTION: Always disconnect the session if connected while logging in
+        // Otherwise, we stay logged in until the session gets disconnected (times out)
+        if (session != null && session.isConnected()) {
+            session.disconnect();
+        }
+
         if (createSession(mUser, mPassword, mHost, mPort)) {
             mHostName = runSSHCommand("hostname");
         }
@@ -111,7 +118,7 @@ public class Controller extends Service {
      * We first establish a session if no session exists (the session established during login may
      * have already dropped by now), then open a channel and execute the command.
      * <p>
-     * The return value of all command on PFFW is always a json array, containing the command output,
+     * The return value of all commands on PFFW is always a json array, containing the command output,
      * error message, and the exit status of the command execution, in that order.
      *
      * @param model The model class in the PHP code.

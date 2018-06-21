@@ -108,7 +108,7 @@ class Utils {
 
     /**
      * Create an SSL context which trusts the PFFW server certificate.
-     * PFFW server certificates are self signed, hence is not verified by the default SSL context.
+     * PFFW server certificate is self signed, hence is not verified by the default SSL context.
      *
      * @param owner Fragment which initiated the call to this method.
      * @return SSL context.

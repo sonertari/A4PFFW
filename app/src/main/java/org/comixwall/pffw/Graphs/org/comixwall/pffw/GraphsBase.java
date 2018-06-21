@@ -179,8 +179,16 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
         // ATTENTION: Measured width of swipeRefresh may be 0 on rotation, which gives negative w otherwise
         int w = swipeRefresh.getMeasuredWidth() - 180;
         mGraphWidth = w > 0 ? w : 900;
+
+        // Limix min/max width
+        mGraphWidth = mGraphWidth > 2048 ? 2048 : mGraphWidth;
+        mGraphWidth = mGraphWidth < 32 ? 32 : mGraphWidth;
+
         mGraphHeight = Math.round(mGraphWidth / 3f);
-        //final int height = Math.round(width / 1.78f);
+
+        // Limix min/max height
+        mGraphHeight = mGraphHeight > 2048 ? 2048 : mGraphHeight;
+        mGraphHeight = mGraphHeight < 32 ? 32 : mGraphHeight;
     }
 
     @Override
