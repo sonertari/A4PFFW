@@ -147,4 +147,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="in4">İçe4</string>
     <string name="in6">İçe6</string>
     <string name="comixwall_logo">ComixWall logosu</string>
+    <string name="notifications">UYARILAR</string>
+    <string name="notification_details">UYARI DETAYLARI</string>
+    <string name="notifications_menu">Uyarılar</string>
 </resources>

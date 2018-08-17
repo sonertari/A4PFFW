@@ -65,7 +65,7 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
         tvHour.setOnClickListener(mLabelClickedHandler);
 
         init();
-        createStatsViews(savedInstanceState);
+        createStatsViews();
 
         if (cache.statsHourly == null) {
             cache.statsHourly = new StatsCache();

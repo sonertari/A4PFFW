@@ -47,7 +47,7 @@ public class StatsLive extends StatsHourly implements RefreshTimer.OnTimeoutList
         tvMonthDay = (TextView) view.findViewById(R.id.systemDatetime);
 
         init();
-        createStatsViews(savedInstanceState);
+        createStatsViews();
 
         if (cache.statsLive == null) {
             cache.statsLive = new StatsCache();

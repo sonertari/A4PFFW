@@ -349,7 +349,7 @@ class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter
         final TextView pid;
         final TextView others;
         final TextView started;
-        public final TextView image;
+        final TextView image;
 
 
         ProcessViewHolder(View view) {

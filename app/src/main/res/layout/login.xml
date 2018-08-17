@@ -70,7 +70,6 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/password"
-                        android:imeActionId="@+id/login"
                         android:imeOptions="actionUnspecified"
                         android:inputType="textPassword"
                         android:maxLines="1" />
@@ -86,7 +85,6 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/host"
-                        android:imeActionId="@+id/login"
                         android:imeOptions="actionUnspecified"
                         android:inputType="textUri"
                         android:maxLines="1" />
@@ -102,7 +100,6 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/port"
-                        android:imeActionId="@+id/login"
                         android:imeOptions="actionUnspecified"
                         android:inputType="text|numberDecimal"
                         android:maxLines="1" />

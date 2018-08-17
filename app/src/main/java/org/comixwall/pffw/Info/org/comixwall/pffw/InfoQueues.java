@@ -259,12 +259,12 @@ class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdapter.Que
     private final List<Queue> queueList;
 
     class QueueViewHolder extends RecyclerView.ViewHolder {
-        public final TextView name;
+        final TextView name;
         final TextView packetsBytes;
         final TextView dropped;
-        public final TextView number;
+        final TextView number;
         final TextView len;
-        public final TextView image;
+        final TextView image;
 
 
         QueueViewHolder(View view) {

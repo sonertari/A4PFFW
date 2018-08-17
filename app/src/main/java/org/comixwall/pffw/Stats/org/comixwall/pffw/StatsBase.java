@@ -76,7 +76,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
     class StatsKey2List extends HashMap<String, StatsList> {
     }
 
-    public class Stats {
+    class Stats {
         final String label;
         final Integer color;
         final BarChart chart;
@@ -236,10 +236,10 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
         mModuleCache.bundle.putString("mDay", mDay);
     }
 
-    void createStatsViews(Bundle savedInstanceState) {
+    void createStatsViews() {
         String[] keys = mCardViews.keySet().toArray(new String[0]);
         for (String k : keys) {
-            getLayoutInflater(savedInstanceState).inflate(R.layout.stats_cardview, mCardViews.get(k), true);
+            getActivity().getLayoutInflater().inflate(R.layout.stats_cardview, mCardViews.get(k), true);
         }
     }
 
@@ -456,7 +456,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
 
             int count = 1;
             for (Object entry : kvps) {
-                TableRow row = (TableRow) getLayoutInflater(new Bundle()).inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
+                TableRow row = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
 
                 ((TextView) row.findViewById(R.id.tableValue)).setText(((Map.Entry<String, Integer>) entry).getValue().toString());
                 ((TextView) row.findViewById(R.id.tableKey)).setText(((Map.Entry<String, Integer>) entry).getKey());
@@ -498,8 +498,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
         // All charts have the same id
         BarChart chart = (BarChart) view.findViewById(R.id.chart);
 
-        RectF bounds = mOnValueSelectedRectF;
-        chart.getBarBounds((BarEntry) e, bounds);
+        chart.getBarBounds((BarEntry) e, mOnValueSelectedRectF);
         MPPointF position = chart.getPosition(e, YAxis.AxisDependency.LEFT);
         MPPointF.recycleInstance(position);
     }

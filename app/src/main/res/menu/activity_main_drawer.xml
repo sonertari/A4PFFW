@@ -21,6 +21,11 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
 
     <group android:checkableBehavior="single">
         <item
+            android:id="@+id/menuNotifications"
+            android:checkable="true"
+            android:icon="@drawable/ic_menu_gallery"
+            android:title="@string/notifications_menu" />
+        <item
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:icon="@drawable/ic_menu_gallery"

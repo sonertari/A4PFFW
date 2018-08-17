@@ -38,6 +38,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
@@ -62,21 +64,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public ActionBarDrawerToggle toggle;
     public DrawerLayout drawer;
 
-    private Boolean mLoggedIn = false;
-
     private NavigationView navigationView;
 
-    /**
-     * Set the login status.
-     * Used by the login fragment to indicate if the authentication was successful.
-     *
-     * @param loggedIn Authentication result.
-     */
-    public void setLoggedIn(Boolean loggedIn) {
-        mLoggedIn = loggedIn;
-    }
-
     public static final Logger logger;
+
+    private static int lastNotificationTimestamp = 0;
 
     static {
         logger = Logger.getLogger("org.comixwall.PFFW");
@@ -105,8 +97,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         logger.finest("MainActivity onCreate()");
 
         mMenuItems2Fragments = new HashMap<Integer, Class>() {{
+            put(R.id.menuNotifications, Notifications.class);
             // ATTENTION: InfoPf fragment should never be instantiated using this map
-            //put(R.id.menuInfoPf, InfoPf.class);
+            put(R.id.menuInfoPf, InfoPf.class);
             put(R.id.menuInfoSystem, InfoSystem.class);
             put(R.id.menuInfoHosts, InfoHosts.class);
             put(R.id.menuInfoIfs, InfoIfs.class);
@@ -152,25 +145,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-        cache.bundle.putBoolean("mLoggedIn", mLoggedIn);
-    }
-
-    @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-
-        mLoggedIn = cache.bundle.getBoolean("mLoggedIn");
-    }
-
-
-    @Override
     public void onResume() {
         super.onResume();
 
-        if (!mLoggedIn) {
+        if (controller == null || !controller.isLoggedin()) {
             // ATTENTION: Login fragment should be inflated only after SSH session is created first
             // onResume() is executed after onRestoreInstanceState().
             FragmentManager fm = getSupportFragmentManager();
@@ -181,6 +159,53 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             //transaction.add(R.id.fragmentContainer, fragment, "MainFragment");
             transaction.replace(R.id.fragmentContainer, fragment);
             transaction.commit();
+        } else {
+            showFirstFragment();
+        }
+    }
+
+    public void showFirstFragment() {
+        NavigationView navigationView = (NavigationView) findViewById(R.id.navView);
+
+        Intent intent = getIntent();
+        Bundle bundle = intent.getExtras();
+
+        if (bundle != null && bundle.containsKey("title") && bundle.containsKey("body") && bundle.containsKey("data")) {
+            // If there is a notification bundle, show the notification fragment
+            try {
+                JSONObject data = new JSONObject(bundle.getString("data"));
+
+                // ATTENTION: Timestamp check is a workaround for the case the user clicks the Overview button
+                // If the activity was created with a notification intent while the app was in the background,
+                // closing the app and then pressing the Overview button recreates the activity with the same intent,
+                // hence we reach here and add the same notification one more time.
+                // Timestamp is a unique notification id to prevent such mistakes
+                // TODO: Find a way to fix this Overview button issue
+                int timestamp = Integer.parseInt(data.getString("timestamp"));
+                if (lastNotificationTimestamp < timestamp) {
+                    lastNotificationTimestamp = timestamp;
+
+                    Notifications.addNotification(Notification.newInstance(data));
+
+                    // Remove one of the extras, so we don't add the same notification again
+                    intent.removeExtra("title");
+                    setIntent(new Intent());
+                } else {
+                    logger.finest("showFirstFragment will not process the same notification: " + lastNotificationTimestamp);
+                }
+            } catch (Exception e) {
+                logger.warning("showFirstFragment Exception= " + e.getMessage());
+            }
+            // Reset the fragment, so onNavigationItemSelected() displays the Notifications fragment in any case
+            fragment = new Fragment();
+            onNavigationItemSelected(navigationView.getMenu().findItem((R.id.menuNotifications)));
+        } else {
+            // Avoid blank pages by showing InfoPf fragment if the backstack is empty
+            if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                // Reset the fragment, so onNavigationItemSelected() displays the InfoPf fragment in any case
+                fragment = new Fragment();
+                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.menuInfoPf));
+            }
         }
     }
 
@@ -190,6 +215,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+
+            if (controller != null && controller.isLoggedin()) {
+                // Avoid blank pages by showing InfoPf fragment if the backstack is empty
+                // ATTENTION: This may show InfoPf for a brief period of time, if the super.onBackPressed()
+                // call above is going to close the activity after returning from this function
+                if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
+                    // Reset the fragment, so onNavigationItemSelected() displays the InfoPf fragment in any case
+                    fragment = new Fragment();
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.menuInfoPf));
+                }
+            }
         }
     }
 
@@ -217,11 +253,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // TODO: Do we need to reset the backstack if we are going to recreate the activity next?
             popAllBackStack();
 
-            // Log user out by setting the mLoggedIn flag
-            mLoggedIn = false;
+            controller.logout();
 
             // We recreate the activity so that onCreate() resets everything and
-            // onResume() displays Login fragment.
+            // onResume() displays the Login fragment.
             recreate();
         }
 
@@ -246,53 +281,58 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        FragmentManager fm = getSupportFragmentManager();
+        // Ignore requests for the same fragment already displayed
+        if (!mMenuItems2Fragments.get(id).isInstance(fragment)) {
+            FragmentManager fm = getSupportFragmentManager();
 
-        boolean add = true;
+            boolean add = true;
 
-        if (id == R.id.menuInfoPf) {
-            // InfoPf is the main fragment, should never be removed,
-            // so remove all backstack entries first to reach the first InfoPf.
-            popAllBackStack();
+            if (id == R.id.menuInfoPf) {
+                // InfoPf is the main fragment, should never be removed,
+                // so remove all backstack entries first to reach the first InfoPf.
+                popAllBackStack();
 
-            // Never add InfoPf to the backstack
-            add = false;
-            fragment = new InfoPf();
+                // Never add InfoPf to the backstack
+                add = false;
+                fragment = new InfoPf();
 
-            // ATTENTION: menuInfoPf does not check initially, so we need to manage it ourselves
-            item.setChecked(true);
+                // ATTENTION: menuInfoPf does not check initially, so we need to manage it ourselves
+                item.setChecked(true);
+            } else {
+                // TODO: Check why android:checkableBehavior="single" does not uncheck menuInfoPf
+                MenuItem itemInfoPf = navigationView.getMenu().findItem(R.id.menuInfoPf);
+                if (itemInfoPf.isChecked()) {
+                    itemInfoPf.setChecked(false);
+                }
+
+                try {
+                    fragment = (Fragment) mMenuItems2Fragments.get(id).getConstructor().newInstance();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    logger.severe("EXCEPTION: " + e.toString());
+                    return false;
+                }
+            }
+
+            String fragmentName = fragment.getClass().getSimpleName();
+
+            // Rolls back the backstack if the fragment is already in
+            if (!fm.popBackStackImmediate(fragmentName, 0)) {
+                android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+
+                if (add) {
+                    transaction.addToBackStack(fragmentName);
+                }
+
+                // TODO: Check if we need to pass any args
+                //fragment.setArguments(getIntent().getExtras());
+                transaction.replace(R.id.fragmentContainer, fragment);
+
+                transaction.commit();
+            }
         } else {
-            // TODO: Check why android:checkableBehavior="single" does not uncheck menuInfoPf
-            MenuItem itemInfoPf = navigationView.getMenu().findItem(R.id.menuInfoPf);
-            if (itemInfoPf.isChecked()) {
-                itemInfoPf.setChecked(false);
-            }
-
-            try {
-                fragment = (Fragment) mMenuItems2Fragments.get(id).getConstructor().newInstance();
-            } catch (Exception e) {
-                e.printStackTrace();
-                logger.severe("EXCEPTION: " + e.toString());
-                return false;
-            }
-        }
-
-        String fragmentName = fragment.getClass().getSimpleName();
-
-        // Rolls back the backstack if the fragment is already in
-        if (!fm.popBackStackImmediate(fragmentName, 0)) {
-            android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-
-            if (add) {
-                transaction.addToBackStack(fragmentName);
-            }
-
-            // TODO: Check if we need to pass any args
-            //fragment.setArguments(getIntent().getExtras());
-            transaction.replace(R.id.fragmentContainer, fragment);
-
-            transaction.commit();
+            logger.finest("onNavigationItemSelected will not show the same fragment");
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -335,11 +375,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private final ServiceConnection mConnection = new ServiceConnection() {
         @Override
-        public void onServiceConnected(ComponentName className,
-                                       IBinder service) {
+        public void onServiceConnected(ComponentName className, IBinder service) {
             // We've bound to Controller, cast the IBinder and get Controller instance
-            Controller.ControllerBinder binder = (Controller.ControllerBinder) service;
-            controller = binder.getService();
+            controller = ((Controller.ControllerBinder) service).getService();
             boundToController = true;
         }
 

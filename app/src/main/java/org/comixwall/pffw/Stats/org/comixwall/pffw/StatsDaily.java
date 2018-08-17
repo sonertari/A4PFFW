@@ -65,7 +65,7 @@ public class StatsDaily extends StatsGeneral {
         view.findViewById(R.id.defaults).setOnClickListener(mLabelClickedHandler);
 
         init();
-        createStatsViews(savedInstanceState);
+        createStatsViews();
 
         if (cache.statsDaily == null) {
             cache.statsDaily = new StatsCache();
@@ -246,49 +246,46 @@ public class StatsDaily extends StatsGeneral {
             try {
                 int id = v.getId();
 
-                if (id == R.id.hourly) {
+                switch (id) {
+                    case R.id.hourly:
+                        setChartType(isDailyChart() ? getString(R.string.hourly) : getString(R.string.daily));
+                        break;
+                    case R.id.allMonths:
+                        setAllMonths(isAllMonths() ? getString(R.string.single_month) : getString(R.string.all_months));
+                        break;
+                    case R.id.allDays:
+                        setAllDays(isAllDays() ? getString(R.string.single_day) : getString(R.string.all_days));
+                        break;
+                    case R.id.defaults:
+                        setDefaults();
+                        break;
+                    default:
+                        android.app.FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
 
-                    setChartType(isDailyChart() ? getString(R.string.hourly) : getString(R.string.daily));
-
-                } else if (id == R.id.allMonths) {
-
-                    setAllMonths(isAllMonths() ? getString(R.string.single_month) : getString(R.string.all_months));
-
-                } else if (id == R.id.allDays) {
-
-                    setAllDays(isAllDays() ? getString(R.string.single_day) : getString(R.string.all_days));
-
-                } else if (id == R.id.defaults) {
-
-                    setDefaults();
-
-                } else {
-
-                    android.app.FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-
-                    if (id == R.id.logFile) {
-                        ((MainActivity) getActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
-                        ((MainActivity) getActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
-                    } else {
-                        DialogFragment dialog = new DialogFragment();
-                        Bundle args = new Bundle();
-                        if (id == R.id.logMonthDay) {
-                            dialog = new StatsDatePickerDialog();
-                            try {
-                                args.putInt("month", Integer.parseInt(mMonth));
-                            } catch (Exception e) {
-                                args.putInt("month", Calendar.getInstance().get(Calendar.MONTH));
+                        if (id == R.id.logFile) {
+                            ((MainActivity) getActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
+                            ((MainActivity) getActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
+                        } else {
+                            DialogFragment dialog = new DialogFragment();
+                            Bundle args = new Bundle();
+                            if (id == R.id.logMonthDay) {
+                                dialog = new StatsDatePickerDialog();
+                                try {
+                                    args.putInt("month", Integer.parseInt(mMonth));
+                                } catch (Exception e) {
+                                    args.putInt("month", Calendar.getInstance().get(Calendar.MONTH));
+                                }
+                                try {
+                                    args.putInt("day", Integer.parseInt(mDay));
+                                } catch (Exception e) {
+                                    args.putInt("day", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+                                }
                             }
-                            try {
-                                args.putInt("day", Integer.parseInt(mDay));
-                            } catch (Exception e) {
-                                args.putInt("day", Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
-                            }
+
+                            dialog.setArguments(args);
+                            dialog.show(ft, "Selection Dialog");
                         }
-
-                        dialog.setArguments(args);
-                        dialog.show(ft, "Selection Dialog");
-                    }
+                        break;
                 }
 
                 updateDateTimeText();

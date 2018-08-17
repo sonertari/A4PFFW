@@ -180,7 +180,7 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
      * should return the name of the decompressed file.
      * <p>
      * We also fetch the list of pf log files to populate the list in the log file picker dialog.
-     * @return
+     * @return true on success, false on error
      */
     @Override
     public boolean executeTask() {
@@ -303,14 +303,19 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
     private void computeNavigationVars() {
 
         if (mButtonPressed) {
-            if (mButton == R.id.first) {
-                mStartLine = 0;
-            } else if (mButton == R.id.previous) {
-                mStartLine -= mLinesPerPage;
-            } else if (mButton == R.id.next) {
-                mStartLine += mLinesPerPage;
-            } else if (mButton == R.id.last) {
-                mStartLine = mLogSize;
+            switch (mButton) {
+                case R.id.first:
+                    mStartLine = 0;
+                    break;
+                case R.id.previous:
+                    mStartLine -= mLinesPerPage;
+                    break;
+                case R.id.next:
+                    mStartLine += mLinesPerPage;
+                    break;
+                case R.id.last:
+                    mStartLine = mLogSize;
+                    break;
             }
             mButtonPressed = false;
         }
@@ -416,12 +421,12 @@ class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.LogView
     private final List<Log> logsList;
 
     class LogViewHolder extends RecyclerView.ViewHolder {
-        public final TextView number;
+        final TextView number;
         final TextView dirIf;
         final TextView srcDst;
         final TextView datetime;
         final TextView log;
-        public final TextView image;
+        final TextView image;
 
 
         LogViewHolder(View view) {
@@ -461,15 +466,19 @@ class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.LogView
         int image;
         String caption;
 
-        if (log.action.equals("block")) {
-            image = R.drawable.block;
-            caption = "B";
-        } else if (log.action.equals("pass")) {
-            image = R.drawable.pass;
-            caption = "P";
-        } else {
-            image = R.drawable.match;
-            caption = "M";
+        switch (log.action) {
+            case "block":
+                image = R.drawable.block;
+                caption = "B";
+                break;
+            case "pass":
+                image = R.drawable.pass;
+                caption = "P";
+                break;
+            default:
+                image = R.drawable.match;
+                caption = "M";
+                break;
         }
 
         holder.image.setBackgroundResource(image);

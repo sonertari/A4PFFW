@@ -90,7 +90,7 @@ public class StatsGeneral extends StatsBase {
         view.findViewById(R.id.statsGeneralTypeTable).setOnClickListener(mLabelClickedHandler);
 
         init();
-        createStatsViews(savedInstanceState);
+        createStatsViews();
 
         if (cache.statsGeneral == null) {
             cache.statsGeneral = new StatsGeneralCache();
@@ -230,7 +230,7 @@ public class StatsGeneral extends StatsBase {
             String key = it.next();
             String count = mJsonGeneralStats.optString(key);
 
-            TableRow row = (TableRow) getLayoutInflater(new Bundle()).inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
+            TableRow row = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
 
             ((TextView) row.findViewById(R.id.tableValue)).setText(count);
             ((TextView) row.findViewById(R.id.tableKey)).setText(key);
@@ -259,7 +259,7 @@ public class StatsGeneral extends StatsBase {
             Arrays.sort(kvps, reverseComparator);
 
             for (Object entry : kvps) {
-                TableRow row = (TableRow) getLayoutInflater(new Bundle()).inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
+                TableRow row = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
 
                 ((TextView) row.findViewById(R.id.tableValue)).setText(((Map.Entry<String, Integer>) entry).getValue().toString());
                 ((TextView) row.findViewById(R.id.tableKey)).setText(((Map.Entry<String, Integer>) entry).getKey());
@@ -295,7 +295,7 @@ public class StatsGeneral extends StatsBase {
 
                 int count = 1;
                 for (Object entry : kvps) {
-                    TableRow row = (TableRow) getLayoutInflater(new Bundle()).inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
+                    TableRow row = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
 
                     ((TextView) row.findViewById(R.id.tableValue)).setText(((Map.Entry<String, Integer>) entry).getValue().toString());
                     ((TextView) row.findViewById(R.id.tableKey)).setText(((Map.Entry<String, Integer>) entry).getKey());
@@ -473,7 +473,7 @@ public class StatsGeneral extends StatsBase {
                 mCardViews.get(k).removeAllViews();
             }
 
-            createStatsViews(new Bundle());
+            createStatsViews();
             configureStatsViews();
 
             mIsLastChartDaily = isDailyChart();
@@ -505,7 +505,7 @@ public class StatsGeneral extends StatsBase {
                     case R.id.statsRequestsByDate:
 
                         View cvGs = view.findViewById(R.id.cardviewGeneralStats);
-                        int heightGs = view.findViewById(R.id.cardviewGeneralStats).getHeight();
+                        int heightGs = cvGs.getHeight();
 
                         RelativeLayout.LayoutParams rlParamsGs = (RelativeLayout.LayoutParams) cvGs.getLayoutParams();
                         if (rlParamsGs.height == RelativeLayout.LayoutParams.WRAP_CONTENT) {

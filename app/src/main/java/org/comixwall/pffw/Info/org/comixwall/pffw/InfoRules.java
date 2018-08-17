@@ -262,9 +262,9 @@ class RuleRecyclerAdapter extends RecyclerView.Adapter<RuleRecyclerAdapter.RuleV
         final TextView packetsBytes;
         final TextView rule;
         final TextView evalsStates;
-        public final TextView number;
+        final TextView number;
         final TextView inserted;
-        public final TextView image;
+        final TextView image;
 
 
         RuleViewHolder(View view) {

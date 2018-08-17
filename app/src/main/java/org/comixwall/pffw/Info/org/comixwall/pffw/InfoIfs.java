@@ -292,8 +292,8 @@ class IfRecyclerAdapter extends RecyclerView.Adapter<IfRecyclerAdapter.IfViewHol
     private final List<If> ifsList;
 
     class IfViewHolder extends RecyclerView.ViewHolder {
-        public final TextView name;
-        public final TextView number;
+        final TextView name;
+        final TextView number;
         final TextView statesRules;
         final TextView cleared;
         final TableLayout table;

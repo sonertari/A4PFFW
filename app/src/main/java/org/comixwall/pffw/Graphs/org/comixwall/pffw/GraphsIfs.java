@@ -74,25 +74,28 @@ public class GraphsIfs extends GraphsBase {
 
     @Override
     public void setBitmap(String title, Bitmap bmp) {
-        if (title.equals("Internal Interface")) {
-            bmpIntIf = bmp;
-        } else if (title.equals("External Interface")) {
-            bmpExtIf = bmp;
-        } else if (title.equals("Loopback Interface")) {
-            bmpLbIf = bmp;
+        switch (title) {
+            case "Internal Interface":
+                bmpIntIf = bmp;
+                break;
+            case "External Interface":
+                bmpExtIf = bmp;
+                break;
+            case "Loopback Interface":
+                bmpLbIf = bmp;
+                break;
         }
     }
 
     @Override
     public Bitmap getBitmap(View view) {
-        int id = view.getId();
-
-        if (id == R.id.imageViewIntIf) {
-            return bmpIntIf;
-        } else if (id == R.id.imageViewExtIf) {
-            return bmpExtIf;
-        } else {
-            return bmpLbIf;
+        switch (view.getId()) {
+            case R.id.imageViewIntIf:
+                return bmpIntIf;
+            case R.id.imageViewExtIf:
+                return bmpExtIf;
+            default:
+                return bmpLbIf;
         }
     }
 

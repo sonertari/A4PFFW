@@ -431,9 +431,9 @@ class ArpTableRecyclerAdapter extends RecyclerView.Adapter<ArpTableRecyclerAdapt
         final TextView onIf;
         final TextView ip;
         final TextView expire;
-        public final TextView number;
+        final TextView number;
         final TextView mac;
-        public final TextView image;
+        final TextView image;
 
 
         ArpViewHolder(View view) {
@@ -479,15 +479,19 @@ class ArpTableRecyclerAdapter extends RecyclerView.Adapter<ArpTableRecyclerAdapt
         int image;
         String caption;
 
-        if (arp.expire.equals("expired")) {
-            image = R.drawable.block;
-            caption = "E";
-        } else if (arp.expire.equals("permanent")) {
-            image = R.drawable.pass;
-            caption = "P";
-        } else {
-            image = R.drawable.match;
-            caption = "A";
+        switch (arp.expire) {
+            case "expired":
+                image = R.drawable.block;
+                caption = "E";
+                break;
+            case "permanent":
+                image = R.drawable.pass;
+                caption = "P";
+                break;
+            default:
+                image = R.drawable.match;
+                caption = "A";
+                break;
         }
 
         holder.image.setBackgroundResource(image);
@@ -538,7 +542,7 @@ class LeaseRecyclerAdapter extends RecyclerView.Adapter<LeaseRecyclerAdapter.Lea
         final TextView startEnd;
         final TextView ip;
         final TextView status;
-        public final TextView number;
+        final TextView number;
         final TextView host;
 
 

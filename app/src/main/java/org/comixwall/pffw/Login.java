@@ -21,7 +21,6 @@ package org.comixwall.pffw;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.test.espresso.core.deps.guava.hash.HashCode;
 import android.support.test.espresso.core.deps.guava.hash.Hashing;
@@ -58,8 +57,6 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
     private int mPort;
 
     private static String mPreviousHost;
-
-    private Boolean mLoggedIn = false;
 
     private String mLastError;
 
@@ -105,10 +102,7 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
     public boolean executeTask() {
         try {
             logger.finest("setAuthParams: " + mUser + ", " + mPassword + ", " + mHost + ", " + mPort);
-            controller.setAuthParams(mUser, mPassword, mHost, mPort);
-
-            mLoggedIn = controller.login();
-
+            controller.login(mUser, mPassword, mHost, mPort);
         } catch (Exception e) {
             mLastError = processException(e);
             return false;
@@ -133,10 +127,7 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
     }
 
     private void processLogin() {
-
-        ((MainActivity) getActivity()).setLoggedIn(mLoggedIn);
-
-        if (mLoggedIn) {
+        if (controller.isLoggedin()) {
             if (!mHost.equals(mPreviousHost)) {
                 // Reset the cache if the host changes
                 FragmentManager fm = getActivity().getSupportFragmentManager();
@@ -155,9 +146,7 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
             // Recreate menu items, the fragment is InfoPf now
             getActivity().invalidateOptionsMenu();
 
-            // Create the InfoPf fragment and set its menu item to checked
-            NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.navView);
-            ((MainActivity) getActivity()).onNavigationItemSelected(navigationView.getMenu().findItem(R.id.menuInfoPf));
+            ((MainActivity) getActivity()).showFirstFragment();
         }
     }
 

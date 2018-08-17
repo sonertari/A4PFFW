@@ -26,8 +26,6 @@ import org.json.JSONObject;
 
 public class Cache extends Fragment {
 
-    public Bundle bundle;
-
     public InfoSystemCache infoSystem;
     public InfoHostsCache infoHosts;
     public InfoIfsCache infoIfs;
@@ -56,6 +54,5 @@ public class Cache extends Fragment {
         super.onCreate(savedInstanceState);
         // retain this fragment
         setRetainInstance(true);
-        bundle = new Bundle();
     }
 }

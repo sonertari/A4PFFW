@@ -89,7 +89,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
     /**
      * This is the host name verifier used in secure HTTP connections to the PFFW hosts.
      */
-    private HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+    private final HostnameVerifier hostnameVerifier = new HostnameVerifier() {
         public boolean verify(String hostname, SSLSession session) {
             return hostname.equals(controller.getHost()) || hostname.equals(controller.getHostname());
         }

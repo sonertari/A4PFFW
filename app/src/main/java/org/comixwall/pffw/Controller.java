@@ -52,6 +52,12 @@ public class Controller extends Service {
         }
     }
 
+    private static Boolean mLoggedIn = false;
+
+    public Boolean isLoggedin() {
+        return mLoggedIn;
+    }
+
     private static String mUser;
     private static String mPassword;
     private static String mHost;
@@ -68,17 +74,7 @@ public class Controller extends Service {
         return mHostName;
     }
 
-    public void setAuthParams(String user, String password, String host, int port) {
-        mUser = user;
-        mPassword = password;
-        mHost = host;
-        mPort = port;
-    }
-
     private Session session = null;
-
-    private final String mPffwc = "sh ctlr";
-    private final String mLocale = "en_En";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -93,24 +89,36 @@ public class Controller extends Service {
      * We also run the hostname command, the output of which we use while verifying the hostname
      * while making secure HTTP connections to fetch graphs.
      *
-     * @return Whether the user is authenticated or not.
      * @throws Exception
      */
-    public Boolean login() throws Exception {
-        mHostName = "";
+    public void login(String user, String password, String host, int port) throws Exception {
+        mUser = user;
+        mPassword = password;
+        mHost = host;
+        mPort = port;
 
-        // ATTENTION: Always disconnect the session if connected while logging in
-        // Otherwise, we stay logged in until the session gets disconnected (times out)
+        if (!mLoggedIn) {
+            mHostName = "";
+
+            if (createSession(mUser, mPassword, mHost, mPort)) {
+                mHostName = runSSHCommand("hostname");
+            }
+
+            mLoggedIn = session.isConnected();
+            logger.finest("Controller login mHostName= " + mHostName);
+        }
+    }
+
+    /**
+     * Log user out by closing the session and unsetting mLoggedIn.
+     */
+    public void logout() {
+        // ATTENTION: Always disconnect the session while logging out
+        // Otherwise, we remain logged in until the session gets disconnected (times out)
         if (session != null && session.isConnected()) {
             session.disconnect();
         }
-
-        if (createSession(mUser, mPassword, mHost, mPort)) {
-            mHostName = runSSHCommand("hostname");
-        }
-
-        logger.finest("Controller login mHostName= " + mHostName);
-        return session.isConnected();
+        mLoggedIn = false;
     }
 
     /**
@@ -128,7 +136,7 @@ public class Controller extends Service {
      * @throws Exception
      */
     public String execute(String model, String cmd, Object... args) throws Exception {
-        String cmdLine = mPffwc + " " + mLocale + " " + model + " " + cmd;
+        String cmdLine = "sh ctlr en_En " + model + " " + cmd;
         for (Object a : args) {
             cmdLine += " '" + a + "'";
         }

@@ -266,14 +266,19 @@ public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefresh
     private void computeNavigationVars() {
 
         if (mButtonPressed) {
-            if (mButton == R.id.first) {
-                mStartLine = 0;
-            } else if (mButton == R.id.previous) {
-                mStartLine -= mLinesPerPage;
-            } else if (mButton == R.id.next) {
-                mStartLine += mLinesPerPage;
-            } else if (mButton == R.id.last) {
-                mStartLine = mStateSize;
+            switch (mButton) {
+                case R.id.first:
+                    mStartLine = 0;
+                    break;
+                case R.id.previous:
+                    mStartLine -= mLinesPerPage;
+                    break;
+                case R.id.next:
+                    mStartLine += mLinesPerPage;
+                    break;
+                case R.id.last:
+                    mStartLine = mStateSize;
+                    break;
             }
             mButtonPressed = false;
         }
@@ -373,12 +378,12 @@ class StateRecyclerAdapter extends RecyclerView.Adapter<StateRecyclerAdapter.Sta
     private final List<State> statesList;
 
     class StateViewHolder extends RecyclerView.ViewHolder {
-        public final TextView number;
+        final TextView number;
         final TextView state;
         final TextView srcDst;
         final TextView ageExpr;
         final TextView others;
-        public final TextView image;
+        final TextView image;
 
 
         StateViewHolder(View view) {

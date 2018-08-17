@@ -155,4 +155,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="allowed_requests">Allowed Requests</string>
     <string name="blocked_requests">Blocked Requests</string>
     <string name="matched_requests">Matched Requests</string>
+    <string name="notifications">NOTIFICATIONS</string>
+    <string name="notification_details">NOTIFICATION DETAILS</string>
+    <string name="notifications_menu">Notifications</string>
 </resources>
