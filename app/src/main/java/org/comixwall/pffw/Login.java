@@ -20,6 +20,7 @@
 package org.comixwall.pffw;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.test.espresso.core.deps.guava.hash.HashCode;
@@ -30,6 +31,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -145,6 +147,12 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
 
             // Recreate menu items, the fragment is InfoPf now
             getActivity().invalidateOptionsMenu();
+
+            try {
+                // Hide the soft keyboard
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+            } catch (Exception ignored) {}
 
             ((MainActivity) getActivity()).showFirstFragment();
         }

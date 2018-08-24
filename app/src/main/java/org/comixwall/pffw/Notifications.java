@@ -114,7 +114,6 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
                             JSONArray logs = jsonArray.getJSONObject(module).getJSONArray(prio);
                             // There is only one sample log record, at index 0
                             details.add(NotificationDetail.newInstance(module, logs.getJSONObject(0)));
-                            logger.warning("details.add= " + module + ", " + prio + ", " + logs.getJSONObject(0).toString());
                         }
                     }
                 }
@@ -135,7 +134,6 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
         args.putString("datetime", notification.datetime);
 
         fragment.setArguments(args);
-        logger.warning("onItemClick args= " + args.toString());
 
         FragmentManager fm = getActivity().getSupportFragmentManager();
         android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
