@@ -150,8 +150,11 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
 
             try {
                 // Hide the soft keyboard
-                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(getView().getWindowToken(), 0);
+                View view = getActivity().getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
             } catch (Exception ignored) {}
 
             ((MainActivity) getActivity()).showFirstFragment();
