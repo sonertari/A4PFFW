@@ -23,7 +23,6 @@ import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.graphics.RectF;
 import android.os.Bundle;
-import android.support.test.espresso.core.deps.guava.collect.HashBiMap;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
@@ -49,6 +48,7 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.MPPointF;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.google.common.collect.HashBiMap;
 
 import org.json.JSONObject;
 

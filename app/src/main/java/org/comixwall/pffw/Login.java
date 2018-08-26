@@ -23,8 +23,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
-import android.support.test.espresso.core.deps.guava.hash.HashCode;
-import android.support.test.espresso.core.deps.guava.hash.Hashing;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -37,6 +35,8 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
