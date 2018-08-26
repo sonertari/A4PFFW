@@ -9,18 +9,35 @@ import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.InstanceIdResult;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
+import static org.comixwall.pffw.MainActivity.token;
+import static org.comixwall.pffw.MainActivity.sendToken;
 import static org.comixwall.pffw.MainActivity.logger;
 
-public class FirebaseService extends FirebaseMessagingService {
+public class FirebaseService extends FirebaseMessagingService implements OnSuccessListener<InstanceIdResult> {
     private NotificationManagerCompat notificationManager;
 
     @Override
     public void onCreate() {
         super.onCreate();
         notificationManager = NotificationManagerCompat.from(this);
+    }
+
+    @Override
+    public void onNewToken(String t) {
+        logger.info("Firebase refreshed token= " + t);
+        token = t;
+        sendToken = true;
+    }
+
+    @Override
+    public void onSuccess(InstanceIdResult instanceIdResult) {
+        token = instanceIdResult.getToken();
+        sendToken = true;
     }
 
     @Override
@@ -38,8 +55,12 @@ public class FirebaseService extends FirebaseMessagingService {
                 intent.putExtras(bundle);
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                // TODO: Need CHANNEL_ID for O?
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
+                // TODO: Need a real CHANNEL_ID for O?
+                //int importance = NotificationManager.IMPORTANCE_DEFAULT;
+                //NotificationChannel notificationChannel = new NotificationChannel("ID", "Name", importance);
+                //notificationManager.createNotificationChannel(notificationChannel);
+                //NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, notificationChannel.getId());
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "NOTIFICATION_CHANNEL_ID")
                         .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                         .setSmallIcon(R.mipmap.notification)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.notification))

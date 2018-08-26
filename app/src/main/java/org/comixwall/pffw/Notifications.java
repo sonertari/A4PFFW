@@ -28,6 +28,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -39,10 +40,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 
-public class Notifications extends Fragment implements RecyclerTouchListener.OnItemClickListener {
+public class Notifications extends Fragment implements RecyclerTouchListener.OnItemClickListener,
+        ControllerTask.ControllerTaskListener {
 
     private static final List<Notification> mNotificationsList = new ArrayList<>();
 
@@ -69,7 +72,7 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
 
         View view = inflater.inflate(R.layout.notifications, container, false);
 
-        RecyclerView rvNotifications = (RecyclerView) view.findViewById(R.id.recyclerViewNotifications);
+        RecyclerView rvNotifications = view.findViewById(R.id.recyclerViewNotifications);
 
         rvNotifications.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvNotifications.setItemAnimator(new DefaultItemAnimator());
@@ -83,8 +86,8 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
     @Override
     public void onItemClick(View view) {
 
-        TextView tvTitle = (TextView) view.findViewById(R.id.title);
-        TextView tvBody = (TextView) view.findViewById(R.id.body);
+        TextView tvTitle = view.findViewById(R.id.title);
+        TextView tvBody = view.findViewById(R.id.body);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -145,6 +148,52 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
         transaction.replace(R.id.fragmentContainer, fragment);
         transaction.commit();
     }
+
+    // ATTENTION: ControllerTask.ControllerTaskListener interface implementation is for deleting token
+    // During logout we send delToken command to the firewall using the refresh menu option
+    // So all fragments should implement it
+    @Override
+    public void executePreTask() {
+    }
+
+    @Override
+    public void preExecute() {
+    }
+
+    @Override
+    public boolean executeTask() {
+        try {
+            // Dummy call
+            controller.execute("pf", "IsRunning");
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void postExecute(boolean result) {
+    }
+
+    @Override
+    public void executeOnCancelled() {
+    }
+
+    private void getInfo() {
+        ControllerTask.run(this, this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menuRefresh) {
+            getInfo();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
 
 class Notification {
@@ -181,10 +230,10 @@ class NotificationRecyclerAdapter extends RecyclerView.Adapter<NotificationRecyc
 
         NotificationViewHolder(View view) {
             super(view);
-            title = (TextView) view.findViewById(R.id.title);
-            body = (TextView) view.findViewById(R.id.body);
-            datetime = (TextView) view.findViewById(R.id.datetime);
-            image = (TextView) view.findViewById(R.id.image);
+            title = view.findViewById(R.id.title);
+            body = view.findViewById(R.id.body);
+            datetime = view.findViewById(R.id.datetime);
+            image = view.findViewById(R.id.image);
         }
     }
 

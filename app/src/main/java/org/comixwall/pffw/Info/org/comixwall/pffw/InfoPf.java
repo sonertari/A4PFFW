@@ -70,18 +70,18 @@ public class InfoPf extends Fragment implements SwipeRefreshLayout.OnRefreshList
 
         view = inflater.inflate(R.layout.info_pf, container, false);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
-        tvPfStatus = (TextView) view.findViewById(R.id.pfStatus);
-        tvPfInfo = (TextView) view.findViewById(R.id.pfInfo);
-        tvPfMem = (TextView) view.findViewById(R.id.pfMem);
-        tvPfTimeout = (TextView) view.findViewById(R.id.pfTimeout);
+        tvPfStatus = view.findViewById(R.id.pfStatus);
+        tvPfInfo = view.findViewById(R.id.pfInfo);
+        tvPfMem = view.findViewById(R.id.pfMem);
+        tvPfTimeout = view.findViewById(R.id.pfTimeout);
 
         tvPfInfo.setOnClickListener(mLabelClickedHandler);
         tvPfTimeout.setOnClickListener(mLabelClickedHandler);
 
-        ivPfStatus = (ImageView) view.findViewById(R.id.imageViewPfStatus);
+        ivPfStatus = view.findViewById(R.id.imageViewPfStatus);
 
         // TODO: How to resize the pf info cardview to pf memory size initially? Should be one time only.
         //tvPfInfo.performClick();

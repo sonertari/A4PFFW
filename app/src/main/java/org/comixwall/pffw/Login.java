@@ -36,11 +36,17 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
+
 import java.nio.charset.Charset;
 
 import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
+import static org.comixwall.pffw.MainActivity.sendToken;
+import static org.comixwall.pffw.MainActivity.token;
 import static org.comixwall.pffw.Utils.processException;
 import static org.comixwall.pffw.Utils.showMessage;
 
@@ -67,14 +73,14 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
 
         View view = inflater.inflate(R.layout.login, container, false);
 
-        pbProgress = (ProgressBar) view.findViewById(R.id.progress);
+        pbProgress = view.findViewById(R.id.progress);
 
-        tvUser = (AutoCompleteTextView) view.findViewById(R.id.user);
-        etPassword = (TextInputEditText) view.findViewById(R.id.password);
-        etHost = (TextInputEditText) view.findViewById(R.id.host);
-        etPort = (TextInputEditText) view.findViewById(R.id.port);
+        tvUser = view.findViewById(R.id.user);
+        etPassword = view.findViewById(R.id.password);
+        etHost = view.findViewById(R.id.host);
+        etPort = view.findViewById(R.id.port);
 
-        Button btnButton = (Button) view.findViewById(R.id.button);
+        Button btnButton = view.findViewById(R.id.button);
         btnButton.setOnClickListener(mButtonClickHandler);
 
         // Disable drawer and toggle button, appbar menu items are not created if the fragment is Login
@@ -156,6 +162,16 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             } catch (Exception ignored) {}
+
+            // Send the token to the system upon each login, so the app can get notifications
+            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(getActivity(), new OnSuccessListener<InstanceIdResult>() {
+                @Override
+                public void onSuccess(InstanceIdResult instanceIdResult) {
+                    token = instanceIdResult.getToken();
+                    // Controller sends the token before the next command it executes, and lowers this sendToken flag
+                    sendToken = true;
+                }
+            });
 
             ((MainActivity) getActivity()).showFirstFragment();
         }

@@ -31,10 +31,15 @@ import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
+import org.json.JSONArray;
+
 import java.io.InputStream;
 import java.util.Properties;
 
 import static org.comixwall.pffw.MainActivity.logger;
+import static org.comixwall.pffw.MainActivity.token;
+import static org.comixwall.pffw.MainActivity.sendToken;
+import static org.comixwall.pffw.MainActivity.deleteToken;
 import static org.comixwall.pffw.Utils.showMessage;
 
 public class Controller extends Service {
@@ -76,6 +81,8 @@ public class Controller extends Service {
 
     private Session session = null;
 
+    private final String ctlrCmd = "sh ctlr en_En ";
+
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -110,15 +117,20 @@ public class Controller extends Service {
     }
 
     /**
-     * Log user out by closing the session and unsetting mLoggedIn.
+     * Log user out by unsetting mLoggedIn.
      */
     public void logout() {
-        // ATTENTION: Always disconnect the session while logging out
-        // Otherwise, we remain logged in until the session gets disconnected (times out)
+        mLoggedIn = false;
+    }
+
+    /**
+     * ATTENTION: Always disconnect the session while logging out.
+     * Otherwise, we remain logged in until the session gets disconnected (times out)
+     */
+    private void finishLogout() {
         if (session != null && session.isConnected()) {
             session.disconnect();
         }
-        mLoggedIn = false;
     }
 
     /**
@@ -136,7 +148,8 @@ public class Controller extends Service {
      * @throws Exception
      */
     public String execute(String model, String cmd, Object... args) throws Exception {
-        String cmdLine = "sh ctlr en_En " + model + " " + cmd;
+        // Keep these lines here for logger
+        String cmdLine = ctlrCmd + model + " " + cmd;
         for (Object a : args) {
             cmdLine += " '" + a + "'";
         }
@@ -145,11 +158,36 @@ public class Controller extends Service {
 
         String output = "";
         if (createSession(mUser, mPassword, mHost, mPort)) {
+            // First run the token commands, if requested
+            if (deleteToken) {
+                runTokenCommand("DelToken");
+                deleteToken = false;
+                finishLogout();
+                // Throw exception to stop executing the rest of the commands, just show the login page
+                throw new Exception("Logout finished");
+            }
+
+            if (sendToken) {
+                runTokenCommand("AddToken");
+                sendToken = false;
+            }
+
+            // Next run the actual command
             output = runSSHCommand(cmdLine);
         }
 
         logger.finest("Controller execute output= " + output);
         return output;
+    }
+
+    private void runTokenCommand(String cmd) throws Exception {
+        String output = runSSHCommand(ctlrCmd + "system " + cmd + " '" + token + "'");
+        String result = new JSONArray(output).get(2).toString();
+        if (result.equals("0")) {
+            logger.finest("Controller runTokenCommand " + cmd + "= " + token);
+        } else {
+            logger.warning("Controller runTokenCommand " + cmd + " failed: " + token);
+        }
     }
 
     /**

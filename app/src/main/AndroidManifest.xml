@@ -55,11 +55,6 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
         </activity>
 
         <service android:name=".Controller" />
-        <service android:name=".FirebaseId">
-            <intent-filter>
-                <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
-            </intent-filter>
-        </service>
         <service
             android:name=".FirebaseService">
             <intent-filter>

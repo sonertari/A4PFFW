@@ -53,6 +53,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static Controller controller;
     private static boolean boundToController = false;
 
+    // Firebase token handling
+    public static String token = "";
+    public static boolean sendToken = false;
+    public static boolean deleteToken = false;
+
     /**
      * Used to get the constructor of and instantiate the fragment class referred by the menu item selected.
      */
@@ -68,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     public static final Logger logger;
 
+    private Menu optionsMenu;
     private static int lastNotificationTimestamp = 0;
 
     static {
@@ -129,16 +135,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fm.beginTransaction().add(cache, "cache").commit();
         }
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        drawer = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawer = findViewById(R.id.drawerLayout);
 
         toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        navigationView = (NavigationView) findViewById(R.id.navView);
+        navigationView = findViewById(R.id.navView);
         navigationView.setNavigationItemSelectedListener(this);
 
         logFilePickerDialog = new LogFilePickerDialog();
@@ -165,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void showFirstFragment() {
-        NavigationView navigationView = (NavigationView) findViewById(R.id.navView);
+        NavigationView navigationView = findViewById(R.id.navView);
 
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
@@ -231,6 +237,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        optionsMenu = menu;
         // Inflate the menu; this adds items to the app bar if it is present.
         // Login fragment should not have any appbar menu
         if (fragment.getClass() != Login.class) {
@@ -252,6 +259,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // TODO: Do we need to reset the backstack if we are going to recreate the activity next?
             popAllBackStack();
+
+            // Raise the deleteToken flag and refresh the fragment, so its resume method runs delToken() in Controller.execute()
+            deleteToken = true;
+            try {
+                // Throws exception to stop further command execution after deleting token
+                // ATTENTION: All fragments should have the Refresh menu item for this workaround to work
+                fragment.onOptionsItemSelected(optionsMenu.findItem(R.id.menuRefresh));
+            } catch (Exception ignored) {}
 
             controller.logout();
 

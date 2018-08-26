@@ -26,6 +26,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -35,9 +36,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.logger;
 
-public class NotificationDetails extends Fragment implements RecyclerTouchListener.OnItemClickListener {
+public class NotificationDetails extends Fragment implements RecyclerTouchListener.OnItemClickListener,
+        ControllerTask.ControllerTaskListener {
 
     private static final List<NotificationDetail> mNotificationDetails = new ArrayList<>();
 
@@ -56,7 +59,7 @@ public class NotificationDetails extends Fragment implements RecyclerTouchListen
         ((TextView) view.findViewById(R.id.body)).setText(args.getString("body"));
         ((TextView) view.findViewById(R.id.datetime)).setText(args.getString("datetime"));
 
-        RecyclerView rvNotifications = (RecyclerView) view.findViewById(R.id.recyclerViewNotificationDetails);
+        RecyclerView rvNotifications = view.findViewById(R.id.recyclerViewNotificationDetails);
 
         rvNotifications.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvNotifications.setItemAnimator(new DefaultItemAnimator());
@@ -70,7 +73,7 @@ public class NotificationDetails extends Fragment implements RecyclerTouchListen
     @Override
     public void onItemClick(View view) {
 
-        TextView tvLog = (TextView) view.findViewById(R.id.log);
+        TextView tvLog = view.findViewById(R.id.log);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -80,6 +83,52 @@ public class NotificationDetails extends Fragment implements RecyclerTouchListen
         }
 
         tvLog.setMaxLines(lines);
+    }
+
+    // ATTENTION: ControllerTask.ControllerTaskListener interface implementation is for deleting token
+    // During logout we send delToken command to the firewall using the refresh menu option
+    // So all fragments should implement it
+    @Override
+    public void executePreTask() {
+    }
+
+    @Override
+    public void preExecute() {
+    }
+
+    @Override
+    public boolean executeTask() {
+        try {
+            // Dummy call
+            controller.execute("pf", "IsRunning");
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public void postExecute(boolean result) {
+    }
+
+    @Override
+    public void executeOnCancelled() {
+    }
+
+    private void getInfo() {
+        ControllerTask.run(this, this);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.menuRefresh) {
+            getInfo();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
 
@@ -120,11 +169,11 @@ class NotificationDetailRecyclerAdapter extends RecyclerView.Adapter<Notificatio
 
         NotificationDetailViewHolder(View view) {
             super(view);
-            process = (TextView) view.findViewById(R.id.process);
-            log = (TextView) view.findViewById(R.id.log);
-            prio = (TextView) view.findViewById(R.id.prio);
-            datetime = (TextView) view.findViewById(R.id.datetime);
-            image = (TextView) view.findViewById(R.id.image);
+            process = view.findViewById(R.id.process);
+            log = view.findViewById(R.id.log);
+            prio = view.findViewById(R.id.prio);
+            datetime = view.findViewById(R.id.datetime);
+            image = view.findViewById(R.id.image);
         }
     }
 
