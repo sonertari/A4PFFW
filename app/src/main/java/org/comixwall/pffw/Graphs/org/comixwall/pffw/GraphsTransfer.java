@@ -38,7 +38,7 @@ public class GraphsTransfer extends GraphsBase {
 
         mLayout = "transfer";
 
-        ivXfer = (ImageView) view.findViewById(R.id.imageViewXfer);
+        ivXfer = view.findViewById(R.id.imageViewXfer);
         ivXfer.setOnClickListener(onViewClick);
 
         if (cache.graphsTransfer == null) {

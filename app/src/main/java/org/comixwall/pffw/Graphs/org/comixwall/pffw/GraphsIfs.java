@@ -43,13 +43,13 @@ public class GraphsIfs extends GraphsBase {
 
         mLayout = "ifs";
 
-        ivIntIf = (ImageView) view.findViewById(R.id.imageViewIntIf);
+        ivIntIf = view.findViewById(R.id.imageViewIntIf);
         ivIntIf.setOnClickListener(onViewClick);
 
-        ivExtIf = (ImageView) view.findViewById(R.id.imageViewExtIf);
+        ivExtIf = view.findViewById(R.id.imageViewExtIf);
         ivExtIf.setOnClickListener(onViewClick);
 
-        ivLbIf = (ImageView) view.findViewById(R.id.imageViewLbIf);
+        ivLbIf = view.findViewById(R.id.imageViewLbIf);
         ivLbIf.setOnClickListener(onViewClick);
 
         if (cache.graphsIfs == null) {

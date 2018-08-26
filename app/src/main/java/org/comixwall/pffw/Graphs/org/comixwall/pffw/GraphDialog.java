@@ -48,7 +48,7 @@ public class GraphDialog extends DialogFragment implements ImageView.OnTouchList
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.graph, container);
 
-        ImageView iv = (ImageView) view.findViewById(R.id.imageView);
+        ImageView iv = view.findViewById(R.id.imageView);
         iv.setOnTouchListener(this);
         if (mBmp != null) {
             iv.setImageBitmap(mBmp);

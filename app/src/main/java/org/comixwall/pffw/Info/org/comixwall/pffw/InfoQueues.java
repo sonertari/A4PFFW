@@ -69,10 +69,10 @@ public class InfoQueues extends Fragment implements SwipeRefreshLayout.OnRefresh
 
         View view = inflater.inflate(R.layout.info_queues, container, false);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
-        RecyclerView rvQueues = (RecyclerView) view.findViewById(R.id.recyclerViewQueues);
+        RecyclerView rvQueues = view.findViewById(R.id.recyclerViewQueues);
 
         rvQueues.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvQueues.setItemAnimator(new DefaultItemAnimator());
@@ -200,8 +200,8 @@ public class InfoQueues extends Fragment implements SwipeRefreshLayout.OnRefresh
     @Override
     public void onItemClick(View view) {
 
-        TextView tvPacketsBytes = (TextView) view.findViewById(R.id.packetsBytes);
-        TextView tvDropped = (TextView) view.findViewById(R.id.dropped);
+        TextView tvPacketsBytes = view.findViewById(R.id.packetsBytes);
+        TextView tvDropped = view.findViewById(R.id.dropped);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -269,12 +269,12 @@ class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdapter.Que
 
         QueueViewHolder(View view) {
             super(view);
-            name = (TextView) view.findViewById(R.id.name);
-            packetsBytes = (TextView) view.findViewById(R.id.packetsBytes);
-            dropped = (TextView) view.findViewById(R.id.dropped);
-            number = (TextView) view.findViewById(R.id.number);
-            len = (TextView) view.findViewById(R.id.len);
-            image = (TextView) view.findViewById(R.id.image);
+            name = view.findViewById(R.id.name);
+            packetsBytes = view.findViewById(R.id.packetsBytes);
+            dropped = view.findViewById(R.id.dropped);
+            number = view.findViewById(R.id.number);
+            len = view.findViewById(R.id.len);
+            image = view.findViewById(R.id.image);
         }
     }
 

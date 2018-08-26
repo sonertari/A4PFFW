@@ -76,21 +76,21 @@ public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefresh
 
         View view = inflater.inflate(R.layout.info_states, container, false);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
-        tvStateSize = (TextView) view.findViewById(R.id.logSize);
+        tvStateSize = view.findViewById(R.id.logSize);
 
-        etStartLine = (EditText) view.findViewById(R.id.startLine);
-        etLinesPerPage = (EditText) view.findViewById(R.id.editTextLinesPerPage);
-        etRegex = (EditText) view.findViewById(R.id.editTextRegex);
+        etStartLine = view.findViewById(R.id.startLine);
+        etLinesPerPage = view.findViewById(R.id.editTextLinesPerPage);
+        etRegex = view.findViewById(R.id.editTextRegex);
 
         view.findViewById(R.id.first).setOnClickListener(mLabelClickedHandler);
         view.findViewById(R.id.previous).setOnClickListener(mLabelClickedHandler);
         view.findViewById(R.id.next).setOnClickListener(mLabelClickedHandler);
         view.findViewById(R.id.last).setOnClickListener(mLabelClickedHandler);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -313,8 +313,8 @@ public class InfoStates extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     @Override
     public void onItemClick(View view) {
-        TextView tvSrcDst = (TextView) view.findViewById(R.id.srcDst);
-        TextView tvOthers = (TextView) view.findViewById(R.id.others);
+        TextView tvSrcDst = view.findViewById(R.id.srcDst);
+        TextView tvOthers = view.findViewById(R.id.others);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -388,12 +388,12 @@ class StateRecyclerAdapter extends RecyclerView.Adapter<StateRecyclerAdapter.Sta
 
         StateViewHolder(View view) {
             super(view);
-            number = (TextView) view.findViewById(R.id.number);
-            state = (TextView) view.findViewById(R.id.state);
-            srcDst = (TextView) view.findViewById(R.id.srcDst);
-            ageExpr = (TextView) view.findViewById(R.id.ageExpr);
-            others = (TextView) view.findViewById(R.id.others);
-            image = (TextView) view.findViewById(R.id.image);
+            number = view.findViewById(R.id.number);
+            state = view.findViewById(R.id.state);
+            srcDst = view.findViewById(R.id.srcDst);
+            ageExpr = view.findViewById(R.id.ageExpr);
+            others = view.findViewById(R.id.others);
+            image = view.findViewById(R.id.image);
         }
     }
 

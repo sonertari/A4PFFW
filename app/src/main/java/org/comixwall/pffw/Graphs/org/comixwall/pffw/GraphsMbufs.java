@@ -38,7 +38,7 @@ public class GraphsMbufs extends GraphsBase {
 
         mLayout = "mbufs";
 
-        ivMbufs = (ImageView) view.findViewById(R.id.imageViewMbufs);
+        ivMbufs = view.findViewById(R.id.imageViewMbufs);
         ivMbufs.setOnClickListener(onViewClick);
 
         if (cache.graphsMbufs == null) {

@@ -72,7 +72,7 @@ public class StatsGeneral extends StatsBase {
 
         view.findViewById(R.id.logFile).setOnClickListener(mLabelClickedHandler);
 
-        tvDaily = (TextView) view.findViewById(R.id.hourly);
+        tvDaily = view.findViewById(R.id.hourly);
         tvDaily.setOnClickListener(mLabelClickedHandler);
 
         view.findViewById(R.id.statsGeneralStats).setOnClickListener(mLabelClickedHandler);
@@ -151,7 +151,7 @@ public class StatsGeneral extends StatsBase {
         owner.addView(hbc, 0);
 
         // ATTENTION: This second look up is not redundant, we set the same id to the horizontal chart above.
-        @SuppressLint("CutPasteId") BarChart chart = (BarChart) cv.findViewById(R.id.chart);
+        @SuppressLint("CutPasteId") BarChart chart = cv.findViewById(R.id.chart);
         chart.setOnChartValueSelectedListener(this);
         chart.setDrawValueAboveBar(true);
         chart.setDrawBarShadow(false);
@@ -222,7 +222,7 @@ public class StatsGeneral extends StatsBase {
     }
 
     private void updateGeneralStatsTable() {
-        TableLayout table = (TableLayout) view.findViewById(R.id.statsGeneralStats);
+        TableLayout table = view.findViewById(R.id.statsGeneralStats);
         table.removeAllViews();
 
         Iterator<String> it = mJsonGeneralStats.keys();
@@ -240,7 +240,7 @@ public class StatsGeneral extends StatsBase {
 
     private void updateRequestsByDateTable() {
         try {
-            TableLayout table = (TableLayout) view.findViewById(R.id.statsRequestsByDate);
+            TableLayout table = view.findViewById(R.id.statsRequestsByDate);
             table.removeAllViews();
 
             HashMap<String, Integer> list = new HashMap<>();

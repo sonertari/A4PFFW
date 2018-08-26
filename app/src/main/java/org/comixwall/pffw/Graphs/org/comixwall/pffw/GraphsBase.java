@@ -100,7 +100,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
         init(inflater, container);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
         sslContext = getSslContext(this);

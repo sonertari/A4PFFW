@@ -76,13 +76,13 @@ public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
         View view = inflater.inflate(R.layout.logs_live, container, false);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
-        etLinesPerPage = (EditText) view.findViewById(R.id.editTextLinesPerPage);
-        etRegex = (EditText) view.findViewById(R.id.editTextRegex);
+        etLinesPerPage = view.findViewById(R.id.editTextLinesPerPage);
+        etRegex = view.findViewById(R.id.editTextRegex);
 
-        RecyclerView mRecyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        RecyclerView mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
         mRecyclerView.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -262,8 +262,8 @@ public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshLi
 
     @Override
     public void onItemClick(View view) {
-        TextView tvLog = (TextView) view.findViewById(R.id.log);
-        TextView tvSrcDst = (TextView) view.findViewById(R.id.srcDst);
+        TextView tvLog = view.findViewById(R.id.log);
+        TextView tvSrcDst = view.findViewById(R.id.srcDst);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {

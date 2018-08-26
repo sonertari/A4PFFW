@@ -185,7 +185,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
             put("Match", getString(R.string.matched_requests));
         }};
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
         mCardViews = new HashMap<>();
@@ -334,7 +334,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
 
         CardView cv = mCardViews.get(k);
 
-        BarChart chart = (BarChart) cv.findViewById(R.id.chart);
+        BarChart chart = cv.findViewById(R.id.chart);
         chart.setOnChartValueSelectedListener(this);
         chart.setDrawValueAboveBar(true);
         chart.setDrawBarShadow(false);
@@ -496,7 +496,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
             return;
 
         // All charts have the same id
-        BarChart chart = (BarChart) view.findViewById(R.id.chart);
+        BarChart chart = view.findViewById(R.id.chart);
 
         chart.getBarBounds((BarEntry) e, mOnValueSelectedRectF);
         MPPointF position = chart.getPosition(e, YAxis.AxisDependency.LEFT);

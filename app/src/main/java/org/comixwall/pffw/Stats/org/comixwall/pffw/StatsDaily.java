@@ -50,16 +50,16 @@ public class StatsDaily extends StatsGeneral {
 
         view.findViewById(R.id.logFile).setOnClickListener(mLabelClickedHandler);
 
-        tvMonthDay = (TextView) view.findViewById(R.id.logMonthDay);
+        tvMonthDay = view.findViewById(R.id.logMonthDay);
         tvMonthDay.setOnClickListener(mLabelClickedHandler);
 
-        tvDaily = (TextView) view.findViewById(R.id.hourly);
+        tvDaily = view.findViewById(R.id.hourly);
         tvDaily.setOnClickListener(mLabelClickedHandler);
 
-        tvAllMonths = (TextView) view.findViewById(R.id.allMonths);
+        tvAllMonths = view.findViewById(R.id.allMonths);
         tvAllMonths.setOnClickListener(mLabelClickedHandler);
 
-        tvAllDays = (TextView) view.findViewById(R.id.allDays);
+        tvAllDays = view.findViewById(R.id.allDays);
         tvAllDays.setOnClickListener(mLabelClickedHandler);
 
         view.findViewById(R.id.defaults).setOnClickListener(mLabelClickedHandler);

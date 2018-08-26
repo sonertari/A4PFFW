@@ -85,8 +85,8 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private final RecyclerTouchListener.OnItemClickListener mArpTableItemClickListener = new RecyclerTouchListener.OnItemClickListener() {
         @Override
         public void onItemClick(View view) {
-            TextView tvIp = (TextView) view.findViewById(R.id.ip);
-            TextView tvMac = (TextView) view.findViewById(R.id.mac);
+            TextView tvIp = view.findViewById(R.id.ip);
+            TextView tvMac = view.findViewById(R.id.mac);
 
             int lines = 10;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -103,9 +103,9 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private final RecyclerTouchListener.OnItemClickListener mLeasesItemClickListener = new RecyclerTouchListener.OnItemClickListener() {
         @Override
         public void onItemClick(View view) {
-            TextView tvStartEnd = (TextView) view.findViewById(R.id.startEnd);
-            TextView tvIp = (TextView) view.findViewById(R.id.ip);
-            TextView tvHost = (TextView) view.findViewById(R.id.host);
+            TextView tvStartEnd = view.findViewById(R.id.startEnd);
+            TextView tvIp = view.findViewById(R.id.ip);
+            TextView tvHost = view.findViewById(R.id.host);
 
             int lines = 10;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -127,16 +127,16 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         View view = inflater.inflate(R.layout.info_hosts, container, false);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
-        tvDhcpdStatus = (TextView) view.findViewById(R.id.dhcpdStatus);
-        tvNamedStatus = (TextView) view.findViewById(R.id.namedStatus);
+        tvDhcpdStatus = view.findViewById(R.id.dhcpdStatus);
+        tvNamedStatus = view.findViewById(R.id.namedStatus);
 
-        ivDhcpdStatus = (ImageView) view.findViewById(R.id.imageViewDhcpdStatus);
-        ivNamedStatus = (ImageView) view.findViewById(R.id.imageViewNamedStatus);
+        ivDhcpdStatus = view.findViewById(R.id.imageViewDhcpdStatus);
+        ivNamedStatus = view.findViewById(R.id.imageViewNamedStatus);
 
-        RecyclerView rvDhcpd = (RecyclerView) view.findViewById(R.id.recyclerViewDhcpd);
+        RecyclerView rvDhcpd = view.findViewById(R.id.recyclerViewDhcpd);
         // ATTENTION: Should use separate LayoutManager for each RecyclerView.
         rvDhcpd.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvDhcpd.setItemAnimator(new DefaultItemAnimator());
@@ -145,7 +145,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         rvDhcpd.setAdapter(mDhcpdAdapter);
         rvDhcpd.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
-        RecyclerView rvNamed = (RecyclerView) view.findViewById(R.id.recyclerViewNamed);
+        RecyclerView rvNamed = view.findViewById(R.id.recyclerViewNamed);
         rvNamed.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvNamed.setItemAnimator(new DefaultItemAnimator());
         rvNamed.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -153,7 +153,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         rvNamed.setAdapter(mNamedAdapter);
         rvNamed.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
-        RecyclerView rvArpTable = (RecyclerView) view.findViewById(R.id.recyclerViewArpTable);
+        RecyclerView rvArpTable = view.findViewById(R.id.recyclerViewArpTable);
         rvArpTable.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvArpTable.setItemAnimator(new DefaultItemAnimator());
         rvArpTable.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -161,7 +161,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         rvArpTable.setAdapter(mArpTableAdapter);
         rvArpTable.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mArpTableItemClickListener));
 
-        RecyclerView rvLeases = (RecyclerView) view.findViewById(R.id.recyclerViewLeases);
+        RecyclerView rvLeases = view.findViewById(R.id.recyclerViewLeases);
         rvLeases.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvLeases.setItemAnimator(new DefaultItemAnimator());
         rvLeases.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -370,8 +370,8 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
      */
     @Override
     public void onItemClick(View view) {
-        TextView tvCommand = (TextView) view.findViewById(R.id.command);
-        TextView tvUserGroup = (TextView) view.findViewById(R.id.others);
+        TextView tvCommand = view.findViewById(R.id.command);
+        TextView tvUserGroup = view.findViewById(R.id.others);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -438,12 +438,12 @@ class ArpTableRecyclerAdapter extends RecyclerView.Adapter<ArpTableRecyclerAdapt
 
         ArpViewHolder(View view) {
             super(view);
-            onIf = (TextView) view.findViewById(R.id.onIf);
-            ip = (TextView) view.findViewById(R.id.ip);
-            expire = (TextView) view.findViewById(R.id.expire);
-            number = (TextView) view.findViewById(R.id.number);
-            mac = (TextView) view.findViewById(R.id.mac);
-            image = (TextView) view.findViewById(R.id.image);
+            onIf = view.findViewById(R.id.onIf);
+            ip = view.findViewById(R.id.ip);
+            expire = view.findViewById(R.id.expire);
+            number = view.findViewById(R.id.number);
+            mac = view.findViewById(R.id.mac);
+            image = view.findViewById(R.id.image);
         }
     }
 
@@ -548,11 +548,11 @@ class LeaseRecyclerAdapter extends RecyclerView.Adapter<LeaseRecyclerAdapter.Lea
 
         LeaseViewHolder(View view) {
             super(view);
-            startEnd = (TextView) view.findViewById(R.id.startEnd);
-            ip = (TextView) view.findViewById(R.id.ip);
-            status = (TextView) view.findViewById(R.id.status);
-            number = (TextView) view.findViewById(R.id.number);
-            host = (TextView) view.findViewById(R.id.host);
+            startEnd = view.findViewById(R.id.startEnd);
+            ip = view.findViewById(R.id.ip);
+            status = view.findViewById(R.id.status);
+            number = view.findViewById(R.id.number);
+            host = view.findViewById(R.id.host);
         }
     }
 

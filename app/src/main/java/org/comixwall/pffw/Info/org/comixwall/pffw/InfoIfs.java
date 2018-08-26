@@ -69,10 +69,10 @@ public class InfoIfs extends Fragment implements SwipeRefreshLayout.OnRefreshLis
 
         View view = inflater.inflate(R.layout.info_ifs, container, false);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
-        RecyclerView rvIfs = (RecyclerView) view.findViewById(R.id.recyclerViewIfs);
+        RecyclerView rvIfs = view.findViewById(R.id.recyclerViewIfs);
 
         rvIfs.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvIfs.setItemAnimator(new DefaultItemAnimator());
@@ -201,8 +201,8 @@ public class InfoIfs extends Fragment implements SwipeRefreshLayout.OnRefreshLis
     @Override
     public void onItemClick(View view) {
 
-        TextView tvName = (TextView) view.findViewById(R.id.name);
-        TextView tvCleared = (TextView) view.findViewById(R.id.cleared);
+        TextView tvName = view.findViewById(R.id.name);
+        TextView tvCleared = view.findViewById(R.id.cleared);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -301,11 +301,11 @@ class IfRecyclerAdapter extends RecyclerView.Adapter<IfRecyclerAdapter.IfViewHol
 
         IfViewHolder(View view) {
             super(view);
-            name = (TextView) view.findViewById(R.id.name);
-            number = (TextView) view.findViewById(R.id.number);
-            statesRules = (TextView) view.findViewById(R.id.statesRules);
-            cleared = (TextView) view.findViewById(R.id.cleared);
-            table = (TableLayout) view.findViewById(R.id.table);
+            name = view.findViewById(R.id.name);
+            number = view.findViewById(R.id.number);
+            statesRules = view.findViewById(R.id.statesRules);
+            cleared = view.findViewById(R.id.cleared);
+            table = view.findViewById(R.id.table);
         }
     }
 

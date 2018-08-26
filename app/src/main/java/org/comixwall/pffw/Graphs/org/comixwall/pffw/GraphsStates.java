@@ -41,10 +41,10 @@ public class GraphsStates extends GraphsBase {
 
         mLayout = "states";
 
-        ivStates = (ImageView) view.findViewById(R.id.imageViewStates);
+        ivStates = view.findViewById(R.id.imageViewStates);
         ivStates.setOnClickListener(onViewClick);
 
-        ivSearchesPkts = (ImageView) view.findViewById(R.id.imageViewSearchesPkts);
+        ivSearchesPkts = view.findViewById(R.id.imageViewSearchesPkts);
         ivSearchesPkts.setOnClickListener(onViewClick);
 
         if (cache.graphsStates == null) {

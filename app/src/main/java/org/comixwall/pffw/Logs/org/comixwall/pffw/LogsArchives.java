@@ -80,23 +80,23 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
 
         view = inflater.inflate(R.layout.logs_archives, container, false);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
         view.findViewById(R.id.logFile).setOnClickListener(mLabelClickedHandler);
 
-        tvLogSize = (TextView) view.findViewById(R.id.logSize);
+        tvLogSize = view.findViewById(R.id.logSize);
 
-        etStartLine = (EditText) view.findViewById(R.id.startLine);
-        etLinesPerPage = (EditText) view.findViewById(R.id.editTextLinesPerPage);
-        etRegex = (EditText) view.findViewById(R.id.editTextRegex);
+        etStartLine = view.findViewById(R.id.startLine);
+        etLinesPerPage = view.findViewById(R.id.editTextLinesPerPage);
+        etRegex = view.findViewById(R.id.editTextRegex);
 
         view.findViewById(R.id.first).setOnClickListener(mLabelClickedHandler);
         view.findViewById(R.id.previous).setOnClickListener(mLabelClickedHandler);
         view.findViewById(R.id.next).setOnClickListener(mLabelClickedHandler);
         view.findViewById(R.id.last).setOnClickListener(mLabelClickedHandler);
 
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -358,8 +358,8 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void onItemClick(View view) {
-        TextView tvLog = (TextView) view.findViewById(R.id.log);
-        TextView tvSrcDst = (TextView) view.findViewById(R.id.srcDst);
+        TextView tvLog = view.findViewById(R.id.log);
+        TextView tvSrcDst = view.findViewById(R.id.srcDst);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -431,12 +431,12 @@ class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.LogView
 
         LogViewHolder(View view) {
             super(view);
-            number = (TextView) view.findViewById(R.id.number);
-            dirIf = (TextView) view.findViewById(R.id.dirif);
-            srcDst = (TextView) view.findViewById(R.id.srcDst);
-            datetime = (TextView) view.findViewById(R.id.year);
-            log = (TextView) view.findViewById(R.id.log);
-            image = (TextView) view.findViewById(R.id.image);
+            number = view.findViewById(R.id.number);
+            dirIf = view.findViewById(R.id.dirif);
+            srcDst = view.findViewById(R.id.srcDst);
+            datetime = view.findViewById(R.id.year);
+            log = view.findViewById(R.id.log);
+            image = view.findViewById(R.id.image);
         }
     }
 

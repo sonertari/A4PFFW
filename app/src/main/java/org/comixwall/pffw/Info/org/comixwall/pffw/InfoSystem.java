@@ -84,16 +84,16 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
 
         View view = inflater.inflate(R.layout.info_system, container, false);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
-        tvSymonStatus = (TextView) view.findViewById(R.id.symonStatus);
-        tvSymuxStatus = (TextView) view.findViewById(R.id.symuxStatus);
+        tvSymonStatus = view.findViewById(R.id.symonStatus);
+        tvSymuxStatus = view.findViewById(R.id.symuxStatus);
 
-        ivSymonStatus = (ImageView) view.findViewById(R.id.imageViewSymonStatus);
-        ivSymuxStatus = (ImageView) view.findViewById(R.id.imageViewSymuxStatus);
+        ivSymonStatus = view.findViewById(R.id.imageViewSymonStatus);
+        ivSymuxStatus = view.findViewById(R.id.imageViewSymuxStatus);
 
-        RecyclerView rvSymon = (RecyclerView) view.findViewById(R.id.recyclerViewSymon);
+        RecyclerView rvSymon = view.findViewById(R.id.recyclerViewSymon);
         rvSymon.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvSymon.setItemAnimator(new DefaultItemAnimator());
         rvSymon.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -101,7 +101,7 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
         rvSymon.setAdapter(mSymonAdapter);
         rvSymon.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
-        RecyclerView rvSymux = (RecyclerView) view.findViewById(R.id.recyclerViewSymux);
+        RecyclerView rvSymux = view.findViewById(R.id.recyclerViewSymux);
         rvSymux.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvSymux.setItemAnimator(new DefaultItemAnimator());
         rvSymux.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -109,7 +109,7 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
         rvSymux.setAdapter(mSymuxAdapter);
         rvSymux.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
-        RecyclerView rvSystem = (RecyclerView) view.findViewById(R.id.recyclerViewSystem);
+        RecyclerView rvSystem = view.findViewById(R.id.recyclerViewSystem);
         rvSystem.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvSystem.setItemAnimator(new DefaultItemAnimator());
         rvSystem.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
@@ -273,8 +273,8 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     @Override
     public void onItemClick(View view) {
-        TextView tvCommand = (TextView) view.findViewById(R.id.command);
-        TextView tvOthers = (TextView) view.findViewById(R.id.others);
+        TextView tvCommand = view.findViewById(R.id.command);
+        TextView tvOthers = view.findViewById(R.id.others);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -354,12 +354,12 @@ class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter
 
         ProcessViewHolder(View view) {
             super(view);
-            cpuMemTime = (TextView) view.findViewById(R.id.cpuMemTime);
-            command = (TextView) view.findViewById(R.id.command);
-            pid = (TextView) view.findViewById(R.id.pid);
-            others = (TextView) view.findViewById(R.id.others);
-            started = (TextView) view.findViewById(R.id.started);
-            image = (TextView) view.findViewById(R.id.image);
+            cpuMemTime = view.findViewById(R.id.cpuMemTime);
+            command = view.findViewById(R.id.command);
+            pid = view.findViewById(R.id.pid);
+            others = view.findViewById(R.id.others);
+            started = view.findViewById(R.id.started);
+            image = view.findViewById(R.id.image);
         }
     }
 

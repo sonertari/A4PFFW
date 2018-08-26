@@ -59,7 +59,7 @@ public class LogFilePickerDialog extends DialogFragment {
 
         updateLogFileLists();
 
-        optionsListView = (ListView) view.findViewById(R.id.options);
+        optionsListView = view.findViewById(R.id.options);
 
         // Do not use simple_list_item_1 here, it has a too large padding around itself
         optionsListView.setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_spinner_item, mLogFileOpts));

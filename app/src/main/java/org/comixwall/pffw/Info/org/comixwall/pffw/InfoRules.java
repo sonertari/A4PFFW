@@ -67,10 +67,10 @@ public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         View view = inflater.inflate(R.layout.info_rules, container, false);
 
-        swipeRefresh = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefresh);
+        swipeRefresh = view.findViewById(R.id.swipeRefresh);
         swipeRefresh.setOnRefreshListener(this);
 
-        RecyclerView rvRules = (RecyclerView) view.findViewById(R.id.recyclerViewRules);
+        RecyclerView rvRules = view.findViewById(R.id.recyclerViewRules);
 
         rvRules.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvRules.setItemAnimator(new DefaultItemAnimator());
@@ -198,8 +198,8 @@ public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshL
     @Override
     public void onItemClick(View view) {
 
-        TextView tvRule = (TextView) view.findViewById(R.id.rule);
-        TextView tvEvalsStates = (TextView) view.findViewById(R.id.evalsStates);
+        TextView tvRule = view.findViewById(R.id.rule);
+        TextView tvEvalsStates = view.findViewById(R.id.evalsStates);
 
         int lines = 10;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
@@ -269,12 +269,12 @@ class RuleRecyclerAdapter extends RecyclerView.Adapter<RuleRecyclerAdapter.RuleV
 
         RuleViewHolder(View view) {
             super(view);
-            packetsBytes = (TextView) view.findViewById(R.id.packetsBytes);
-            rule = (TextView) view.findViewById(R.id.rule);
-            evalsStates = (TextView) view.findViewById(R.id.evalsStates);
-            number = (TextView) view.findViewById(R.id.number);
-            inserted = (TextView) view.findViewById(R.id.inserted);
-            image = (TextView) view.findViewById(R.id.image);
+            packetsBytes = view.findViewById(R.id.packetsBytes);
+            rule = view.findViewById(R.id.rule);
+            evalsStates = view.findViewById(R.id.evalsStates);
+            number = view.findViewById(R.id.number);
+            inserted = view.findViewById(R.id.inserted);
+            image = view.findViewById(R.id.image);
         }
     }
 

@@ -58,10 +58,10 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
 
         view.findViewById(R.id.logFile).setOnClickListener(mLabelClickedHandler);
 
-        tvMonthDay = (TextView) view.findViewById(R.id.logMonthDay);
+        tvMonthDay = view.findViewById(R.id.logMonthDay);
         tvMonthDay.setOnClickListener(mLabelClickedHandler);
 
-        tvHour = (TextView) view.findViewById(R.id.logHour);
+        tvHour = view.findViewById(R.id.logHour);
         tvHour.setOnClickListener(mLabelClickedHandler);
 
         init();
