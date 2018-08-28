@@ -55,11 +55,13 @@ public class FirebaseService extends FirebaseMessagingService implements OnSucce
                 intent.putExtras(bundle);
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                // TODO: Need a real CHANNEL_ID for O?
+                // TODO: Support O+, currently N-
+                // TODO: Need a real CHANNEL_ID to support O?
                 //int importance = NotificationManager.IMPORTANCE_DEFAULT;
                 //NotificationChannel notificationChannel = new NotificationChannel("ID", "Name", importance);
                 //notificationManager.createNotificationChannel(notificationChannel);
                 //NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, notificationChannel.getId());
+                //NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
                 NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "NOTIFICATION_CHANNEL_ID")
                         .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                         .setSmallIcon(R.mipmap.notification)

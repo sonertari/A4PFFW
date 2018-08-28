@@ -19,17 +19,24 @@
 
 package org.comixwall.pffw;
 
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -37,6 +44,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -55,8 +63,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     // Firebase token handling
     public static String token = "";
+    public static String user = "Unknown user";
+    public static final String product = Build.PRODUCT;
     public static boolean sendToken = false;
     public static boolean deleteToken = false;
+    private static final int PERMISSION_REQUEST_CODE = 1;
 
     /**
      * Used to get the constructor of and instantiate the fragment class referred by the menu item selected.
@@ -148,6 +159,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
 
         logFilePickerDialog = new LogFilePickerDialog();
+
+        // TODO: Support O+
+        // @see https://developer.android.com/about/versions/oreo/android-8.0-changes.html#aaad
+        // In Android 8.0 (API level 26), apps can no longer get access to user accounts unless the
+        // authenticator owns the accounts or the user grants that access. The GET_ACCOUNTS permission
+        // is no longer sufficient. To be granted access to an account, apps should either use
+        // AccountManager.newChooseAccountIntent() or an authenticator-specific method. After getting
+        // access to accounts, an app can call AccountManager.getAccounts() to access them.
+        int result = ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS);
+        if (result == PackageManager.PERMISSION_GRANTED){
+            setUser();
+        } else {
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.GET_ACCOUNTS)){
+                Toast.makeText(this, R.string.account_perms, Toast.LENGTH_LONG).show();
+            }
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.GET_ACCOUNTS}, PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                setUser();
+                Toast.makeText(this,user + ", " + product, Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, R.string.account_perms, Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private void setUser() {
+        //Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
+        Account[] accounts = AccountManager.get(this).getAccounts();
+
+        // Use the first entry, if any
+        if (accounts.length > 0) {
+            user = accounts[0].name;
+        }
     }
 
     @Override

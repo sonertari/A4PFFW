@@ -20,6 +20,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     package="org.comixwall.pffw">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
     <application
         android:allowBackup="true"

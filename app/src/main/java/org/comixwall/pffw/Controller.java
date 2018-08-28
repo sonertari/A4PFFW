@@ -32,6 +32,7 @@ import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -40,6 +41,8 @@ import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.MainActivity.token;
 import static org.comixwall.pffw.MainActivity.sendToken;
 import static org.comixwall.pffw.MainActivity.deleteToken;
+import static org.comixwall.pffw.MainActivity.user;
+import static org.comixwall.pffw.MainActivity.product;
 import static org.comixwall.pffw.Utils.showMessage;
 
 public class Controller extends Service {
@@ -160,7 +163,7 @@ public class Controller extends Service {
         if (createSession(mUser, mPassword, mHost, mPort)) {
             // First run the token commands, if requested
             if (deleteToken) {
-                runTokenCommand("DelToken");
+                runTokenCommand("DelNotifierUser", token);
                 deleteToken = false;
                 finishLogout();
                 // Throw exception to stop executing the rest of the commands, just show the login page
@@ -168,7 +171,8 @@ public class Controller extends Service {
             }
 
             if (sendToken) {
-                runTokenCommand("AddToken");
+                JSONObject tokenUser = new JSONObject().put(token, user + ", " + product);
+                runTokenCommand("AddNotifierUser", tokenUser.toString());
                 sendToken = false;
             }
 
@@ -180,13 +184,13 @@ public class Controller extends Service {
         return output;
     }
 
-    private void runTokenCommand(String cmd) throws Exception {
-        String output = runSSHCommand(ctlrCmd + "system " + cmd + " '" + token + "'");
+    private void runTokenCommand(String cmd, String arg) throws Exception {
+        String output = runSSHCommand(ctlrCmd + "system " + cmd + " '" + arg + "'");
         String result = new JSONArray(output).get(2).toString();
         if (result.equals("0")) {
-            logger.finest("Controller runTokenCommand " + cmd + "= " + token);
+            logger.finest("Controller runTokenCommand " + cmd + "= " + arg);
         } else {
-            logger.warning("Controller runTokenCommand " + cmd + " failed: " + token);
+            logger.warning("Controller runTokenCommand " + cmd + " failed: " + arg);
         }
     }
 
