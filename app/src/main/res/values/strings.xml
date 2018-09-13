@@ -159,4 +159,5 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="notification_details">NOTIFICATION DETAILS</string>
     <string name="notifications_menu">Notifications</string>
     <string name="account_perms">Account permission is used to get user name only</string>
+    <string name="notification_channel_id" translatable="false">PFFW_NOTIFIER_CHANNEL</string>
 </resources>

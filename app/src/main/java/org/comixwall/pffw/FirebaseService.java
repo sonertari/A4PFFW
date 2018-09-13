@@ -1,10 +1,13 @@
 package org.comixwall.pffw;
 
 import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -55,14 +58,15 @@ public class FirebaseService extends FirebaseMessagingService implements OnSucce
                 intent.putExtras(bundle);
                 PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                // TODO: Support O+, currently N-
-                // TODO: Need a real CHANNEL_ID to support O?
-                //int importance = NotificationManager.IMPORTANCE_DEFAULT;
-                //NotificationChannel notificationChannel = new NotificationChannel("ID", "Name", importance);
-                //notificationManager.createNotificationChannel(notificationChannel);
-                //NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, notificationChannel.getId());
-                //NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this)
-                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, "NOTIFICATION_CHANNEL_ID")
+                String channelId = getApplication().getString(R.string.notification_channel_id);
+
+                // O+ needs notification channel
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    NotificationChannel channel = new NotificationChannel(channelId, "PFFW Notifier", NotificationManager.IMPORTANCE_DEFAULT);
+                    ((NotificationManager) getSystemService(NOTIFICATION_SERVICE)).createNotificationChannel(channel);
+                }
+
+                NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this, channelId)
                         .setDefaults(Notification.DEFAULT_SOUND | Notification.DEFAULT_VIBRATE)
                         .setSmallIcon(R.mipmap.notification)
                         .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.notification))

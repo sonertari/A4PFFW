@@ -54,6 +54,8 @@ import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static android.accounts.AccountManager.KEY_ACCOUNT_NAME;
+
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     public static Cache cache;
@@ -68,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static boolean sendToken = false;
     public static boolean deleteToken = false;
     private static final int PERMISSION_REQUEST_CODE = 1;
+    private static final int PICK_CONTACT_REQUEST = 2;
 
     /**
      * Used to get the constructor of and instantiate the fragment class referred by the menu item selected.
@@ -160,26 +163,35 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         logFilePickerDialog = new LogFilePickerDialog();
 
-        // TODO: Support O+
-        // @see https://developer.android.com/about/versions/oreo/android-8.0-changes.html#aaad
-        // In Android 8.0 (API level 26), apps can no longer get access to user accounts unless the
-        // authenticator owns the accounts or the user grants that access. The GET_ACCOUNTS permission
-        // is no longer sufficient. To be granted access to an account, apps should either use
-        // AccountManager.newChooseAccountIntent() or an authenticator-specific method. After getting
-        // access to accounts, an app can call AccountManager.getAccounts() to access them.
         int result = ContextCompat.checkSelfPermission(this, Manifest.permission.GET_ACCOUNTS);
-        if (result == PackageManager.PERMISSION_GRANTED){
+        if (result == PackageManager.PERMISSION_GRANTED) {
             setUser();
         } else {
-            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.GET_ACCOUNTS)){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.GET_ACCOUNTS)) {
                 Toast.makeText(this, R.string.account_perms, Toast.LENGTH_LONG).show();
             }
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.GET_ACCOUNTS}, PERMISSION_REQUEST_CODE);
         }
-    }
+
+        if (user.equals("Unknown user")) {
+            // In Android 8.0 (API level 26), apps can no longer get access to user accounts unless the
+            // authenticator owns the accounts or the user grants that access. The GET_ACCOUNTS permission
+            // is no longer sufficient. To be granted access to an account, apps should either use
+            // AccountManager.newChooseAccountIntent() or an authenticator-specific method. After getting
+            // access to accounts, an app can call AccountManager.getAccounts() to access them.
+            // @see https://developer.android.com/about/versions/oreo/android-8.0-changes.html#aaad
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                // TODO: Use new String[]{"com.google"} for allowableAccountTypes instead?
+                Intent intent = AccountManager.newChooseAccountIntent(null, null, null,
+                        null, null, null, null);
+                startActivityForResult(intent, PICK_CONTACT_REQUEST);
+
+            }
+        }
+   }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setUser();
@@ -191,12 +203,29 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void setUser() {
-        //Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
+        // TODO: Use getAccountsByType("com.google") instead?
         Account[] accounts = AccountManager.get(this).getAccounts();
 
         // Use the first entry, if any
         if (accounts.length > 0) {
             user = accounts[0].name;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_CONTACT_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                // The user picked a contact.
+                // The Intent's data Uri identifies which contact was selected.
+                Bundle bundle = data.getExtras();
+                if (bundle != null && bundle.containsKey(KEY_ACCOUNT_NAME)) {
+                    user = data.getExtras().getString(KEY_ACCOUNT_NAME);
+                    Toast.makeText(this, user + ", " + product, Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(this, R.string.account_perms, Toast.LENGTH_LONG).show();
+            }
         }
     }
 

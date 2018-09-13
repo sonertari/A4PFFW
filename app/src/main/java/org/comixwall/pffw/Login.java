@@ -64,8 +64,6 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
     private String mHost;
     private int mPort;
 
-    private static String mPreviousHost;
-
     private String mLastError;
 
     @Override
@@ -136,16 +134,12 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
 
     private void processLogin() {
         if (controller.isLoggedin()) {
-            if (!mHost.equals(mPreviousHost)) {
-                // Reset the cache if the host changes
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.beginTransaction().remove(fm.findFragmentByTag("cache")).commit();
+            // Reset the cache upon login
+            FragmentManager fm = getActivity().getSupportFragmentManager();
+            fm.beginTransaction().remove(fm.findFragmentByTag("cache")).commit();
 
-                MainActivity.cache = new Cache();
-                fm.beginTransaction().add(MainActivity.cache, "cache").commit();
-
-                mPreviousHost = mHost;
-            }
+            MainActivity.cache = new Cache();
+            fm.beginTransaction().add(MainActivity.cache, "cache").commit();
 
             // Enable drawer and toggle button
             ((MainActivity) getActivity()).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
