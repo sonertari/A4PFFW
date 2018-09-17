@@ -88,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final Logger logger;
 
     private Menu optionsMenu;
-    private static int lastNotificationTimestamp = 0;
+    public static int lastNotificationTimestamp = 0;
 
     static {
         logger = Logger.getLogger("org.comixwall.PFFW");
@@ -276,7 +276,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     intent.removeExtra("title");
                     setIntent(new Intent());
                 } else {
-                    logger.finest("showFirstFragment will not process the same notification: " + lastNotificationTimestamp);
+                    Toast.makeText(this, R.string.notification_not_recent, Toast.LENGTH_LONG).show();
+                    logger.finest("showFirstFragment will not process the same or older notification: " + lastNotificationTimestamp);
                 }
             } catch (Exception e) {
                 logger.warning("showFirstFragment Exception= " + e.getMessage());
@@ -292,6 +293,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 onNavigationItemSelected(navigationView.getMenu().findItem(R.id.menuInfoPf));
             }
         }
+
+        createOptionsMenu();
     }
 
     @Override
@@ -312,17 +315,27 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
             }
         }
+
+        createOptionsMenu();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         optionsMenu = menu;
-        // Inflate the menu; this adds items to the app bar if it is present.
-        // Login fragment should not have any appbar menu
-        if (fragment.getClass() != Login.class) {
-            getMenuInflater().inflate(R.menu.app_bar_menu, menu);
-        }
+        createOptionsMenu();
         return true;
+    }
+
+    public void createOptionsMenu() {
+        if (optionsMenu != null) {
+            optionsMenu.clear();
+            if (fragment.getClass() == Notifications.class) {
+                getMenuInflater().inflate(R.menu.app_bar_notifications_menu, optionsMenu);
+            } else if (fragment.getClass() != Login.class) {
+                // Login fragment should not have any appbar menu
+                getMenuInflater().inflate(R.menu.app_bar_menu, optionsMenu);
+            }
+        }
     }
 
     @Override
@@ -352,6 +365,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // We recreate the activity so that onCreate() resets everything and
             // onResume() displays the Login fragment.
             recreate();
+        } else if (id == R.id.menuDelete) {
+            return fragment.onOptionsItemSelected(item);
         }
 
         return super.onOptionsItemSelected(item);
@@ -430,6 +445,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
 
         drawer.closeDrawer(GravityCompat.START);
+        createOptionsMenu();
         return true;
     }
 

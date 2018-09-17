@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.comixwall.pffw.MainActivity.controller;
+import static org.comixwall.pffw.MainActivity.fragment;
 import static org.comixwall.pffw.MainActivity.logger;
 
 public class NotificationDetails extends Fragment implements RecyclerTouchListener.OnItemClickListener,
@@ -68,6 +69,12 @@ public class NotificationDetails extends Fragment implements RecyclerTouchListen
         rvNotifications.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fragment = this;
     }
 
     @Override

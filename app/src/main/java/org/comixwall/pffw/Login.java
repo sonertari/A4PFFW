@@ -44,6 +44,7 @@ import java.nio.charset.Charset;
 
 import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
+import static org.comixwall.pffw.MainActivity.lastNotificationTimestamp;
 import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.MainActivity.sendToken;
 import static org.comixwall.pffw.MainActivity.token;
@@ -140,6 +141,9 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
 
             MainActivity.cache = new Cache();
             fm.beginTransaction().add(MainActivity.cache, "cache").commit();
+
+            // Reset saved timestamp of last notification
+            lastNotificationTimestamp = 0;
 
             // Enable drawer and toggle button
             ((MainActivity) getActivity()).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);

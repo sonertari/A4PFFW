@@ -42,12 +42,15 @@ import java.util.List;
 
 import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
+import static org.comixwall.pffw.MainActivity.lastNotificationTimestamp;
 import static org.comixwall.pffw.MainActivity.logger;
 
 public class Notifications extends Fragment implements RecyclerTouchListener.OnItemClickListener,
         ControllerTask.ControllerTaskListener {
 
     private static final List<Notification> mNotificationsList = new ArrayList<>();
+
+    private RecyclerView rvNotifications;
 
     private static final ArrayList<String> priorities = new ArrayList<String>() {{
         add("Critical");
@@ -72,7 +75,7 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
 
         View view = inflater.inflate(R.layout.notifications, container, false);
 
-        RecyclerView rvNotifications = view.findViewById(R.id.recyclerViewNotifications);
+        rvNotifications = view.findViewById(R.id.recyclerViewNotifications);
 
         rvNotifications.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvNotifications.setItemAnimator(new DefaultItemAnimator());
@@ -81,6 +84,12 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
         rvNotifications.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        fragment = this;
     }
 
     @Override
@@ -147,6 +156,8 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
 
         transaction.replace(R.id.fragmentContainer, fragment);
         transaction.commit();
+
+        ((MainActivity)getActivity()).createOptionsMenu();
     }
 
     // ATTENTION: ControllerTask.ControllerTaskListener interface implementation is for deleting token
@@ -190,9 +201,20 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
         if (id == R.id.menuRefresh) {
             getInfo();
             return true;
+        } else if (id == R.id.menuDelete) {
+            deleteAllNotifications();
+            return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private void deleteAllNotifications() {
+        mNotificationsList.clear();
+        NotificationRecyclerAdapter rvAdapter = (NotificationRecyclerAdapter)rvNotifications.getAdapter();
+        rvAdapter.notificationList.clear();
+        rvAdapter.notifyDataSetChanged();
+        lastNotificationTimestamp = 0;
     }
 }
 
@@ -220,7 +242,7 @@ class Notification {
 
 class NotificationRecyclerAdapter extends RecyclerView.Adapter<NotificationRecyclerAdapter.NotificationViewHolder> {
 
-    private final List<Notification> notificationList = new ArrayList<>();
+    public final List<Notification> notificationList = new ArrayList<>();
 
     class NotificationViewHolder extends RecyclerView.ViewHolder {
         final TextView title;
