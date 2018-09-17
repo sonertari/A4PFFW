@@ -1,6 +1,6 @@
 # A4PFFW
 
-A4PFFW is an Android user interface for PFFW 5.9. Afaik, PFFW is the only firewall with an Android UI for monitoring.
+A4PFFW is an Android user interface for PFFW and UTMFW. Afaik, PFFW and UTMFW are the only firewalls with an Android UI for monitoring. A4PFFW supports Firebase push notifications too.
 
 You can find a couple of screenshots on the [wiki](https://github.com/sonertari/A4PFFW/wiki).
 

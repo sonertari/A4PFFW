@@ -49,6 +49,6 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/v5_9" />
+        android:text="@string/v6_3" />
 
 </LinearLayout>

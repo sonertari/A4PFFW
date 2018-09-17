@@ -237,8 +237,10 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
                         logger.finest("Using secure http: " + secureUrl.toString());
 
-                        // ATTENTION: Setting a timeout value enables SocketTimeoutException
+                        // ATTENTION: Setting a timeout value enables SocketTimeoutException, set both timeouts
+                        secureUrlConn.setConnectTimeout(5000);
                         secureUrlConn.setReadTimeout(5000);
+                        logger.finest("Secure URL connection timeout values: " + secureUrlConn.getConnectTimeout() + ", " + secureUrlConn.getReadTimeout());
 
                         stream = secureUrlConn.getInputStream();
 
@@ -249,13 +251,17 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
 
                     // Try plain if secure fails
                     if (stream == null) {
+                        // ATTENTION: Don't use try-catch here, catch in the outer exception handling
                         URL plainUrl = new URL("http://" + controller.getHost() + "/symon/graph.php?" + hash);
+
                         HttpURLConnection plainUrlConn = (HttpURLConnection) plainUrl.openConnection();
 
                         logger.finest("Using plain http: " + plainUrlConn.toString());
 
-                        // ATTENTION: Setting a timeout value enables SocketTimeoutException
+                        // ATTENTION: Setting a timeout value enables SocketTimeoutException, set both timeouts
+                        plainUrlConn.setConnectTimeout(5000);
                         plainUrlConn.setReadTimeout(5000);
+                        logger.finest("Plain URL connection timeout values: " + plainUrlConn.getConnectTimeout() + ", " + plainUrlConn.getReadTimeout());
 
                         stream = plainUrlConn.getInputStream();
                     }
@@ -266,7 +272,9 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
                 } catch (Exception e) {
                     // We are especially interested in SocketTimeoutException, but catch all
                     e.printStackTrace();
-                    logger.info("doInBackground exception: " + e.toString());
+                    logger.info("GraphsBase doInBackground exception: " + e.toString());
+                    // We should break out of while loop on exception, because all conn attempts have failed
+                    break;
                 }
             }
 
