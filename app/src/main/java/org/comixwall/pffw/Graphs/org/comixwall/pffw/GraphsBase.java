@@ -24,6 +24,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,6 +33,7 @@ import android.view.ViewGroup;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -201,7 +203,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
      * We fetch the graphs using secure http, or fall back to plain http if secure connection fails.
      * <p>
      * Note that the PFFW uses a self-signed server certificate. So the code should trust that certificate
-     * and do not reject the hostname.
+     * and not reject the hostname.
      *
      * @return True on success, false on failure.
      */
@@ -217,53 +219,69 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
             Iterator<String> it = mGraphsJsonObject.keys();
             while (it.hasNext()) {
                 String title = it.next();
-                String hash = mGraphsJsonObject.getString(title);
+                String file = mGraphsJsonObject.getString(title);
 
                 try {
                     InputStream stream = null;
 
                     try {
-                        // Using https here gives: CertPathValidatorException: Trust anchor for certification path not found.
-                        // So we should trust the PFFW server crt and hostname
-                        URL secureUrl = new URL("https://" + controller.getHost() + "/symon/graph.php?" + hash);
-
-                        HttpsURLConnection secureUrlConn = (HttpsURLConnection) secureUrl.openConnection();
-
-                        // Tell the URLConnection to use a SocketFactory from our SSLContext
-                        secureUrlConn.setSSLSocketFactory(sslContext.getSocketFactory());
-
-                        // Install the PFFW host verifier
-                        secureUrlConn.setHostnameVerifier(hostnameVerifier);
-
-                        logger.finest("Using secure http: " + secureUrl.toString());
-
-                        // ATTENTION: Setting a timeout value enables SocketTimeoutException, set both timeouts
-                        secureUrlConn.setConnectTimeout(5000);
-                        secureUrlConn.setReadTimeout(5000);
-                        logger.finest("Secure URL connection timeout values: " + secureUrlConn.getConnectTimeout() + ", " + secureUrlConn.getReadTimeout());
-
-                        stream = secureUrlConn.getInputStream();
+                        String outputGraph = controller.execute("symon", "GetGraph", file);
+                        String base64Graph = new JSONArray(outputGraph).get(0).toString();
+                        stream = new ByteArrayInputStream(Base64.decode(base64Graph, Base64.DEFAULT));
 
                     } catch (Exception e) {
                         e.printStackTrace();
-                        logger.warning("Secure URL connection exception: " + e.toString());
+                        logger.warning("SSH graph connection exception: " + e.toString());
                     }
 
-                    // Try plain if secure fails
+                    // Try secure http if ssh fails
                     if (stream == null) {
-                        // ATTENTION: Don't use try-catch here, catch in the outer exception handling
-                        URL plainUrl = new URL("http://" + controller.getHost() + "/symon/graph.php?" + hash);
+                        // 1540861800_404e00f4044d07242a77f802e457f774
+                        String hash = file.substring(file.indexOf('_') + 1);
 
-                        HttpURLConnection plainUrlConn = (HttpURLConnection) plainUrl.openConnection();
+                        try {
+                            // Using https here gives: CertPathValidatorException: Trust anchor for certification path not found.
+                            // So we should trust the PFFW server crt and hostname
+                            URL secureUrl = new URL("https://" + controller.getHost() + "/symon/graph.php?" + hash);
 
-                        logger.finest("Using plain http: " + plainUrlConn.toString());
+                            HttpsURLConnection secureUrlConn = (HttpsURLConnection) secureUrl.openConnection();
 
-                        // ATTENTION: Setting a timeout value enables SocketTimeoutException, set both timeouts
-                        plainUrlConn.setConnectTimeout(5000);
-                        plainUrlConn.setReadTimeout(5000);
-                        logger.finest("Plain URL connection timeout values: " + plainUrlConn.getConnectTimeout() + ", " + plainUrlConn.getReadTimeout());
+                            // Tell the URLConnection to use a SocketFactory from our SSLContext
+                            secureUrlConn.setSSLSocketFactory(sslContext.getSocketFactory());
 
-                        stream = plainUrlConn.getInputStream();
+                            // Install the PFFW host verifier
+                            secureUrlConn.setHostnameVerifier(hostnameVerifier);
+
+                            logger.finest("Using secure http: " + secureUrl.toString());
+
+                            // ATTENTION: Setting a timeout value enables SocketTimeoutException, set both timeouts
+                            secureUrlConn.setConnectTimeout(5000);
+                            secureUrlConn.setReadTimeout(5000);
+                            logger.finest("Secure URL connection timeout values: " + secureUrlConn.getConnectTimeout() + ", " + secureUrlConn.getReadTimeout());
+
+                            stream = secureUrlConn.getInputStream();
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            logger.warning("Secure URL connection exception: " + e.toString());
+                        }
+
+                        // Try plain http if secure http fails
+                        if (stream == null) {
+                            // ATTENTION: Don't use try-catch here, catch in the outer exception handling
+                            URL plainUrl = new URL("http://" + controller.getHost() + "/symon/graph.php?" + hash);
+
+                            HttpURLConnection plainUrlConn = (HttpURLConnection) plainUrl.openConnection();
+
+                            logger.finest("Using plain http: " + plainUrlConn.toString());
+
+                            // ATTENTION: Setting a timeout value enables SocketTimeoutException, set both timeouts
+                            plainUrlConn.setConnectTimeout(5000);
+                            plainUrlConn.setReadTimeout(5000);
+                            logger.finest("Plain URL connection timeout values: " + plainUrlConn.getConnectTimeout() + ", " + plainUrlConn.getReadTimeout());
+
+                            stream = plainUrlConn.getInputStream();
+                        }
                     }
 
                     Bitmap bmp = BitmapFactory.decodeStream(stream);
