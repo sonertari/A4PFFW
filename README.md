@@ -4,7 +4,7 @@ A4PFFW is an Android user interface for PFFW and UTMFW. Afaik, PFFW and UTMFW ar
 
 You can find a couple of screenshots on the [wiki](https://github.com/sonertari/A4PFFW/wiki).
 
-The apk file is available for download at [a4pffw63_20180917.apk](https://drive.google.com/file/d/12t1Df-uOZzIcRMNz8Kv04qZSmH_efdX2/view?usp=sharing). Make sure the sha256 checksum is correct: 41b8258c9e08ebb2fa74f70de085a3a8a929431bddf6cec376f5481e376e17f8.
+The apk file is available for download at [a4pffw64\_20181106.apk](https://drive.google.com/file/d/1qLqfSALcAzNFUx5jnYNraJLnH3ZuJVl4/view?usp=sharing). Make sure the SHA256 checksum is correct: c0a1eddc118976df6cb6dc737331cd8d5dc7a7429a557f83aeb8b69b7aa907a6.
 
 A4PFFW is part of the PFFW project.
 
