@@ -46,7 +46,8 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
         android:paddingLeft="@dimen/activity_vertical_smallmargin"
         android:paddingRight="@dimen/activity_vertical_smallmargin"
         android:paddingTop="@dimen/activity_vertical_smallmargin"
-        android:smoothScrollbar="true" />
+        android:smoothScrollbar="true"
+        android:focusable="true" />
 
     <Button
         android:id="@+id/cancelButton"
