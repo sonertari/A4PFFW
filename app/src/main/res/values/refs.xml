@@ -22,4 +22,8 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <drawable name="block">@android:drawable/presence_busy</drawable>
     <drawable name="pass">@android:drawable/presence_online</drawable>
     <drawable name="match">@android:drawable/presence_away</drawable>
+    <drawable name="stopped">@android:drawable/presence_invisible</drawable>
+    <drawable name="critical">@android:drawable/presence_busy</drawable>
+    <drawable name="error">@android:drawable/presence_away</drawable>
+    <drawable name="noerror">@android:drawable/presence_online</drawable>
 </resources>

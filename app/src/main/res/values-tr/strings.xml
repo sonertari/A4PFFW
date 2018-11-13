@@ -124,7 +124,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="touch_tables_to_resize">Boyutu ayarlamak için tabloya dokunun</string>
     <string name="transfer">Veri Aktarımı</string>
     <string name="user">kullanıcı</string>
-    <string name="version">6.4 sürümü</string>
+    <string name="version">6.4.1 sürümü</string>
     <string name="mbuf_statistics">MBUF İSTATİSTİKLERİ</string>
     <string name="date">Tarih: %1$s %2$s, %3$s:%4$s</string>
     <string name="hour_colon">Saat: %1$s</string>
@@ -153,4 +153,18 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="account_perms">Hesaba ulaşım izni sadece kullanıcı adını almak için kullanılır</string>
     <string name="delete_all">Hepsini Sil</string>
     <string name="notification_not_recent">Uyarı yakın tarihli değil</string>
+    <string name="dashboard_menu">Gösterge Paneli</string>
+    <string name="dashboard">GÖSTERGE PANELİ</string>
+    <string name="critical">ÖNEMLİ</string>
+    <string name="error">HATA</string>
+    <string name="warning">UYARI</string>
+    <string name="System">Sistem</string>
+    <string name="PacketFilter">Paket Eleği</string>
+    <string name="DHCPServer">DHCP Sunucu</string>
+    <string name="DNSServer">DNS Sunucu</string>
+    <string name="OpenSSH">OpenSSH</string>
+    <string name="FTPProxy">FTP Vekil</string>
+    <string name="WebServer">Web Sunucu</string>
+    <string name="Symon">Symon</string>
+    <string name="Symux">Symux</string>
 </resources>

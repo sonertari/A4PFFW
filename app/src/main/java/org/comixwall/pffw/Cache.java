@@ -46,6 +46,8 @@ public class Cache extends Fragment {
     public LogsCache logsArchive;
     public LogsCache logsLive;
 
+    public DashboardCache dashboard;
+
     public JSONObject mJsonLogFileList = new JSONObject();
 
     // this method is only called once for this fragment

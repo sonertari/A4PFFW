@@ -50,7 +50,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="label">Label</string>
     <string name="comixwall_logo">ComixWall logo</string>
     <string name="pf_firewall">PF Firewall</string>
-    <string name="version">v6.4</string>
+    <string name="version">v6.4.1</string>
     <string name="a" translatable="false">A</string>
     <string name="i" translatable="false">I</string>
     <string name="l" translatable="false">L</string>
@@ -162,4 +162,18 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="notification_channel_id" translatable="false">PFFW_NOTIFIER_CHANNEL</string>
     <string name="delete_all">Delete All</string>
     <string name="notification_not_recent">Notification is not more recent than the last one</string>
+    <string name="dashboard_menu">Dashboard</string>
+    <string name="dashboard">DASHBOARD</string>
+    <string name="critical">CRITICAL</string>
+    <string name="error">ERROR</string>
+    <string name="warning">WARNING</string>
+    <string name="System">System</string>
+    <string name="PacketFilter">Packet Filter</string>
+    <string name="DHCPServer">DHCP Server</string>
+    <string name="DNSServer">DNS Server</string>
+    <string name="OpenSSH">OpenSSH</string>
+    <string name="FTPProxy">FTP Proxy</string>
+    <string name="WebServer">Web Server</string>
+    <string name="Symon">Symon</string>
+    <string name="Symux">Symux</string>
 </resources>

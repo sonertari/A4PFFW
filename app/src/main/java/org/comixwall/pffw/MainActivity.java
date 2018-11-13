@@ -117,8 +117,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         logger.finest("MainActivity onCreate()");
 
         mMenuItems2Fragments = new HashMap<Integer, Class>() {{
+            // ATTENTION: Dashboard fragment should never be instantiated using this map
+            put(R.id.menuDashboard, Dashboard.class);
             put(R.id.menuNotifications, Notifications.class);
-            // ATTENTION: InfoPf fragment should never be instantiated using this map
             put(R.id.menuInfoPf, InfoPf.class);
             put(R.id.menuInfoSystem, InfoSystem.class);
             put(R.id.menuInfoHosts, InfoHosts.class);
@@ -286,11 +287,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             fragment = new Fragment();
             onNavigationItemSelected(navigationView.getMenu().findItem((R.id.menuNotifications)));
         } else {
-            // Avoid blank pages by showing InfoPf fragment if the backstack is empty
+            // Avoid blank pages by showing Dashboard fragment if the backstack is empty
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                // Reset the fragment, so onNavigationItemSelected() displays the InfoPf fragment in any case
+                // Reset the fragment, so onNavigationItemSelected() displays the Dashboard fragment in any case
                 fragment = new Fragment();
-                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.menuInfoPf));
+                onNavigationItemSelected(navigationView.getMenu().findItem(R.id.menuDashboard));
             }
         }
 
@@ -305,13 +306,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             super.onBackPressed();
 
             if (controller != null && controller.isLoggedin()) {
-                // Avoid blank pages by showing InfoPf fragment if the backstack is empty
-                // ATTENTION: This may show InfoPf for a brief period of time, if the super.onBackPressed()
+                // Avoid blank pages by showing Dashboard fragment if the backstack is empty
+                // ATTENTION: This may show Dashboard for a brief period of time, if the super.onBackPressed()
                 // call above is going to close the activity after returning from this function
                 if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
-                    // Reset the fragment, so onNavigationItemSelected() displays the InfoPf fragment in any case
+                    // Reset the fragment, so onNavigationItemSelected() displays the Dashboard fragment in any case
                     fragment = new Fragment();
-                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.menuInfoPf));
+                    onNavigationItemSelected(navigationView.getMenu().findItem(R.id.menuDashboard));
                 }
             }
         }
@@ -378,9 +379,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * So if a fragment which is already in the backstack is selected, we roll back the backstack
      * to its position.
      * <p>
-     * We never push the InfoPf fragment to the backstack because it is always
+     * We never push the Dashboard fragment to the backstack because it is always
      * the first fragment displayed (if we push it to the backstack too, pressing the back button
-     * while InfoPf fragment is displayed causes a blank activity screen).
+     * while Dashboard fragment is displayed causes a blank activity screen).
      *
      * @param item The menu item selected.
      * @return See {@link NavigationView.OnNavigationItemSelectedListener}
@@ -396,22 +397,22 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             boolean add = true;
 
-            if (id == R.id.menuInfoPf) {
-                // InfoPf is the main fragment, should never be removed,
-                // so remove all backstack entries first to reach the first InfoPf.
+            if (id == R.id.menuDashboard) {
+                // Dashboard is the main fragment, should never be removed,
+                // so remove all backstack entries first to reach the first Dashboard.
                 popAllBackStack();
 
-                // Never add InfoPf to the backstack
+                // Never add Dashboard to the backstack
                 add = false;
-                fragment = new InfoPf();
+                fragment = new Dashboard();
 
-                // ATTENTION: menuInfoPf does not check initially, so we need to manage it ourselves
+                // ATTENTION: menuDashboard does not check initially, so we need to manage it ourselves
                 item.setChecked(true);
             } else {
-                // TODO: Check why android:checkableBehavior="single" does not uncheck menuInfoPf
-                MenuItem itemInfoPf = navigationView.getMenu().findItem(R.id.menuInfoPf);
-                if (itemInfoPf.isChecked()) {
-                    itemInfoPf.setChecked(false);
+                // TODO: Check why android:checkableBehavior="single" does not uncheck menuDashboard
+                MenuItem itemDashboard = navigationView.getMenu().findItem(R.id.menuDashboard);
+                if (itemDashboard.isChecked()) {
+                    itemDashboard.setChecked(false);
                 }
 
                 try {
@@ -451,10 +452,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private void popAllBackStack() {
         // TODO: What is the best way to pop all backstack items?
-        // It does NOT help to use a special StackBottom name while adding the first InfoPf to the backstack,
+        // It does NOT help to use a special StackBottom name while adding the first Dashboard to the backstack,
         // then we could pop all items simply by:
         // fm.popBackStackImmediate("StackBottom", FragmentManager.POP_BACK_STACK_INCLUSIVE);
-        // But if we add the first InfoPf to the backstack, we get a blank page when the user presses the back button.
+        // But if we add the first Dashboard to the backstack, we get a blank page when the user presses the back button.
 
         FragmentManager fm = getSupportFragmentManager();
         while (fm.getBackStackEntryCount() > 0) {

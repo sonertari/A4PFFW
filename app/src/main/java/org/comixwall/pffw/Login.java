@@ -149,7 +149,7 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
             ((MainActivity) getActivity()).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
             ((MainActivity) getActivity()).toggle.setDrawerIndicatorEnabled(true);
 
-            // Recreate menu items, the fragment is InfoPf now
+            // Recreate menu items, the fragment is Dashboard now
             getActivity().invalidateOptionsMenu();
 
             try {

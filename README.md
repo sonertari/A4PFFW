@@ -1,6 +1,6 @@
 # A4PFFW
 
-A4PFFW is an Android user interface for PFFW and UTMFW. Afaik, PFFW and UTMFW are the only firewalls with Android UI for monitoring. A4PFFW supports Firebase push notifications too.
+A4PFFW is an Android user interface for PFFW and UTMFW. Afaik, PFFW and UTMFW are the only firewalls with Web, Android, and Windows UI for monitoring. A4PFFW supports Firebase push notifications too.
 
 You can find a couple of screenshots on the [wiki](https://github.com/sonertari/A4PFFW/wiki).
 
@@ -12,9 +12,12 @@ A4PFFW is part of the PFFW project.
 
 A4PFFW provides all of the monitoring features available on the web user interface of PFFW:
 
+- Dashboard provides an overview of system status.
 - Information on hosts, interfaces, pf rules, states, and queues are provided.
 - Pf logs can be viewed on the Android UI. Compressed log files are supported too.
 - Pf statistics collected over logs are displayed in bar charts and top lists. Statistics over compressed log files are supported too.
 - You can monitor interfaces, packet transfer, pf states, and kernel memory management on the graphs.
 - System status can be received as Firebase push notifications.
 - The Android UI supports English and Turkish.
+
+![Dashboard](https://github.com/sonertari/A4PFFW/blob/master/screenshots/A4PffwDashboard.png)

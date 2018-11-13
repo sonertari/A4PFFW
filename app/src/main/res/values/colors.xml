@@ -19,7 +19,10 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimary">#3f51b5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#ff4081</color>
+    <color name="colorCritical">#ea0010</color>
+    <color name="colorError">#ff7d1a</color>
+    <color name="colorWarning">#ffde07</color>
 </resources>
