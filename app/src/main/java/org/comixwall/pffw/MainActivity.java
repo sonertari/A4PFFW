@@ -88,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final Logger logger;
 
     private Menu optionsMenu;
-    public static int lastNotificationTimestamp = 0;
 
     static {
         logger = Logger.getLogger("org.comixwall.PFFW");
@@ -260,26 +259,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // If there is a notification bundle, show the notification fragment
             try {
                 JSONObject data = new JSONObject(bundle.getString("data"));
+                Notifications.addNotification(Notification.newInstance(data));
 
-                // ATTENTION: Timestamp check is a workaround for the case the user clicks the Overview button
-                // If the activity was created with a notification intent while the app was in the background,
-                // closing the app and then pressing the Overview button recreates the activity with the same intent,
-                // hence we reach here and add the same notification one more time.
-                // Timestamp is a unique notification id to prevent such mistakes
-                // TODO: Find a way to fix this Overview button issue
-                int timestamp = Integer.parseInt(data.getString("timestamp"));
-                if (lastNotificationTimestamp < timestamp) {
-                    lastNotificationTimestamp = timestamp;
-
-                    Notifications.addNotification(Notification.newInstance(data));
-
-                    // Remove one of the extras, so we don't add the same notification again
-                    intent.removeExtra("title");
-                    setIntent(new Intent());
-                } else {
-                    Toast.makeText(this, R.string.notification_not_recent, Toast.LENGTH_LONG).show();
-                    logger.finest("showFirstFragment will not process the same or older notification: " + lastNotificationTimestamp);
-                }
+                // Remove one of the extras, so we don't add the same notification again
+                intent.removeExtra("title");
+                setIntent(new Intent());
             } catch (Exception e) {
                 logger.warning("showFirstFragment Exception= " + e.getMessage());
             }

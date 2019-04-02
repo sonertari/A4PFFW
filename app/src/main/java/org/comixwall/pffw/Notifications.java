@@ -37,12 +37,12 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
 import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
-import static org.comixwall.pffw.MainActivity.lastNotificationTimestamp;
 import static org.comixwall.pffw.MainActivity.logger;
 
 public class Notifications extends Fragment implements RecyclerTouchListener.OnItemClickListener,
@@ -58,9 +58,34 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
         add("Warning");
     }};
 
+    /**
+     * Comparator used to sort notifications in reverse order.
+     */
+    static Comparator comparator = new Comparator() {
+        public int compare(Object o1, Object o2) {
+            return ((Notification) o2).datetime.compareTo(((Notification) o1).datetime);
+        }
+    };
+
     public static void addNotification(Notification element) {
+
+        for (Notification n : mNotificationsList) {
+            // ATTENTION: This comparison is a workaround for the case the user clicks the Overview button
+            // If the activity was created with a notification intent while the app was in the background,
+            // closing the app and then pressing the Overview button recreates the activity with the same intent,
+            // hence we reach here and add the same notification one more time.
+            // Timestamp is a unique notification id to prevent such mistakes
+            // TODO: Find a way to fix this Overview button issue
+            if (n.title.equals(element.title) && n.body.equals(element.body) && n.data.equals(element.data) && n.datetime.equals(element.datetime)) {
+                logger.finest("addNotification will not add the same notification: " + element.datetime);
+                return;
+            }
+        }
+
         // Recent notifications first, hence use id 0
         mNotificationsList.add(0, element);
+        // Reverse sort in case the timestamp is older
+        mNotificationsList.sort(comparator);
 
         // Limit the number of notifications
         int count = mNotificationsList.size();
@@ -214,7 +239,6 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
         NotificationRecyclerAdapter rvAdapter = (NotificationRecyclerAdapter)rvNotifications.getAdapter();
         rvAdapter.notificationList.clear();
         rvAdapter.notifyDataSetChanged();
-        lastNotificationTimestamp = 0;
     }
 }
 

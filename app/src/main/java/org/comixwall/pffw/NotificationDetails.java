@@ -152,7 +152,7 @@ class NotificationDetail {
             notification.module = module;
             notification.process = notificationEntry.getString("Process");
             notification.log = notificationEntry.getString("Log");
-            notification.prio = notificationEntry.getString("Prio");
+            notification.prio = notificationEntry.getString("Prio").toUpperCase();
             notification.datetime = notificationEntry.getString("Date") + " " + notificationEntry.getString("Time");
         } catch (Exception e) {
             e.printStackTrace();
