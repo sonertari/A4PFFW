@@ -167,4 +167,19 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="WebServer">Web Sunucu</string>
     <string name="Symon">Symon</string>
     <string name="Symux">Symux</string>
+    <string name="SSLProxy">SSL Vekil</string>
+    <string name="WebFilter">Web Eleği</string>
+    <string name="IDS">STS</string>
+    <string name="InlineIPS">Inline SES</string>
+    <string name="PassiveIPS">Pasif SES</string>
+    <string name="SPAMFilter">SPAM Eleği</string>
+    <string name="VirusFilter">Virüs Eleği</string>
+    <string name="VirusDBUpdate">Virüs VT Güncelleme</string>
+    <string name="POP3Proxy">POP3 Vekil</string>
+    <string name="SMTPProxy">SMTP Vekil</string>
+    <string name="IMProxy">IM Vekil</string>
+    <string name="OpenVPN">OpenVPN</string>
+    <string name="SOCKSProxy">SOCKS Vekil</string>
+    <string name="SPAMDeferral">SPAM Geciktirme</string>
+    <string name="Pmacct">Pmacct</string>
 </resources>

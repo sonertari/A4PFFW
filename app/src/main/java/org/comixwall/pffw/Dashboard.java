@@ -101,6 +101,21 @@ public class Dashboard extends Fragment implements  SwipeRefreshLayout.OnRefresh
             put("httpd", getString(R.string.WebServer));
             put("symon", getString(R.string.Symon));
             put("symux", getString(R.string.Symux));
+            put("sslproxy", getString(R.string.SSLProxy));
+            put("e2guardian", getString(R.string.WebFilter));
+            put("snort", getString(R.string.IDS));
+            put("snortinline", getString(R.string.InlineIPS));
+            put("snortips", getString(R.string.PassiveIPS));
+            put("spamassassin", getString(R.string.SPAMFilter));
+            put("clamd", getString(R.string.VirusFilter));
+            put("freshclam", getString(R.string.VirusDBUpdate));
+            put("p3scan", getString(R.string.POP3Proxy));
+            put("smtp-gated", getString(R.string.SMTPProxy));
+            put("imspector", getString(R.string.IMProxy));
+            put("openvpn", getString(R.string.OpenVPN));
+            put("dante", getString(R.string.SOCKSProxy));
+            put("spamd", getString(R.string.SPAMDeferral));
+            put("pmacct", getString(R.string.Pmacct));
         }};
 
         if (cache.dashboard == null) {
