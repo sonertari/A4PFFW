@@ -124,7 +124,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="touch_tables_to_resize">Boyutu ayarlamak için tabloya dokunun</string>
     <string name="transfer">Veri Aktarımı</string>
     <string name="user">kullanıcı</string>
-    <string name="version">6.4.1 sürümü</string>
+    <string name="version">6.5 sürümü</string>
     <string name="mbuf_statistics">MBUF İSTATİSTİKLERİ</string>
     <string name="date">Tarih: %1$s %2$s, %3$s:%4$s</string>
     <string name="hour_colon">Saat: %1$s</string>
