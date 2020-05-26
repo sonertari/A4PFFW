@@ -108,7 +108,7 @@ public class Controller extends Service {
 
             if (createSession(mUser, mPassword, mHost, mPort)) {
                 String output = runSSHCommand(new JSONArray().put("en_EN").put("system").put("GetMyName").toString());
-                mHostName = new JSONArray(output).get(0).toString();
+                mHostName = new JSONArray(output).get(0).toString().trim();
             }
 
             mLoggedIn = session.isConnected();
@@ -121,6 +121,7 @@ public class Controller extends Service {
      */
     public void logout() {
         mLoggedIn = false;
+        mHostName = "";
     }
 
     /**
