@@ -199,7 +199,7 @@ public class StatsGeneral extends StatsBase {
             mLogFile = new JSONArray(output).get(0).toString();
 
             // Whether to collect hourly stats too
-            String collect = isDailyChart() ? "''" : "'COLLECT'";
+            String collect = isDailyChart() ? "" : "COLLECT";
             output = controller.execute("pf", "GetAllStats", mLogFile, collect);
 
             mJsonAllStats = new JSONObject(new JSONArray(output).get(0).toString());

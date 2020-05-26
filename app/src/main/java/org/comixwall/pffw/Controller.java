@@ -84,8 +84,6 @@ public class Controller extends Service {
 
     private Session session = null;
 
-    private final String ctlrCmd = "sh ctlr en_En ";
-
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -111,7 +109,8 @@ public class Controller extends Service {
             mHostName = "";
 
             if (createSession(mUser, mPassword, mHost, mPort)) {
-                mHostName = runSSHCommand("hostname");
+                String output = runSSHCommand(new JSONArray().put("en_EN").put("system").put("GetMyName").toString());
+                mHostName = new JSONArray(output).get(0).toString();
             }
 
             mLoggedIn = session.isConnected();
@@ -152,12 +151,13 @@ public class Controller extends Service {
      */
     public String execute(String model, String cmd, Object... args) throws Exception {
         // Keep these lines here for logger
-        String cmdLine = ctlrCmd + model + " " + cmd;
+        JSONArray cmdLine = new JSONArray().put("en_EN").put(model).put(cmd);
         for (Object a : args) {
-            cmdLine += " '" + a + "'";
+            // @attention Always call toString(), otherwise JSONObject() vars are not properly stringered
+            cmdLine.put(a.toString());
         }
 
-        logger.finest("Controller execute cmdLine= " + cmdLine);
+        logger.finest("Controller execute cmdLine= " + cmdLine.toString());
 
         String output = "";
         if (createSession(mUser, mPassword, mHost, mPort)) {
@@ -177,7 +177,7 @@ public class Controller extends Service {
             }
 
             // Next run the actual command
-            output = runSSHCommand(cmdLine);
+            output = runSSHCommand(cmdLine.toString());
         }
 
         logger.finest("Controller execute output= " + output);
@@ -185,7 +185,7 @@ public class Controller extends Service {
     }
 
     private void runTokenCommand(String cmd, String arg) throws Exception {
-        String output = runSSHCommand(ctlrCmd + "system " + cmd + " '" + arg + "'");
+        String output = runSSHCommand(new JSONArray().put("en_EN").put("system").put(cmd).put(arg).toString());
         String result = new JSONArray(output).get(2).toString();
         if (result.equals("0")) {
             logger.finest("Controller runTokenCommand " + cmd + "= " + arg);

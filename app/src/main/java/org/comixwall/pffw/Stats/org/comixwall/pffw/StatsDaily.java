@@ -134,7 +134,7 @@ public class StatsDaily extends StatsGeneral {
                 mLastLogFile = mLogFile;
             }
 
-            String collect = isDailyChart() ? "''" : "'COLLECT'";
+            String collect = isDailyChart() ? "" : "COLLECT";
             String month = isAllMonths() ? "" : mMonth;
             String day = isAllDays() ? "" : mDay;
 
