@@ -94,8 +94,6 @@ public class Controller extends Service {
      * <p>
      * PFFW users are system users. So we try to log in to the PFFW system via SSH.
      * If the session is successfully established, then the user must be authenticated.
-     * We also run the hostname command, the output of which we use while verifying the hostname
-     * while making secure HTTP connections to fetch graphs.
      *
      * @throws Exception
      */

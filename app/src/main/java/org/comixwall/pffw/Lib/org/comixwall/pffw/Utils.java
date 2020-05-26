@@ -24,15 +24,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.InputStream;
-import java.security.KeyStore;
-import java.security.cert.Certificate;
-import java.security.cert.CertificateFactory;
-import java.security.cert.X509Certificate;
-
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManagerFactory;
-
 import static org.comixwall.pffw.MainActivity.logger;
 
 /**
@@ -104,50 +95,5 @@ class Utils {
         } else {
             logger.info("Fragment not visible on showMessage: " + owner.getClass().getSimpleName());
         }
-    }
-
-    /**
-     * Create an SSL context which trusts the PFFW server certificate.
-     * PFFW server certificate is self signed, hence is not verified by the default SSL context.
-     *
-     * @param owner Fragment which initiated the call to this method.
-     * @return SSL context.
-     */
-    static SSLContext getSslContext(final Fragment owner) {
-        SSLContext sslContext = null;
-        try {
-            // Load our crt from an InputStream
-            CertificateFactory cf = CertificateFactory.getInstance("X.509");
-            InputStream crtInput = owner.getResources().openRawResource(
-                    owner.getResources().getIdentifier("server", "raw", owner.getActivity().getPackageName()));
-
-            Certificate crt;
-            try {
-                crt = cf.generateCertificate(crtInput);
-                logger.finest("server.crt=" + ((X509Certificate) crt).getSubjectDN());
-            } finally {
-                crtInput.close();
-            }
-
-            // Create a KeyStore containing our trusted crt
-            String keyStoreType = KeyStore.getDefaultType();
-            KeyStore keyStore = KeyStore.getInstance(keyStoreType);
-            keyStore.load(null, null);
-            keyStore.setCertificateEntry("server.crt", crt);
-
-            // Create a TrustManager that trusts the crt in our KeyStore
-            String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
-            TrustManagerFactory tmf = TrustManagerFactory.getInstance(tmfAlgorithm);
-            tmf.init(keyStore);
-
-            // Create an SSLContext that uses our TrustManager
-            sslContext = SSLContext.getInstance("TLS");
-            sslContext.init(null, tmf.getTrustManagers(), null);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            logger.severe("getSslContext exception: " + e.toString());
-        }
-        return sslContext;
     }
 }
