@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2017-2018 Soner Tari
+ * Copyright (C) 2017-2020 Soner Tari
  *
  * This file is part of PFFW.
  *
