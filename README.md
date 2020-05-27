@@ -1,10 +1,10 @@
 # A4PFFW
 
-A4PFFW is an Android user interface for PFFW and UTMFW. Afaik, PFFW and UTMFW are the only FOSS firewalls with Web, Android, and Windows UI for monitoring. A4PFFW supports Firebase push notifications too.
+A4PFFW is an Android user interface for [PFFW](https://github.com/sonertari/PFFW) and [UTMFW](https://github.com/sonertari/UTMFW). A4PFFW supports Firebase push notifications.
 
 You can find a couple of screenshots on the [wiki](https://github.com/sonertari/A4PFFW/wiki).
 
-The apk file is available for download at [a4pffw65\_20190520.apk](https://drive.google.com/file/d/1zMuAcRWgG_uv3QZ__RsH5Ym7yVRWNb5p/view?usp=sharing). Make sure the SHA256 checksum is correct: c5ce76ffee4f1c4f28bfd47b3462bf73d966b53c97c67e399c5ffc348514b3c4.
+The apk file is available for download at [a4pffw67\_20200527.apk](https://drive.google.com/file/d/1kB2Cft069IBr6fpyy_NZd2XH4sB8Llm8/view?usp=sharing). Make sure the SHA256 checksum is correct: 407dfff329273a8256b7c51936fbf547000aef1d2d0b5640a8287fbaa6fc65ad.
 
 A4PFFW is part of the PFFW project.
 
