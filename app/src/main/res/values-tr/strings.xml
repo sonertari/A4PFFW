@@ -152,7 +152,6 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="notifications_menu">Uyarılar</string>
     <string name="account_perms">Hesaba ulaşım izni sadece kullanıcı adını almak için kullanılır</string>
     <string name="delete_all">Hepsini Sil</string>
-    <string name="notification_not_recent">Uyarı yakın tarihli değil</string>
     <string name="dashboard_menu">Gösterge Paneli</string>
     <string name="dashboard">GÖSTERGE PANELİ</string>
     <string name="critical">ÖNEMLİ</string>

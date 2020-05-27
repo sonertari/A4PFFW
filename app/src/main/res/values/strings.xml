@@ -161,7 +161,6 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="account_perms">Account permission is used to get user name only</string>
     <string name="notification_channel_id" translatable="false">PFFW_NOTIFIER_CHANNEL</string>
     <string name="delete_all">Delete All</string>
-    <string name="notification_not_recent">Notification is not more recent than the last one</string>
     <string name="dashboard_menu">Dashboard</string>
     <string name="dashboard">DASHBOARD</string>
     <string name="critical">CRITICAL</string>
