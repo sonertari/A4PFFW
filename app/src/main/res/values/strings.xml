@@ -50,7 +50,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="label">Label</string>
     <string name="comixwall_logo">ComixWall logo</string>
     <string name="pf_firewall">PF Firewall</string>
-    <string name="version">v6.5</string>
+    <string name="version">v6.7</string>
     <string name="a" translatable="false">A</string>
     <string name="i" translatable="false">I</string>
     <string name="l" translatable="false">L</string>
