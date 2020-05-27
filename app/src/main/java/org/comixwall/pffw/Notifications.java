@@ -85,7 +85,9 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
         // Recent notifications first, hence use id 0
         mNotificationsList.add(0, element);
         // Reverse sort in case the timestamp is older
-        mNotificationsList.sort(comparator);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            mNotificationsList.sort(comparator);
+        }
 
         // Limit the number of notifications
         int count = mNotificationsList.size();
