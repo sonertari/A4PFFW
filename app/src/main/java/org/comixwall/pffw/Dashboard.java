@@ -116,6 +116,7 @@ public class Dashboard extends Fragment implements  SwipeRefreshLayout.OnRefresh
             put("dante", getString(R.string.SOCKSProxy));
             put("spamd", getString(R.string.SPAMDeferral));
             put("pmacct", getString(R.string.Pmacct));
+            put("collectd", getString(R.string.Collectd));
         }};
 
         if (cache.dashboard == null) {
@@ -190,7 +191,7 @@ public class Dashboard extends Fragment implements  SwipeRefreshLayout.OnRefresh
             String output = controller.execute("system", "GetServiceStatus");
 
             JSONArray jsonArray = new JSONArray(output);
-            mServiceStatus = new JSONObject(jsonArray.get(0).toString());
+            mServiceStatus = new JSONObject(jsonArray.get(0).toString()).getJSONObject("status");
 
             output = controller.execute("pf", "GetReloadRate");
 

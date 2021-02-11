@@ -124,7 +124,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="touch_tables_to_resize">Boyutu ayarlamak için tabloya dokunun</string>
     <string name="transfer">Veri Aktarımı</string>
     <string name="user">kullanıcı</string>
-    <string name="version">6.7 sürümü</string>
+    <string name="version">6.8.1 sürümü</string>
     <string name="mbuf_statistics">MBUF İSTATİSTİKLERİ</string>
     <string name="date">Tarih: %1$s %2$s, %3$s:%4$s</string>
     <string name="hour_colon">Saat: %1$s</string>
@@ -181,4 +181,5 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="SOCKSProxy">SOCKS Vekil</string>
     <string name="SPAMDeferral">SPAM Geciktirme</string>
     <string name="Pmacct">Pmacct</string>
+    <string name="Collectd">Collectd</string>
 </resources>
