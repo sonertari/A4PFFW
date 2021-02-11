@@ -4,7 +4,7 @@ A4PFFW is an Android user interface for [PFFW](https://github.com/sonertari/PFFW
 
 You can find a couple of screenshots on the [wiki](https://github.com/sonertari/A4PFFW/wiki).
 
-The apk file is available for download at [a4pffw67\_20200527.apk](https://drive.google.com/file/d/1kB2Cft069IBr6fpyy_NZd2XH4sB8Llm8/view?usp=sharing). Make sure the SHA256 checksum is correct: 407dfff329273a8256b7c51936fbf547000aef1d2d0b5640a8287fbaa6fc65ad.
+The apk file is available for download at [a4pffw681\_20210211.apk](https://drive.google.com/file/d/1RjaqAGI_lNiSF3n0zzVF-Lw2G8jmRxN8/view?usp=sharing). Make sure the SHA256 checksum is correct: 64792c4884da26045ff34afaca42fd5f739c132ab0c906adfd0d8a42264b7d72.
 
 A4PFFW is part of the PFFW project.
 
