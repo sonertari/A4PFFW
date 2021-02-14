@@ -20,4 +20,4 @@ A4PFFW provides all of the monitoring features available on the web user interfa
 - System status can be received as Firebase push notifications.
 - The Android UI supports English and Turkish.
 
-<img src="https://github.com/sonertari/A4PFFW/blob/master/screenshots/A4PffwDashboard.png" width="50%" height="50%">
+![Dashboard](https://github.com/sonertari/A4PFFW/blob/master/screenshots/A4PffwDashboard.png)
