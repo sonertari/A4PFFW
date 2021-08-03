@@ -69,7 +69,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="lt_lt_first"><![CDATA[<< İlk]]></string>
     <string name="lt_previous"><![CDATA[< Önceki]]></string>
     <string name="mbufs">Mbuf\'lar</string>
-    <string name="named_status">Named Durumu</string>
+    <string name="dnsmasq_status">Dnsmasq Durumu</string>
     <string name="navigation_drawer_close">Gezinti çekmecesini kapa</string>
     <string name="navigation_drawer_open">Gezinti çekmecesini aç</string>
     <string name="next_gt"><![CDATA[Sonraki >]]></string>
@@ -136,7 +136,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="allowed_requests">İzin Verilen İstekler</string>
     <string name="matched_requests">Eşleşen İstekler</string>
     <string name="dhcp_server">DHCP Sunucu</string>
-    <string name="dns_server">DNS Sunucu</string>
+    <string name="dns_forwarder">DNS İletici</string>
     <string name="evals_states_statecreats">işleme: %1$s, durum: %2$s, durum yarat: %3$s</string>
     <string name="proto_dir_pkts_bytes_age">%1$s, %2$s, paket: %3$s, bayt: %4$s, yaş: %5$s</string>
     <string name="cpu_mem_time">cpu: %1$s, bellek: %2$s, süre: %3$s</string>
@@ -160,7 +160,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="System">Sistem</string>
     <string name="PacketFilter">Paket Eleği</string>
     <string name="DHCPServer">DHCP Sunucu</string>
-    <string name="DNSServer">DNS Sunucu</string>
+    <string name="DNSForwarder">DNS İletici</string>
     <string name="OpenSSH">OpenSSH</string>
     <string name="FTPProxy">FTP Vekil</string>
     <string name="WebServer">Web Sunucu</string>

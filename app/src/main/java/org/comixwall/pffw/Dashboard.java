@@ -95,7 +95,7 @@ public class Dashboard extends Fragment implements  SwipeRefreshLayout.OnRefresh
             put("system", getString(R.string.System));
             put("pf", getString(R.string.PacketFilter));
             put("dhcpd", getString(R.string.DHCPServer));
-            put("named", getString(R.string.DNSServer));
+            put("dnsmasq", getString(R.string.DNSForwarder));
             put("openssh", getString(R.string.OpenSSH));
             put("ftp-proxy", getString(R.string.FTPProxy));
             put("httpd", getString(R.string.WebServer));

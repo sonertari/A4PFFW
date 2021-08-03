@@ -58,21 +58,21 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
     private SwipeRefreshLayout swipeRefresh;
 
     private String mDhcpdStatus;
-    private String mNamedStatus;
+    private String mDnsmasqStatus;
 
     private TextView tvDhcpdStatus;
-    private TextView tvNamedStatus;
+    private TextView tvDnsmasqStatus;
 
     private ImageView ivDhcpdStatus;
-    private ImageView ivNamedStatus;
+    private ImageView ivDnsmasqStatus;
 
     private JSONArray mDhcpdJsonArray;
     private final List<Process> mDhcpdList = new ArrayList<>();
     private ProcessRecyclerAdapter mDhcpdAdapter;
 
-    private JSONArray mNamedJsonArray;
-    private final List<Process> mNamedList = new ArrayList<>();
-    private ProcessRecyclerAdapter mNamedAdapter;
+    private JSONArray mDnsmasqJsonArray;
+    private final List<Process> mDnsmasqList = new ArrayList<>();
+    private ProcessRecyclerAdapter mDnsmasqAdapter;
 
     private JSONArray mArpTableJsonArray;
     private final List<Arp> mArpTableList = new ArrayList<>();
@@ -131,10 +131,10 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         swipeRefresh.setOnRefreshListener(this);
 
         tvDhcpdStatus = view.findViewById(R.id.dhcpdStatus);
-        tvNamedStatus = view.findViewById(R.id.namedStatus);
+        tvDnsmasqStatus = view.findViewById(R.id.dnsmasqStatus);
 
         ivDhcpdStatus = view.findViewById(R.id.imageViewDhcpdStatus);
-        ivNamedStatus = view.findViewById(R.id.imageViewNamedStatus);
+        ivDnsmasqStatus = view.findViewById(R.id.imageViewDnsmasqStatus);
 
         RecyclerView rvDhcpd = view.findViewById(R.id.recyclerViewDhcpd);
         // ATTENTION: Should use separate LayoutManager for each RecyclerView.
@@ -145,13 +145,13 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         rvDhcpd.setAdapter(mDhcpdAdapter);
         rvDhcpd.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
-        RecyclerView rvNamed = view.findViewById(R.id.recyclerViewNamed);
-        rvNamed.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rvNamed.setItemAnimator(new DefaultItemAnimator());
-        rvNamed.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
-        mNamedAdapter = new ProcessRecyclerAdapter(mNamedList);
-        rvNamed.setAdapter(mNamedAdapter);
-        rvNamed.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
+        RecyclerView rvDnsmasq = view.findViewById(R.id.recyclerViewDnsmasq);
+        rvDnsmasq.setLayoutManager(new LinearLayoutManager(getActivity()));
+        rvDnsmasq.setItemAnimator(new DefaultItemAnimator());
+        rvDnsmasq.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        mDnsmasqAdapter = new ProcessRecyclerAdapter(mDnsmasqList);
+        rvDnsmasq.setAdapter(mDnsmasqAdapter);
+        rvDnsmasq.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
         RecyclerView rvArpTable = view.findViewById(R.id.recyclerViewArpTable);
         rvArpTable.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -182,10 +182,10 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         super.onPause();
 
         mModuleCache.bundle.putString("mDhcpdStatus", mDhcpdStatus);
-        mModuleCache.bundle.putString("mNamedStatus", mNamedStatus);
+        mModuleCache.bundle.putString("mDnsmasqStatus", mDnsmasqStatus);
 
         mModuleCache.mDhcpdJsonArray = mDhcpdJsonArray;
-        mModuleCache.mNamedJsonArray = mNamedJsonArray;
+        mModuleCache.mDnsmasqJsonArray = mDnsmasqJsonArray;
         mModuleCache.mArpTableJsonArray = mArpTableJsonArray;
         mModuleCache.mLeasesJsonArray = mLeasesJsonArray;
 
@@ -204,10 +204,10 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
             getInfo();
         } else {
 
-            mNamedStatus = mModuleCache.bundle.getString("mNamedStatus");
+            mDnsmasqStatus = mModuleCache.bundle.getString("mDnsmasqStatus");
 
             mDhcpdJsonArray = mModuleCache.mDhcpdJsonArray;
-            mNamedJsonArray = mModuleCache.mNamedJsonArray;
+            mDnsmasqJsonArray = mModuleCache.mDnsmasqJsonArray;
             mArpTableJsonArray = mModuleCache.mArpTableJsonArray;
             mLeasesJsonArray = mModuleCache.mLeasesJsonArray;
 
@@ -234,7 +234,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
     }
 
     /**
-     * Fetch dhcpd and named status, arp table and dhcpd leases.
+     * Fetch dhcpd and dnsmasq status, arp table and dhcpd leases.
      *
      * @return True on success, false on failure.
      */
@@ -249,12 +249,12 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
             JSONArray jsonArray = new JSONArray(output);
             mDhcpdJsonArray = new JSONArray(jsonArray.get(0).toString());
 
-            output = controller.execute("named", "IsRunning");
-            mNamedStatus = new JSONArray(output).get(2).toString();
+            output = controller.execute("dnsmasq", "IsRunning");
+            mDnsmasqStatus = new JSONArray(output).get(2).toString();
 
-            output = controller.execute("named", "GetProcList");
+            output = controller.execute("dnsmasq", "GetProcList");
             jsonArray = new JSONArray(output);
-            mNamedJsonArray = new JSONArray(jsonArray.get(0).toString());
+            mDnsmasqJsonArray = new JSONArray(jsonArray.get(0).toString());
 
             output = controller.execute("dhcpd", "GetArpTable");
             jsonArray = new JSONArray(output);
@@ -302,10 +302,10 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         updateProcList(mDhcpdJsonArray, mDhcpdList);
         mDhcpdAdapter.notifyDataSetChanged();
 
-        Utils.updateStatusViews(mNamedStatus, ivNamedStatus, tvNamedStatus, getString(R.string.dns_server));
+        Utils.updateStatusViews(mDnsmasqStatus, ivDnsmasqStatus, tvDnsmasqStatus, getString(R.string.dns_forwarder));
 
-        updateProcList(mNamedJsonArray, mNamedList);
-        mNamedAdapter.notifyDataSetChanged();
+        updateProcList(mDnsmasqJsonArray, mDnsmasqList);
+        mDnsmasqAdapter.notifyDataSetChanged();
 
         updateArpList(mArpTableJsonArray, mArpTableList);
         mArpTableAdapter.notifyDataSetChanged();
@@ -592,7 +592,7 @@ class InfoHostsCache {
     public final Bundle bundle = new Bundle();
 
     JSONArray mDhcpdJsonArray;
-    JSONArray mNamedJsonArray;
+    JSONArray mDnsmasqJsonArray;
     JSONArray mArpTableJsonArray;
     JSONArray mLeasesJsonArray;
 }

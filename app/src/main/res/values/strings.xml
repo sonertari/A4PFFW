@@ -26,7 +26,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="info">Info</string>
     <string name="packet_filter">Packet Filter</string>
     <string name="dhcp_server">DHCP Server</string>
-    <string name="dns_server">DNS Server</string>
+    <string name="dns_forwarder">DNS Forwarder</string>
     <string name="system">System</string>
     <string name="hosts">Hosts</string>
     <string name="interfaces">Interfaces</string>
@@ -106,7 +106,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="all_months">All Months</string>
     <string name="bytes">bytes</string>
     <string name="pf_info">Pf Info</string>
-    <string name="named_status">Named Status</string>
+    <string name="dnsmasq_status">Dnsmasq Status</string>
     <string name="symux_status">Symux Status</string>
     <string name="all_days">All Days</string>
     <string name="block">Block</string>
@@ -169,7 +169,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
     <string name="System">System</string>
     <string name="PacketFilter">Packet Filter</string>
     <string name="DHCPServer">DHCP Server</string>
-    <string name="DNSServer">DNS Server</string>
+    <string name="DNSForwarder">DNS Forwarder</string>
     <string name="OpenSSH">OpenSSH</string>
     <string name="FTPProxy">FTP Proxy</string>
     <string name="WebServer">Web Server</string>
