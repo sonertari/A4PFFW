@@ -180,6 +180,13 @@ public class Controller extends Service {
         }
 
         logger.finest("Controller execute output= " + output);
+
+        if (!output.isEmpty()) {
+            JSONArray jsonArray = new JSONArray(output);
+            if (jsonArray.getInt(2) == 1) {
+                throw new Exception(jsonArray.get(1).toString());
+            }
+        }
         return output;
     }
 
