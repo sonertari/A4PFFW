@@ -22,10 +22,15 @@ package org.comixwall.pffw;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.os.Bundle;
-import android.support.design.widget.TextInputEditText;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.DrawerLayout;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.drawerlayout.widget.DrawerLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,11 +39,9 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ProgressBar;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.nio.charset.Charset;
 
@@ -157,11 +160,11 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
                 }
             } catch (Exception ignored) {}
 
-            // Send the token to the system upon each login, so the app can get notifications
-            FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(getActivity(), new OnSuccessListener<InstanceIdResult>() {
+           // Send the token to the system upon each login, so the app can get notifications
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                 @Override
-                public void onSuccess(InstanceIdResult instanceIdResult) {
-                    token = instanceIdResult.getToken();
+                public void onComplete(@NonNull Task<String> task) {
+                    token = task.getResult();
                     // Controller sends the token before the next command it executes, and lowers this sendToken flag
                     sendToken = true;
                 }

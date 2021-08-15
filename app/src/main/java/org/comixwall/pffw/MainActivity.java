@@ -30,18 +30,18 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.annotation.NonNull;
-import android.support.design.widget.NavigationView;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import androidx.annotation.NonNull;
+import com.google.android.material.navigation.NavigationView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.core.app.ActivityCompat;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -185,17 +185,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 Intent intent = AccountManager.newChooseAccountIntent(null, null, null,
                         null, null, null, null);
                 startActivityForResult(intent, PICK_CONTACT_REQUEST);
-
             }
         }
    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 setUser();
-                Toast.makeText(this,user + ", " + product, Toast.LENGTH_LONG).show();
+                Toast.makeText(this, user + ", " + product, Toast.LENGTH_LONG).show();
             } else {
                 Toast.makeText(this, R.string.account_perms, Toast.LENGTH_LONG).show();
             }
@@ -214,6 +214,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == PICK_CONTACT_REQUEST) {
             if (resultCode == RESULT_OK) {
                 // The user picked a contact.
@@ -237,7 +238,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             // ATTENTION: Login fragment should be inflated only after SSH session is created first
             // onResume() is executed after onRestoreInstanceState().
             FragmentManager fm = getSupportFragmentManager();
-            android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
+            FragmentTransaction transaction = fm.beginTransaction();
 
             fragment = new Login();
             // ATTENTION: Do not add but replace, because login page may be rotated, which brings us here again.
@@ -413,7 +414,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
             // Rolls back the backstack if the fragment is already in
             if (!fm.popBackStackImmediate(fragmentName, 0)) {
-                android.support.v4.app.FragmentTransaction transaction = fm.beginTransaction();
+                FragmentTransaction transaction = fm.beginTransaction();
                 transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
                 if (add) {

@@ -9,19 +9,21 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.iid.InstanceIdResult;
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import static org.comixwall.pffw.MainActivity.token;
-import static org.comixwall.pffw.MainActivity.sendToken;
 import static org.comixwall.pffw.MainActivity.logger;
+import static org.comixwall.pffw.MainActivity.sendToken;
+import static org.comixwall.pffw.MainActivity.token;
 
-public class FirebaseService extends FirebaseMessagingService implements OnSuccessListener<InstanceIdResult> {
+public class FirebaseService extends FirebaseMessagingService implements OnCompleteListener<String> {
     private NotificationManagerCompat notificationManager;
 
     @Override
@@ -38,8 +40,9 @@ public class FirebaseService extends FirebaseMessagingService implements OnSucce
     }
 
     @Override
-    public void onSuccess(InstanceIdResult instanceIdResult) {
-        token = instanceIdResult.getToken();
+    public void onComplete(@NonNull Task<String> task) {
+        token = task.getResult();
+        // Controller sends the token before the next command it executes, and lowers this sendToken flag
         sendToken = true;
     }
 

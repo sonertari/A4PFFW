@@ -18,18 +18,18 @@ You should have received a copy of the GNU General Public License
 along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:card_view="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/swipeRefresh"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v4.widget.NestedScrollView
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -49,7 +49,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                     android:layout_marginStart="@dimen/activity_vertical_smallmargin"
                     android:text="@string/pf_status_allcaps" />
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -84,7 +84,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                             android:text="@string/pf_status"
                             card_view:ignore="RtlSymmetry" />
                     </LinearLayout>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
@@ -113,7 +113,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
 
                 </RelativeLayout>
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:id="@+id/pfInfoCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -128,7 +128,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
 
-                        <android.support.v4.widget.NestedScrollView
+                        <androidx.core.widget.NestedScrollView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -146,9 +146,9 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                                 android:text="@string/pf_info"
                                 android:textSize="12sp"
                                 android:typeface="monospace" />
-                        </android.support.v4.widget.NestedScrollView>
+                        </androidx.core.widget.NestedScrollView>
                     </HorizontalScrollView>
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -157,7 +157,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                     android:layout_marginStart="@dimen/activity_vertical_smallmargin"
                     android:text="@string/pf_memory_allcaps" />
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:id="@+id/pfMemCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -176,7 +176,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                         android:text="@string/pf_memory"
                         android:textSize="12sp"
                         android:typeface="monospace" />
-                </android.support.v7.widget.CardView>
+                </androidx.cardview.widget.CardView>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -185,7 +185,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                     android:layout_marginStart="@dimen/activity_vertical_smallmargin"
                     android:text="@string/pf_timeouts_allcaps" />
 
-                <android.support.v7.widget.CardView
+                <androidx.cardview.widget.CardView
                     android:id="@+id/pfTimeoutCardView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -196,7 +196,7 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                     android:layout_marginTop="1dp"
                     card_view:cardCornerRadius="4dp">
 
-                    <android.support.v4.widget.NestedScrollView
+                    <androidx.core.widget.NestedScrollView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:scrollbarAlwaysDrawVerticalTrack="true"
@@ -211,11 +211,11 @@ along with PFFW.  If not, see <http://www.gnu.org/licenses/>.
                             android:text="@string/pf_timeouts"
                             android:textSize="12sp"
                             android:typeface="monospace" />
-                    </android.support.v4.widget.NestedScrollView>
-                </android.support.v7.widget.CardView>
+                    </androidx.core.widget.NestedScrollView>
+                </androidx.cardview.widget.CardView>
 
             </LinearLayout>
 
-        </android.support.v4.widget.NestedScrollView>
-    </android.support.v4.widget.SwipeRefreshLayout>
-</android.support.design.widget.CoordinatorLayout>
+        </androidx.core.widget.NestedScrollView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
