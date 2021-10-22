@@ -24,28 +24,38 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
+
 import androidx.fragment.app.Fragment;
 
-import com.jcraft.jsch.Channel;
-import com.jcraft.jsch.ChannelExec;
-import com.jcraft.jsch.JSch;
-import com.jcraft.jsch.Session;
+import net.schmizz.sshj.SSHClient;
+import net.schmizz.sshj.common.IOUtils;
+import net.schmizz.sshj.connection.channel.direct.Session;
+import net.schmizz.sshj.transport.verification.HostKeyVerifier;
 
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.util.Properties;
+import java.security.PublicKey;
+import java.security.Security;
+import java.util.concurrent.TimeUnit;
 
-import static org.comixwall.pffw.MainActivity.logger;
-import static org.comixwall.pffw.MainActivity.token;
-import static org.comixwall.pffw.MainActivity.sendToken;
 import static org.comixwall.pffw.MainActivity.deleteToken;
-import static org.comixwall.pffw.MainActivity.user;
+import static org.comixwall.pffw.MainActivity.logger;
 import static org.comixwall.pffw.MainActivity.product;
+import static org.comixwall.pffw.MainActivity.sendToken;
+import static org.comixwall.pffw.MainActivity.token;
+import static org.comixwall.pffw.MainActivity.user;
 import static org.comixwall.pffw.Utils.showMessage;
 
 public class Controller extends Service {
+    // This is to fix: net.schmizz.sshj.transport.TransportException: no such algorithm: ECDSA for provider BC
+    // https://stackoverflow.com/questions/26653399/android-sshj-exception-upon-connect-keyfactory-ecdsa-implementation-not-fou
+    static {
+        Security.removeProvider("BC"); // first remove default os provider
+        Security.insertProviderAt(new BouncyCastleProvider(), 1); // add new provider
+    }
+
     // Binder given to clients
     private final IBinder mBinder = new ControllerBinder();
 
@@ -82,7 +92,7 @@ public class Controller extends Service {
         return mHostName;
     }
 
-    private Session session = null;
+    private SSHClient ssh = null;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -93,7 +103,7 @@ public class Controller extends Service {
      * Authenticate the given user on the given host.
      * <p>
      * PFFW users are system users. So we try to log in to the PFFW system via SSH.
-     * If the session is successfully established, then the user must be authenticated.
+     * If the ssh connection is successfully established, the user must be authenticated.
      *
      * @throws Exception
      */
@@ -106,12 +116,12 @@ public class Controller extends Service {
         if (!mLoggedIn) {
             mHostName = "";
 
-            if (createSession(mUser, mPassword, mHost, mPort)) {
+            if (createSsh(mUser, mPassword, mHost, mPort)) {
                 String output = runSSHCommand(new JSONArray().put("en_EN").put("system").put("GetMyName").toString());
                 mHostName = new JSONArray(output).get(0).toString().trim();
             }
 
-            mLoggedIn = session.isConnected();
+            mLoggedIn = ssh != null && ssh.isConnected();
             logger.finest("Controller login mHostName= " + mHostName);
         }
     }
@@ -125,19 +135,23 @@ public class Controller extends Service {
     }
 
     /**
-     * ATTENTION: Always disconnect the session while logging out.
-     * Otherwise, we remain logged in until the session gets disconnected (times out)
+     * ATTENTION: Always disconnect the ssh connection while logging out.
+     * Otherwise, we remain logged in until the ssh connection gets disconnected (times out)
      */
     private void finishLogout() {
-        if (session != null && session.isConnected()) {
-            session.disconnect();
+        try {
+            if (ssh != null && ssh.isConnected()) {
+                ssh.disconnect();
+            }
+        } catch (Exception ignored) {
         }
     }
 
     /**
      * Execute the given command.
-     * We first establish a session if no session exists (the session established during login may
-     * have already dropped by now), then open a channel and execute the command.
+     * We first try to establish an ssh connection if one does not exist (the ssh connection
+     * established during login may have already dropped by now), then start a session and execute
+     * the command.
      * <p>
      * The return value of all commands on PFFW is always a json array, containing the command output,
      * error message, and the exit status of the command execution, in that order.
@@ -159,7 +173,7 @@ public class Controller extends Service {
         logger.finest("Controller execute cmdLine= " + cmdLine.toString());
 
         String output = "";
-        if (createSession(mUser, mPassword, mHost, mPort)) {
+        if (createSsh(mUser, mPassword, mHost, mPort)) {
             // First run the token commands, if requested
             if (deleteToken) {
                 runTokenCommand("DelNotifierUser", token);
@@ -201,112 +215,68 @@ public class Controller extends Service {
     }
 
     /**
-     * Establish a session if none exists.
+     * Establish an ssh connection if none exists.
      */
-    private Boolean createSession(String username, String password, String hostname, int port) throws Exception {
+    private Boolean createSsh(String username, String password, String hostname, int port) throws Exception {
 
-        if (session == null || !session.isConnected()) {
-            logger.finest("Controller createSession: " + username + ", " + password + ", " + hostname + ", " + port);
+        if (ssh == null || !ssh.isConnected()) {
+            logger.finest("Controller createSsh: " + username + ", " + password + ", " + hostname + ", " + port);
 
-            session = new JSch().getSession(username, hostname, port);
-
-            session.setPassword(password);
+            ssh = new SSHClient();
 
             // Avoid asking for key confirmation
-            Properties prop = new Properties();
-            prop.put("StrictHostKeyChecking", "no");
-            session.setConfig(prop);
+            HostKeyVerifier hostKeyVerifier = new HostKeyVerifier() {
+                @Override
+                public boolean verify(String hostname, int port, PublicKey key) {
+                    return true;
+                }
+            };
+            ssh.addHostKeyVerifier(hostKeyVerifier);
 
-            // Wait 30 secs for session establishment
-            session.setTimeout(30000);
+            logger.info("Controller ssh connect");
+            ssh.connect(hostname, port);
+            ssh.authPassword(username, password);
 
-            logger.info("Controller session connect");
-            session.connect();
+            // Wait 30 secs for connection establishment
+            ssh.setTimeout(30);
         } else {
-            logger.fine("Controller session already connected");
+            logger.fine("Controller ssh already connected");
         }
 
-        return session.isConnected();
+        return ssh.isConnected();
     }
 
     /**
-     * Run the command after opening a channel.
+     * Run the command after opening a session.
      * Note that we use an exec channel not a shell one to run the command. This channel is
      * closed after the output is received completely.
      * <p>
      * We wait for command output for a limited time only, otherwise we may get stuck here.
      *
-     * @param cmd The command to run.
+     * @param command The command to run.
      * @return The command output.
      * @throws Exception
      */
-    private String runSSHCommand(String cmd) throws Exception {
+    private String runSSHCommand(String command) throws Exception {
         String out = "";
 
-        Channel channel = session.openChannel("exec");
+        Session session = null;
+        try {
+            session = ssh.startSession();
+            Session.Command cmd = session.exec(command);
 
-        ((ChannelExec) channel).setCommand(cmd);
+            out = IOUtils.readFully(cmd.getInputStream()).toString();
+            cmd.join(30, TimeUnit.SECONDS);
 
-        InputStream in = channel.getInputStream();
-
-        logger.fine("Controller channel connect");
-        channel.connect();
-
-        byte[] tmp = new byte[100000];
-
-        // In nanosecs for use with System.nanoTime()
-        final long ONE_SEC = 1000000000;
-
-        // Wait 30 secs for output
-        final long TIMEOUT = 30 * ONE_SEC;
-
-        long startTime = System.nanoTime();
-
-        while (true) {
-            logger.finest("Controller get data outer loop, time to timeout (ms)= " + ((TIMEOUT + startTime - System.nanoTime()) / 1000000));
-
-            boolean received = false;
-
-            while (in.available() > 0) {
-                logger.finest("Controller get data inner loop");
-
-                int i = in.read(tmp, 0, 100000);
-                if (i < 0) {
-                    break;
-                }
-
-                out += new String(tmp, 0, i);
-                // Will be set on each loop iteration unnecessarily, but ok
-                received = true;
-            }
-
-            if (channel.isClosed()) {
-                if (in.available() > 0) {
-                    continue;
-                }
-                logger.finest("Controller runSSHCommand channel getExitStatus= " + channel.getExitStatus());
-                break;
-            }
-
-            if (received) {
-                // Reset timeout
-                startTime = System.nanoTime();
-                logger.finest("Controller reset output timeout");
-            } else {
-                if (System.nanoTime() - startTime > TIMEOUT) {
-                    channel.disconnect();
-                    logger.warning("Controller output timed out");
-                    throw new Exception("Controller output timed out");
-                }
-            }
-
+            logger.finest("Controller runSSHCommand cmd getExitStatus= " + cmd.getExitStatus());
+        } finally {
             try {
-                Thread.sleep(10);
+                if (session != null) {
+                    session.close();
+                }
             } catch (Exception ignored) {
             }
         }
-
-        channel.disconnect();
         return out;
     }
 }
