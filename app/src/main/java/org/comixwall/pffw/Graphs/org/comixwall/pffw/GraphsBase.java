@@ -22,6 +22,8 @@ package org.comixwall.pffw;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import android.util.Base64;
@@ -76,7 +78,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
     private int mGraphHeight;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         init(inflater, container);
 
@@ -159,14 +161,14 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
         mGraphWidth = w > 0 ? w : 900;
 
         // Limix min/max width
-        mGraphWidth = mGraphWidth > 2048 ? 2048 : mGraphWidth;
-        mGraphWidth = mGraphWidth < 32 ? 32 : mGraphWidth;
+        mGraphWidth = Math.min(mGraphWidth, 2048);
+        mGraphWidth = Math.max(mGraphWidth, 32);
 
         mGraphHeight = Math.round(mGraphWidth / 3f);
 
         // Limix min/max height
-        mGraphHeight = mGraphHeight > 2048 ? 2048 : mGraphHeight;
-        mGraphHeight = mGraphHeight < 32 ? 32 : mGraphHeight;
+        mGraphHeight = Math.min(mGraphHeight, 2048);
+        mGraphHeight = Math.max(mGraphHeight, 32);
     }
 
     @Override
@@ -185,7 +187,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
      */
     @Override
     public boolean executeTask() {
-        Boolean retval = true;
+        boolean retval = true;
         try {
             String output = controller.execute("symon", "RenderLayout", mLayout, mGraphWidth, mGraphHeight);
 
@@ -225,7 +227,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
             output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
-            mRefreshTimeout = timeout < 10 ? 10 : timeout;
+            mRefreshTimeout = Math.max(timeout, 10);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -278,7 +280,7 @@ public abstract class GraphsBase extends Fragment implements SwipeRefreshLayout.
         public void onClick(View view) {
             logger.finest("Show Graph Dialog");
 
-            android.app.FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+            android.app.FragmentTransaction ft = requireActivity().getFragmentManager().beginTransaction();
 
             GraphDialog dialog = new GraphDialog();
             dialog.setBitmap(getBitmap(view));

@@ -44,6 +44,7 @@ import com.google.common.hash.Hashing;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.nio.charset.Charset;
+import java.util.Objects;
 
 import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
@@ -85,8 +86,8 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
         btnButton.setOnClickListener(mButtonClickHandler);
 
         // Disable drawer and toggle button, appbar menu items are not created if the fragment is Login
-        ((MainActivity) getActivity()).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        ((MainActivity) getActivity()).toggle.setDrawerIndicatorEnabled(false);
+        ((MainActivity) requireActivity()).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        ((MainActivity) requireActivity()).toggle.setDrawerIndicatorEnabled(false);
 
         return view;
     }
@@ -138,24 +139,24 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
     private void processLogin() {
         if (controller.isLoggedin()) {
             // Reset the cache upon login
-            FragmentManager fm = getActivity().getSupportFragmentManager();
-            fm.beginTransaction().remove(fm.findFragmentByTag("cache")).commit();
+            FragmentManager fm = Objects.requireNonNull(requireActivity()).getSupportFragmentManager();
+            fm.beginTransaction().remove(Objects.requireNonNull(fm.findFragmentByTag("cache"))).commit();
 
             MainActivity.cache = new Cache();
             fm.beginTransaction().add(MainActivity.cache, "cache").commit();
 
             // Enable drawer and toggle button
-            ((MainActivity) getActivity()).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-            ((MainActivity) getActivity()).toggle.setDrawerIndicatorEnabled(true);
+            ((MainActivity) requireActivity()).drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+            ((MainActivity) requireActivity()).toggle.setDrawerIndicatorEnabled(true);
 
             // Recreate menu items, the fragment is Dashboard now
-            getActivity().invalidateOptionsMenu();
+            requireActivity().invalidateOptionsMenu();
 
             try {
                 // Hide the soft keyboard
-                View view = getActivity().getCurrentFocus();
+                View view = requireActivity().getCurrentFocus();
                 if (view != null) {
-                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+                    InputMethodManager imm = (InputMethodManager) requireContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
             } catch (Exception ignored) {}
@@ -170,7 +171,7 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
                 }
             });
 
-            ((MainActivity) getActivity()).showFirstFragment();
+            ((MainActivity) requireActivity()).showFirstFragment();
         }
     }
 
@@ -188,14 +189,14 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
                 mUser = tvUser.getText().toString();
 
                 // ATTENTION: Encrypt the password immediately.
-                HashCode hashCode = Hashing.sha1().hashString(etPassword.getText().toString(), Charset.defaultCharset());
+                HashCode hashCode = Hashing.sha1().hashString(Objects.requireNonNull(etPassword.getText()).toString(), Charset.defaultCharset());
                 mPassword = hashCode.toString();
 
-                mHost = etHost.getText().toString();
+                mHost = Objects.requireNonNull(etHost.getText()).toString();
 
                 boolean applyDefaultPort = false;
                 try {
-                    mPort = Integer.parseInt(etPort.getText().toString());
+                    mPort = Integer.parseInt(Objects.requireNonNull(etPort.getText()).toString());
                     if (mPort < 1 || mPort > 65535) {
                         applyDefaultPort = true;
                     }

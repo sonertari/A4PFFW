@@ -19,8 +19,9 @@
 
 package org.comixwall.pffw;
 
-import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -37,6 +38,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.comixwall.pffw.MainActivity.cache;
 import static org.comixwall.pffw.MainActivity.controller;
@@ -74,7 +76,7 @@ public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
         rvRules.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvRules.setItemAnimator(new DefaultItemAnimator());
-        rvRules.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvRules.addItemDecoration(new RecyclerDivider(Objects.requireNonNull(requireActivity()), LinearLayoutManager.VERTICAL));
         mRulesAdapter = new RuleRecyclerAdapter(mRulesList);
         rvRules.setAdapter(mRulesAdapter);
         rvRules.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -132,7 +134,7 @@ public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
     @Override
     public boolean executeTask() {
-        Boolean retval = true;
+        boolean retval = true;
         try {
             String output = controller.execute("pf", "GetPfRulesInfo");
 
@@ -142,7 +144,7 @@ public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshL
             output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
-            mRefreshTimeout = timeout < 10 ? 10 : timeout;
+            mRefreshTimeout = Math.max(timeout, 10);
 
         } catch (Exception e) {
             mLastError = processException(e);
@@ -202,10 +204,8 @@ public class InfoRules extends Fragment implements SwipeRefreshLayout.OnRefreshL
         TextView tvEvalsStates = view.findViewById(R.id.evalsStates);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvRule.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvRule.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvRule.setMaxLines(lines);
@@ -258,7 +258,7 @@ class RuleRecyclerAdapter extends RecyclerView.Adapter<RuleRecyclerAdapter.RuleV
 
     private final List<Rule> ruleList;
 
-    class RuleViewHolder extends RecyclerView.ViewHolder {
+    static class RuleViewHolder extends RecyclerView.ViewHolder {
         final TextView packetsBytes;
         final TextView rule;
         final TextView evalsStates;
@@ -282,6 +282,7 @@ class RuleRecyclerAdapter extends RecyclerView.Adapter<RuleRecyclerAdapter.RuleV
         this.ruleList = list;
     }
 
+    @NonNull
     @Override
     public RuleViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())

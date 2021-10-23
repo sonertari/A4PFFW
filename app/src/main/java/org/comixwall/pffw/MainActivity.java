@@ -51,6 +51,7 @@ import com.google.android.material.navigation.NavigationView;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Handler;
 import java.util.logging.Level;
@@ -192,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
    }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[], @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_CODE) {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -261,7 +262,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         if (bundle != null && bundle.containsKey("title") && bundle.containsKey("body") && bundle.containsKey("data")) {
             // If there is a notification bundle, show the notification fragment
             try {
-                JSONObject data = new JSONObject(bundle.getString("data"));
+                JSONObject data = new JSONObject(Objects.requireNonNull(bundle.getString("data")));
                 Notifications.addNotification(Notification.newInstance(data));
 
                 // Remove one of the extras, so we don't add the same notification again
@@ -380,7 +381,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         int id = item.getItemId();
 
         // Ignore requests for the same fragment already displayed
-        if (!mMenuItems2Fragments.get(id).isInstance(fragment)) {
+        if (!Objects.requireNonNull(mMenuItems2Fragments.get(id)).isInstance(fragment)) {
             FragmentManager fm = getSupportFragmentManager();
 
             boolean add = true;
@@ -404,7 +405,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 }
 
                 try {
-                    fragment = (Fragment) mMenuItems2Fragments.get(id).getConstructor().newInstance();
+                    fragment = (Fragment) Objects.requireNonNull(mMenuItems2Fragments.get(id)).getConstructor().newInstance();
                 } catch (Exception e) {
                     e.printStackTrace();
                     logger.severe("EXCEPTION: " + e.toString());

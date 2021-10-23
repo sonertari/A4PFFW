@@ -20,8 +20,9 @@
 package org.comixwall.pffw;
 
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -58,7 +59,7 @@ public class Dashboard extends Fragment implements  SwipeRefreshLayout.OnRefresh
     private static final List<DashboardEntry> mDashboardList = new ArrayList<>();
 
     private RefreshTimer mTimer;
-    private int mRefreshTimeout = 10;
+    private long mRefreshTimeout = 10;
 
     private SwipeRefreshLayout swipeRefresh;
     private DashboardEntryRecyclerAdapter mAdapter;
@@ -86,7 +87,7 @@ public class Dashboard extends Fragment implements  SwipeRefreshLayout.OnRefresh
         RecyclerView rvDashboard = view.findViewById(R.id.recyclerViewDashboard);
         rvDashboard.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvDashboard.setItemAnimator(new DefaultItemAnimator());
-        rvDashboard.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvDashboard.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         mAdapter = new DashboardEntryRecyclerAdapter(mDashboardList);
         rvDashboard.setAdapter(mAdapter);
         rvDashboard.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -166,10 +167,8 @@ public class Dashboard extends Fragment implements  SwipeRefreshLayout.OnRefresh
         TextView tvErrors = view.findViewById(R.id.errors);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvModule.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvModule.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvModule.setMaxLines(lines);
@@ -196,7 +195,7 @@ public class Dashboard extends Fragment implements  SwipeRefreshLayout.OnRefresh
             output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
-            mRefreshTimeout = timeout < 10 ? 10 : timeout;
+            mRefreshTimeout = Math.max(timeout, 10);
 
         } catch (Exception e) {
             mLastError = processException(e);
@@ -321,7 +320,7 @@ class DashboardEntryRecyclerAdapter extends RecyclerView.Adapter<DashboardEntryR
 
     private final List<DashboardEntry> dashboardEntryList;
 
-    class DashboardEntryViewHolder extends RecyclerView.ViewHolder {
+    static class DashboardEntryViewHolder extends RecyclerView.ViewHolder {
         final TextView status;
         final TextView errorStatus;
         final TextView module;
@@ -340,6 +339,7 @@ class DashboardEntryRecyclerAdapter extends RecyclerView.Adapter<DashboardEntryR
         this.dashboardEntryList = list;
     }
 
+    @NonNull
     @Override
     public DashboardEntryViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())

@@ -19,7 +19,6 @@
 
 package org.comixwall.pffw;
 
-import android.os.Build;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -85,7 +84,7 @@ public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         RecyclerView mRecyclerView = view.findViewById(R.id.recyclerView);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
-        mRecyclerView.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        mRecyclerView.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         mAdapter = new LogRecyclerAdapter(mLogsList);
         mRecyclerView.setAdapter(mAdapter);
         mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -184,7 +183,7 @@ public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshLi
             output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
-            mRefreshTimeout = timeout < 10 ? 10 : timeout;
+            mRefreshTimeout = Math.max(timeout, 10);
 
         } catch (Exception e) {
             mLastError = processException(e);
@@ -266,10 +265,8 @@ public class LogsLive extends Fragment implements SwipeRefreshLayout.OnRefreshLi
         TextView tvSrcDst = view.findViewById(R.id.srcDst);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvLog.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvLog.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvLog.setMaxLines(lines);

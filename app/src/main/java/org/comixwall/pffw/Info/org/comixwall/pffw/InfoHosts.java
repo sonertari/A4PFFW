@@ -19,8 +19,9 @@
 
 package org.comixwall.pffw;
 
-import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -38,6 +39,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.comixwall.pffw.MainActivity.cache;
 import static org.comixwall.pffw.MainActivity.controller;
@@ -89,10 +91,8 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
             TextView tvMac = view.findViewById(R.id.mac);
 
             int lines = 10;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                if (tvIp.getMaxLines() != 1) {
-                    lines = 1;
-                }
+            if (tvIp.getMaxLines() != 1) {
+                lines = 1;
             }
 
             tvIp.setMaxLines(lines);
@@ -108,10 +108,8 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
             TextView tvHost = view.findViewById(R.id.host);
 
             int lines = 10;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                if (tvIp.getMaxLines() != 1) {
-                    lines = 1;
-                }
+            if (tvIp.getMaxLines() != 1) {
+                lines = 1;
             }
 
             tvStartEnd.setMaxLines(lines);
@@ -140,7 +138,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         // ATTENTION: Should use separate LayoutManager for each RecyclerView.
         rvDhcpd.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvDhcpd.setItemAnimator(new DefaultItemAnimator());
-        rvDhcpd.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvDhcpd.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         mDhcpdAdapter = new ProcessRecyclerAdapter(mDhcpdList);
         rvDhcpd.setAdapter(mDhcpdAdapter);
         rvDhcpd.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -148,7 +146,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         RecyclerView rvDnsmasq = view.findViewById(R.id.recyclerViewDnsmasq);
         rvDnsmasq.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvDnsmasq.setItemAnimator(new DefaultItemAnimator());
-        rvDnsmasq.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvDnsmasq.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         mDnsmasqAdapter = new ProcessRecyclerAdapter(mDnsmasqList);
         rvDnsmasq.setAdapter(mDnsmasqAdapter);
         rvDnsmasq.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -156,7 +154,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         RecyclerView rvArpTable = view.findViewById(R.id.recyclerViewArpTable);
         rvArpTable.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvArpTable.setItemAnimator(new DefaultItemAnimator());
-        rvArpTable.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvArpTable.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         mArpTableAdapter = new ArpTableRecyclerAdapter(mArpTableList);
         rvArpTable.setAdapter(mArpTableAdapter);
         rvArpTable.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mArpTableItemClickListener));
@@ -164,7 +162,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         RecyclerView rvLeases = view.findViewById(R.id.recyclerViewLeases);
         rvLeases.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvLeases.setItemAnimator(new DefaultItemAnimator());
-        rvLeases.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvLeases.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         mLeasesAdapter = new LeaseRecyclerAdapter(mLeasesList);
         rvLeases.setAdapter(mLeasesAdapter);
         rvLeases.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), mLeasesItemClickListener));
@@ -240,7 +238,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
      */
     @Override
     public boolean executeTask() {
-        Boolean retval = true;
+        boolean retval = true;
         try {
             String output = controller.execute("dhcpd", "IsRunning");
             mDhcpdStatus = new JSONArray(output).get(2).toString();
@@ -266,7 +264,7 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
 
             output = controller.execute("pf", "GetReloadRate");
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
-            mRefreshTimeout = timeout < 10 ? 10 : timeout;
+            mRefreshTimeout = Math.max(timeout, 10);
 
         } catch (Exception e) {
             mLastError = processException(e);
@@ -374,10 +372,8 @@ public class InfoHosts extends Fragment implements SwipeRefreshLayout.OnRefreshL
         TextView tvUserGroup = view.findViewById(R.id.others);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvCommand.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvCommand.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvCommand.setMaxLines(lines);
@@ -427,7 +423,7 @@ class ArpTableRecyclerAdapter extends RecyclerView.Adapter<ArpTableRecyclerAdapt
 
     private final List<Arp> arpList;
 
-    class ArpViewHolder extends RecyclerView.ViewHolder {
+    static class ArpViewHolder extends RecyclerView.ViewHolder {
         final TextView onIf;
         final TextView ip;
         final TextView expire;
@@ -451,6 +447,7 @@ class ArpTableRecyclerAdapter extends RecyclerView.Adapter<ArpTableRecyclerAdapt
         this.arpList = list;
     }
 
+    @NonNull
     @Override
     public ArpViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -538,7 +535,7 @@ class LeaseRecyclerAdapter extends RecyclerView.Adapter<LeaseRecyclerAdapter.Lea
 
     private final List<Lease> leaseList;
 
-    class LeaseViewHolder extends RecyclerView.ViewHolder {
+    static class LeaseViewHolder extends RecyclerView.ViewHolder {
         final TextView startEnd;
         final TextView ip;
         final TextView status;
@@ -560,6 +557,7 @@ class LeaseRecyclerAdapter extends RecyclerView.Adapter<LeaseRecyclerAdapter.Lea
         this.leaseList = list;
     }
 
+    @NonNull
     @Override
     public LeaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())

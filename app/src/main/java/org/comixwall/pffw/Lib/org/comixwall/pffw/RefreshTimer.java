@@ -49,8 +49,8 @@ class RefreshTimer extends Timer {
         }
     };
 
-    public void start(int timeout) {
-        final int ONE_SECOND = 1000;
+    public void start(long timeout) {
+        final long ONE_SECOND = 1000;
         schedule(new RefreshTask(), timeout * ONE_SECOND, timeout * ONE_SECOND);
     }
 }

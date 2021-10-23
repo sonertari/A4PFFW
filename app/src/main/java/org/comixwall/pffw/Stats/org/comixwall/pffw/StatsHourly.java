@@ -34,6 +34,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -183,7 +184,7 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
 
     private void updateChartData(String k) {
         try {
-            ArrayList<BarEntry> values = mStats.get(k).values;
+            ArrayList<BarEntry> values = Objects.requireNonNull(mStats.get(k)).values;
             values.clear();
 
             int j = 0;
@@ -223,19 +224,19 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
     private void updateStatsLists(String k) {
         try {
             // Clear the stats first, in case there is no data
-            mStats.get(k).total = "0";
+            Objects.requireNonNull(mStats.get(k)).total = "0";
 
-            StatsKey2List k2ls = mStats.get(k).lists;
+            StatsKey2List k2ls = Objects.requireNonNull(mStats.get(k)).lists;
             String[] chartKeys = k2ls.keySet().toArray(new String[0]);
 
             for (String key : chartKeys) {
-                k2ls.get(key).clear();
+                Objects.requireNonNull(k2ls.get(key)).clear();
             }
 
             if (mJsonHourStats.has(k)) {
                 JSONObject cks = mJsonHourStats.getJSONObject(k);
 
-                mStats.get(k).total = cks.getString("Sum");
+                Objects.requireNonNull(mStats.get(k)).total = cks.getString("Sum");
 
                 for (String key : chartKeys) {
                     StatsList list = k2ls.get(key);
@@ -243,10 +244,10 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
                     JSONObject vs = cks.getJSONObject(key);
 
                     JSONArray statsKeys = vs.names();
-                    for (int i = 0; i < statsKeys.length(); i++) {
+                    for (int i = 0; i < Objects.requireNonNull(statsKeys).length(); i++) {
                         String sk = statsKeys.getString(i);
                         String v = vs.getString(sk);
-                        list.put(sk, Integer.parseInt(v));
+                        Objects.requireNonNull(list).put(sk, Integer.parseInt(v));
                     }
                 }
             }
@@ -269,11 +270,11 @@ public class StatsHourly extends StatsBase implements TimePickerDialog.OnTimeSet
             try {
                 int id = v.getId();
 
-                android.app.FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+                android.app.FragmentTransaction ft = requireActivity().getFragmentManager().beginTransaction();
 
                 if (id == R.id.logFile) {
-                    ((MainActivity) getActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
-                    ((MainActivity) getActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
+                    ((MainActivity) requireActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
+                    ((MainActivity) requireActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
                 } else {
                     DialogFragment dialog = new DialogFragment();
                     Bundle args = new Bundle();

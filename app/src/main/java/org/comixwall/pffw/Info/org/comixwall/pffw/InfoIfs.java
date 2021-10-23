@@ -19,8 +19,9 @@
 
 package org.comixwall.pffw;
 
-import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -39,6 +40,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.comixwall.pffw.MainActivity.cache;
 import static org.comixwall.pffw.MainActivity.controller;
@@ -76,7 +78,7 @@ public class InfoIfs extends Fragment implements SwipeRefreshLayout.OnRefreshLis
 
         rvIfs.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvIfs.setItemAnimator(new DefaultItemAnimator());
-        rvIfs.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvIfs.addItemDecoration(new RecyclerDivider(Objects.requireNonNull(requireActivity()), LinearLayoutManager.VERTICAL));
         mIfsAdapter = new IfRecyclerAdapter(mIfsList);
         rvIfs.setAdapter(mIfsAdapter);
         rvIfs.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -134,7 +136,7 @@ public class InfoIfs extends Fragment implements SwipeRefreshLayout.OnRefreshLis
 
     @Override
     public boolean executeTask() {
-        Boolean retval = true;
+        boolean retval = true;
         try {
             String output = controller.execute("pf", "GetPfIfsInfo");
 
@@ -144,7 +146,7 @@ public class InfoIfs extends Fragment implements SwipeRefreshLayout.OnRefreshLis
             output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
-            mRefreshTimeout = timeout < 10 ? 10 : timeout;
+            mRefreshTimeout = Math.max(timeout, 10);
 
         } catch (Exception e) {
             mLastError = processException(e);
@@ -205,10 +207,8 @@ public class InfoIfs extends Fragment implements SwipeRefreshLayout.OnRefreshLis
         TextView tvCleared = view.findViewById(R.id.cleared);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvName.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvName.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvName.setMaxLines(lines);
@@ -291,7 +291,7 @@ class IfRecyclerAdapter extends RecyclerView.Adapter<IfRecyclerAdapter.IfViewHol
 
     private final List<If> ifsList;
 
-    class IfViewHolder extends RecyclerView.ViewHolder {
+    static class IfViewHolder extends RecyclerView.ViewHolder {
         final TextView name;
         final TextView number;
         final TextView statesRules;
@@ -314,6 +314,7 @@ class IfRecyclerAdapter extends RecyclerView.Adapter<IfRecyclerAdapter.IfViewHol
         this.ifsList = list;
     }
 
+    @NonNull
     @Override
     public IfViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())

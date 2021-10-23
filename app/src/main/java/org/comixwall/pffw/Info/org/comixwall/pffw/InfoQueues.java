@@ -19,8 +19,9 @@
 
 package org.comixwall.pffw;
 
-import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -37,6 +38,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -76,7 +78,7 @@ public class InfoQueues extends Fragment implements SwipeRefreshLayout.OnRefresh
 
         rvQueues.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvQueues.setItemAnimator(new DefaultItemAnimator());
-        rvQueues.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvQueues.addItemDecoration(new RecyclerDivider(Objects.requireNonNull(requireActivity()), LinearLayoutManager.VERTICAL));
         mQueuesAdapter = new QueueRecyclerAdapter(mQueuesList);
         rvQueues.setAdapter(mQueuesAdapter);
         rvQueues.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -133,7 +135,7 @@ public class InfoQueues extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     @Override
     public boolean executeTask() {
-        Boolean retval = true;
+        boolean retval = true;
         try {
             String output = controller.execute("pf", "GetPfQueueInfo");
 
@@ -143,7 +145,7 @@ public class InfoQueues extends Fragment implements SwipeRefreshLayout.OnRefresh
             output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
-            mRefreshTimeout = timeout < 10 ? 10 : timeout;
+            mRefreshTimeout = Math.max(timeout, 10);
 
         } catch (Exception e) {
             mLastError = processException(e);
@@ -204,10 +206,8 @@ public class InfoQueues extends Fragment implements SwipeRefreshLayout.OnRefresh
         TextView tvDropped = view.findViewById(R.id.dropped);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvPacketsBytes.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvPacketsBytes.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvPacketsBytes.setMaxLines(lines);
@@ -258,7 +258,7 @@ class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdapter.Que
 
     private final List<Queue> queueList;
 
-    class QueueViewHolder extends RecyclerView.ViewHolder {
+    static class QueueViewHolder extends RecyclerView.ViewHolder {
         final TextView name;
         final TextView packetsBytes;
         final TextView dropped;
@@ -282,6 +282,7 @@ class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdapter.Que
         this.queueList = list;
     }
 
+    @NonNull
     @Override
     public QueueViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
@@ -307,8 +308,8 @@ class QueueRecyclerAdapter extends RecyclerView.Adapter<QueueRecyclerAdapter.Que
         Pattern p = Pattern.compile("(\\d+)\\s*/\\s*(\\d+)");
         Matcher m = p.matcher(queue.len);
         if (m.matches()) {
-            used = Float.parseFloat(m.group(1));
-            len = Float.parseFloat(m.group(2));
+            used = Float.parseFloat(Objects.requireNonNull(m.group(1)));
+            len = Float.parseFloat(Objects.requireNonNull(m.group(2)));
         }
 
         float ratio = used / len;

@@ -48,6 +48,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.comixwall.pffw.MainActivity.cache;
 import static org.comixwall.pffw.MainActivity.controller;
@@ -79,10 +80,10 @@ public class StatsGeneral extends StatsBase {
         view.findViewById(R.id.statsRequestsByDate).setOnClickListener(mLabelClickedHandler);
 
         generalStatsTables = new HashMap<>();
-        generalStatsTables.put("SrcIP", (TableLayout) view.findViewById(R.id.statsGeneralSrcIPTable));
-        generalStatsTables.put("DstIP", (TableLayout) view.findViewById(R.id.statsGeneralDstIPTable));
-        generalStatsTables.put("DPort", (TableLayout) view.findViewById(R.id.statsGeneralDPortTable));
-        generalStatsTables.put("Type", (TableLayout) view.findViewById(R.id.statsGeneralTypeTable));
+        generalStatsTables.put("SrcIP", view.findViewById(R.id.statsGeneralSrcIPTable));
+        generalStatsTables.put("DstIP", view.findViewById(R.id.statsGeneralDstIPTable));
+        generalStatsTables.put("DPort", view.findViewById(R.id.statsGeneralDPortTable));
+        generalStatsTables.put("Type", view.findViewById(R.id.statsGeneralTypeTable));
 
         view.findViewById(R.id.statsGeneralSrcIPTable).setOnClickListener(mLabelClickedHandler);
         view.findViewById(R.id.statsGeneralDstIPTable).setOnClickListener(mLabelClickedHandler);
@@ -140,7 +141,7 @@ public class StatsGeneral extends StatsBase {
 
         CardView cv = mCardViews.get(k);
 
-        @SuppressLint("CutPasteId") View bc = cv.findViewById(R.id.chart);
+        @SuppressLint("CutPasteId") View bc = Objects.requireNonNull(cv).findViewById(R.id.chart);
         LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) bc.getLayoutParams();
         ViewGroup owner = (ViewGroup) bc.getParent();
         owner.removeView(bc);
@@ -230,7 +231,7 @@ public class StatsGeneral extends StatsBase {
             String key = it.next();
             String count = mJsonGeneralStats.optString(key);
 
-            TableRow row = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
+            TableRow row = (TableRow) requireActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
 
             ((TextView) row.findViewById(R.id.tableValue)).setText(count);
             ((TextView) row.findViewById(R.id.tableKey)).setText(key);
@@ -247,7 +248,7 @@ public class StatsGeneral extends StatsBase {
 
             JSONObject values = mJsonBriefStats.getJSONObject("Date");
             JSONArray keys = values.names();
-            for (int i = 0; i < keys.length(); i++) {
+            for (int i = 0; i < Objects.requireNonNull(keys).length(); i++) {
                 String k = keys.getString(i);
                 String v = values.getString(k);
 
@@ -259,7 +260,7 @@ public class StatsGeneral extends StatsBase {
             Arrays.sort(kvps, reverseComparator);
 
             for (Object entry : kvps) {
-                TableRow row = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
+                TableRow row = (TableRow) requireActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
 
                 ((TextView) row.findViewById(R.id.tableValue)).setText(((Map.Entry<String, Integer>) entry).getValue().toString());
                 ((TextView) row.findViewById(R.id.tableKey)).setText(((Map.Entry<String, Integer>) entry).getKey());
@@ -276,13 +277,13 @@ public class StatsGeneral extends StatsBase {
 
             for (String sk : generalStatsTables.keySet()) {
                 TableLayout statsTable = generalStatsTables.get(sk);
-                statsTable.removeAllViews();
+                Objects.requireNonNull(statsTable).removeAllViews();
 
                 HashMap<String, Integer> list = new HashMap<>();
 
                 JSONObject values = mJsonBriefStats.getJSONObject(sk);
                 JSONArray keys = values.names();
-                for (int i = 0; i < keys.length(); i++) {
+                for (int i = 0; i < Objects.requireNonNull(keys).length(); i++) {
                     String k = keys.getString(i);
                     String v = values.getString(k);
 
@@ -295,7 +296,7 @@ public class StatsGeneral extends StatsBase {
 
                 int count = 1;
                 for (Object entry : kvps) {
-                    TableRow row = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
+                    TableRow row = (TableRow) requireActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
 
                     ((TextView) row.findViewById(R.id.tableValue)).setText(((Map.Entry<String, Integer>) entry).getValue().toString());
                     ((TextView) row.findViewById(R.id.tableKey)).setText(((Map.Entry<String, Integer>) entry).getKey());
@@ -352,13 +353,13 @@ public class StatsGeneral extends StatsBase {
 
     void updateChartData(String k) {
         try {
-            ArrayList<BarEntry> values = mStats.get(k).values;
+            ArrayList<BarEntry> values = Objects.requireNonNull(mStats.get(k)).values;
             values.clear();
 
             if (isDailyChart()) {
                 HashMap<Float, String> labels = new HashMap<>();
 
-                Integer i = 0;
+                int i = 0;
                 Iterator<String> it = mJsonStats.keys();
                 while (it.hasNext()) {
                     String d = it.next();
@@ -368,7 +369,7 @@ public class StatsGeneral extends StatsBase {
                     }
 
                     values.add(i, new BarEntry(i, Integer.parseInt(count), d));
-                    labels.put(i.floatValue(), d);
+                    labels.put((float) i, d);
                     i++;
                 }
 
@@ -421,16 +422,16 @@ public class StatsGeneral extends StatsBase {
     void updateListsData(String k) {
         try {
             // Clear the stats first, in case there is no data
-            mStats.get(k).total = "0";
+            Objects.requireNonNull(mStats.get(k)).total = "0";
 
-            StatsKey2List k2ls = mStats.get(k).lists;
+            StatsKey2List k2ls = Objects.requireNonNull(mStats.get(k)).lists;
             String[] chartKeys = k2ls.keySet().toArray(new String[0]);
 
             for (String key : chartKeys) {
-                k2ls.get(key).clear();
+                Objects.requireNonNull(k2ls.get(key)).clear();
             }
 
-            Integer count = 0;
+            int count = 0;
             Iterator<String> it = mJsonStats.keys();
             while (it.hasNext()) {
                 String d = it.next();
@@ -444,12 +445,12 @@ public class StatsGeneral extends StatsBase {
                         JSONObject vs = cks.getJSONObject(key);
 
                         JSONArray statsKeys = vs.names();
-                        for (int i = 0; i < statsKeys.length(); i++) {
+                        for (int i = 0; i < Objects.requireNonNull(statsKeys).length(); i++) {
                             String sk = statsKeys.getString(i);
                             String v = vs.getString(sk);
 
                             int c = Integer.parseInt(v);
-                            if (list.containsKey(sk)) {
+                            if (Objects.requireNonNull(list).containsKey(sk)) {
                                 c += list.get(sk);
                             }
                             list.put(sk, c);
@@ -458,7 +459,7 @@ public class StatsGeneral extends StatsBase {
                 }
             }
 
-            mStats.get(k).total = count.toString();
+            Objects.requireNonNull(mStats.get(k)).total = Integer.toString(count);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -470,7 +471,7 @@ public class StatsGeneral extends StatsBase {
         if (mIsLastChartDaily != isDailyChart()) {
             String[] keys = mCardViews.keySet().toArray(new String[0]);
             for (String k : keys) {
-                mCardViews.get(k).removeAllViews();
+                Objects.requireNonNull(mCardViews.get(k)).removeAllViews();
             }
 
             createStatsViews();
@@ -510,7 +511,7 @@ public class StatsGeneral extends StatsBase {
                         RelativeLayout.LayoutParams rlParamsGs = (RelativeLayout.LayoutParams) cvGs.getLayoutParams();
                         if (rlParamsGs.height == RelativeLayout.LayoutParams.WRAP_CONTENT) {
                             // XXX
-                            rlParamsGs.height = heightGs < 332 ? heightGs : 332;
+                            rlParamsGs.height = Math.min(heightGs, 332);
                         } else {
                             rlParamsGs.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
                         }
@@ -530,7 +531,7 @@ public class StatsGeneral extends StatsBase {
                         RelativeLayout.LayoutParams rlParams = (RelativeLayout.LayoutParams) cv.getLayoutParams();
                         if (rlParams.height == RelativeLayout.LayoutParams.WRAP_CONTENT) {
                             // XXX
-                            rlParams.height = height < 332 ? height : 332;
+                            rlParams.height = Math.min(height, 332);
                         } else {
                             rlParams.height = RelativeLayout.LayoutParams.WRAP_CONTENT;
                         }
@@ -539,9 +540,9 @@ public class StatsGeneral extends StatsBase {
                         break;
 
                     default:
-                        android.app.FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
-                        ((MainActivity) getActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
-                        ((MainActivity) getActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
+                        android.app.FragmentTransaction ft = requireActivity().getFragmentManager().beginTransaction();
+                        ((MainActivity) requireActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
+                        ((MainActivity) requireActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
                         break;
                 }
             } catch (Exception e) {

@@ -33,7 +33,7 @@ public class FirebaseService extends FirebaseMessagingService implements OnCompl
     }
 
     @Override
-    public void onNewToken(String t) {
+    public void onNewToken(@NonNull String t) {
         logger.info("Firebase refreshed token= " + t);
         token = t;
         sendToken = true;
@@ -47,7 +47,7 @@ public class FirebaseService extends FirebaseMessagingService implements OnCompl
     }
 
     @Override
-    public void onMessageReceived(RemoteMessage remoteMessage) {
+    public void onMessageReceived(@NonNull RemoteMessage remoteMessage) {
         try {
             if (remoteMessage.getNotification() != null) {
                 Intent intent = new Intent(this, MainActivity.class);

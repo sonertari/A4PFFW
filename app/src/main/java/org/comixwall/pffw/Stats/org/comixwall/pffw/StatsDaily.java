@@ -260,11 +260,11 @@ public class StatsDaily extends StatsGeneral {
                         setDefaults();
                         break;
                     default:
-                        android.app.FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+                        android.app.FragmentTransaction ft = requireActivity().getFragmentManager().beginTransaction();
 
                         if (id == R.id.logFile) {
-                            ((MainActivity) getActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
-                            ((MainActivity) getActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
+                            ((MainActivity) requireActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
+                            ((MainActivity) requireActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
                         } else {
                             DialogFragment dialog = new DialogFragment();
                             Bundle args = new Bundle();

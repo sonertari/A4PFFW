@@ -130,6 +130,7 @@ public class GraphDialog extends DialogFragment implements ImageView.OnTouchList
 
         ImageView view = (ImageView) v;
         view.setImageMatrix(matrix);
+        view.performClick();
         return true;
     }
 
@@ -152,7 +153,7 @@ public class GraphDialog extends DialogFragment implements ImageView.OnTouchList
     }
 
     private void dumpEvent(MotionEvent event) {
-        String names[] = {"DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE",
+        String[] names = {"DOWN", "UP", "MOVE", "CANCEL", "OUTSIDE",
                 "POINTER_DOWN", "POINTER_UP", "7?", "8?", "9?"};
         StringBuilder sb = new StringBuilder();
         int action = event.getAction();
@@ -161,7 +162,7 @@ public class GraphDialog extends DialogFragment implements ImageView.OnTouchList
         if (actionCode == MotionEvent.ACTION_POINTER_DOWN
                 || actionCode == MotionEvent.ACTION_POINTER_UP) {
             sb.append("(pid ").append(
-                    action >> MotionEvent.ACTION_POINTER_INDEX_MASK);
+                    action & MotionEvent.ACTION_POINTER_INDEX_MASK);
             sb.append(")");
         }
         sb.append("[");

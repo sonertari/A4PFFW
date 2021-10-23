@@ -21,6 +21,8 @@ package org.comixwall.pffw;
 
 import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -40,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Objects;
 
 import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
@@ -61,7 +64,7 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
     /**
      * Comparator used to sort notifications in reverse order.
      */
-    static Comparator comparator = new Comparator() {
+    static final Comparator comparator = new Comparator() {
         public int compare(Object o1, Object o2) {
             return ((Notification) o2).datetime.compareTo(((Notification) o1).datetime);
         }
@@ -106,7 +109,7 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
 
         rvNotifications.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvNotifications.setItemAnimator(new DefaultItemAnimator());
-        rvNotifications.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvNotifications.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         rvNotifications.setAdapter(new NotificationRecyclerAdapter(mNotificationsList));
         rvNotifications.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
@@ -126,10 +129,8 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
         TextView tvBody = view.findViewById(R.id.body);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvTitle.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvTitle.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvTitle.setMaxLines(lines);
@@ -174,7 +175,7 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
 
         fragment.setArguments(args);
 
-        FragmentManager fm = getActivity().getSupportFragmentManager();
+        FragmentManager fm = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 
@@ -184,7 +185,7 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
         transaction.replace(R.id.fragmentContainer, fragment);
         transaction.commit();
 
-        ((MainActivity)getActivity()).createOptionsMenu();
+        ((MainActivity) requireActivity()).createOptionsMenu();
     }
 
     // ATTENTION: ControllerTask.ControllerTaskListener interface implementation is for deleting token
@@ -239,7 +240,7 @@ public class Notifications extends Fragment implements RecyclerTouchListener.OnI
     private void deleteAllNotifications() {
         mNotificationsList.clear();
         NotificationRecyclerAdapter rvAdapter = (NotificationRecyclerAdapter)rvNotifications.getAdapter();
-        rvAdapter.notificationList.clear();
+        Objects.requireNonNull(rvAdapter).notificationList.clear();
         rvAdapter.notifyDataSetChanged();
     }
 }
@@ -270,7 +271,7 @@ class NotificationRecyclerAdapter extends RecyclerView.Adapter<NotificationRecyc
 
     public final List<Notification> notificationList = new ArrayList<>();
 
-    class NotificationViewHolder extends RecyclerView.ViewHolder {
+    static class NotificationViewHolder extends RecyclerView.ViewHolder {
         final TextView title;
         final TextView body;
         final TextView datetime;
@@ -290,6 +291,7 @@ class NotificationRecyclerAdapter extends RecyclerView.Adapter<NotificationRecyc
         this.notificationList.addAll(list);
     }
 
+    @NonNull
     @Override
     public NotificationViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())

@@ -19,8 +19,9 @@
 
 package org.comixwall.pffw;
 
-import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,6 +36,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.comixwall.pffw.MainActivity.controller;
 import static org.comixwall.pffw.MainActivity.fragment;
@@ -56,7 +58,7 @@ public class NotificationDetails extends Fragment implements RecyclerTouchListen
         View view = inflater.inflate(R.layout.notification_details, container, false);
 
         Bundle args = getArguments();
-        ((TextView) view.findViewById(R.id.title)).setText(args.getString("title"));
+        ((TextView) view.findViewById(R.id.title)).setText(Objects.requireNonNull(args).getString("title"));
         ((TextView) view.findViewById(R.id.body)).setText(args.getString("body"));
         ((TextView) view.findViewById(R.id.datetime)).setText(args.getString("datetime"));
 
@@ -64,7 +66,7 @@ public class NotificationDetails extends Fragment implements RecyclerTouchListen
 
         rvNotifications.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvNotifications.setItemAnimator(new DefaultItemAnimator());
-        rvNotifications.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvNotifications.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         rvNotifications.setAdapter(new NotificationDetailRecyclerAdapter(mNotificationDetails));
         rvNotifications.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
 
@@ -83,10 +85,8 @@ public class NotificationDetails extends Fragment implements RecyclerTouchListen
         TextView tvLog = view.findViewById(R.id.log);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvLog.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvLog.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvLog.setMaxLines(lines);
@@ -166,7 +166,7 @@ class NotificationDetailRecyclerAdapter extends RecyclerView.Adapter<Notificatio
 
     private final List<NotificationDetail> notificationList;
 
-    class NotificationDetailViewHolder extends RecyclerView.ViewHolder {
+    static class NotificationDetailViewHolder extends RecyclerView.ViewHolder {
         final TextView process;
         final TextView log;
         final TextView prio;
@@ -188,6 +188,7 @@ class NotificationDetailRecyclerAdapter extends RecyclerView.Adapter<Notificatio
         this.notificationList = list;
     }
 
+    @NonNull
     @Override
     public NotificationDetailViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())

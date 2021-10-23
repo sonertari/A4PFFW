@@ -47,7 +47,6 @@ import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 import com.github.mikephil.charting.utils.MPPointF;
-import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.google.common.collect.HashBiMap;
 
 import org.json.JSONObject;
@@ -58,6 +57,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 import static org.comixwall.pffw.MainActivity.cache;
 import static org.comixwall.pffw.Utils.showMessage;
@@ -70,13 +70,13 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
         DatePickerDialog.OnDateSetListener, ControllerTask.ControllerTaskListener {
 
     // Type definitions
-    class StatsList extends HashMap<String, Integer> {
+    static class StatsList extends HashMap<String, Integer> {
     }
 
-    class StatsKey2List extends HashMap<String, StatsList> {
+    static class StatsKey2List extends HashMap<String, StatsList> {
     }
 
-    class Stats {
+    static class Stats {
         final String label;
         final Integer color;
         final BarChart chart;
@@ -122,11 +122,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
     /**
      * Comparator used to sort all of the top lists in reverse order.
      */
-    final Comparator reverseComparator = new Comparator() {
-        public int compare(Object o1, Object o2) {
-            return ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
-        }
-    };
+    final Comparator reverseComparator = (o1, o2) -> ((Map.Entry<String, Integer>) o2).getValue().compareTo(((Map.Entry<String, Integer>) o1).getValue());
 
     IAxisValueFormatter xavf;
     IAxisValueFormatter yavf;
@@ -189,10 +185,10 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
         swipeRefresh.setOnRefreshListener(this);
 
         mCardViews = new HashMap<>();
-        mCardViews.put("Total", (CardView) view.findViewById(R.id.cardviewTotal));
-        mCardViews.put("Pass", (CardView) view.findViewById(R.id.cardviewPass));
-        mCardViews.put("Block", (CardView) view.findViewById(R.id.cardviewBlock));
-        mCardViews.put("Match", (CardView) view.findViewById(R.id.cardviewMatch));
+        mCardViews.put("Total", view.findViewById(R.id.cardviewTotal));
+        mCardViews.put("Pass", view.findViewById(R.id.cardviewPass));
+        mCardViews.put("Block", view.findViewById(R.id.cardviewBlock));
+        mCardViews.put("Match", view.findViewById(R.id.cardviewMatch));
     }
 
     @Override
@@ -239,7 +235,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
     void createStatsViews() {
         String[] keys = mCardViews.keySet().toArray(new String[0]);
         for (String k : keys) {
-            getActivity().getLayoutInflater().inflate(R.layout.stats_cardview, mCardViews.get(k), true);
+            requireActivity().getLayoutInflater().inflate(R.layout.stats_cardview, mCardViews.get(k), true);
         }
     }
 
@@ -263,7 +259,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
                 configureBarChart(k);
             }
 
-            ((TextView) cv.findViewById(R.id.chartLabel)).setText(mChartLabels.get(k));
+            ((TextView) Objects.requireNonNull(cv).findViewById(R.id.chartLabel)).setText(mChartLabels.get(k));
 
             StatsKey2List statsLists = new StatsKey2List();
             statsLists.put("SrcIP", new StatsList());
@@ -272,18 +268,18 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
             statsLists.put("Type", new StatsList());
 
             HashMap<String, TableLayout> statsTables = new HashMap<>();
-            statsTables.put("SrcIP", (TableLayout) cv.findViewById(R.id.statsSrcIPTable));
-            statsTables.put("DstIP", (TableLayout) cv.findViewById(R.id.statsDstIPTable));
-            statsTables.put("DPort", (TableLayout) cv.findViewById(R.id.statsDPortTable));
-            statsTables.put("Type", (TableLayout) cv.findViewById(R.id.statsTypeTable));
+            statsTables.put("SrcIP", cv.findViewById(R.id.statsSrcIPTable));
+            statsTables.put("DstIP", cv.findViewById(R.id.statsDstIPTable));
+            statsTables.put("DPort", cv.findViewById(R.id.statsDPortTable));
+            statsTables.put("Type", cv.findViewById(R.id.statsTypeTable));
 
             mStats.put(k, new Stats(
                     mChartLabels.get(k),
                     mColors.get(k),
-                    new ArrayList<BarEntry>(),
-                    (BarChart) cv.findViewById(R.id.chart),
+                    new ArrayList<>(),
+                    cv.findViewById(R.id.chart),
                     "0",
-                    (TextView) cv.findViewById(R.id.chartTotal),
+                    cv.findViewById(R.id.chartTotal),
                     statsLists,
                     statsTables
             ));
@@ -306,8 +302,8 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
 
     @Override
     public void postExecute(boolean result) {
-        ((MainActivity) getActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
-        mSelectedLogFileOpt = ((MainActivity) getActivity()).logFilePickerDialog.updateLogFileLists();
+        ((MainActivity) requireActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
+        mSelectedLogFileOpt = ((MainActivity) requireActivity()).logFilePickerDialog.updateLogFileLists();
 
         updateLogFileText();
         updateDateTimeText();
@@ -334,7 +330,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
 
         CardView cv = mCardViews.get(k);
 
-        BarChart chart = cv.findViewById(R.id.chart);
+        BarChart chart = Objects.requireNonNull(cv).findViewById(R.id.chart);
         chart.setOnChartValueSelectedListener(this);
         chart.setDrawValueAboveBar(true);
         chart.setDrawBarShadow(false);
@@ -408,10 +404,10 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
 
     void updateChart(String key) {
 
-        ArrayList<BarEntry> values = mStats.get(key).values;
+        ArrayList<BarEntry> values = Objects.requireNonNull(mStats.get(key)).values;
 
         BarDataSet set1;
-        BarChart chart = mStats.get(key).chart;
+        BarChart chart = Objects.requireNonNull(mStats.get(key)).chart;
 
         if (chart.getData() != null && chart.getData().getDataSetCount() > 0) {
             set1 = (BarDataSet) chart.getData().getDataSetByIndex(0);
@@ -420,7 +416,7 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
             chart.notifyDataSetChanged();
         } else {
             set1 = new BarDataSet(values, key);
-            set1.setColor(mStats.get(key).color);
+            set1.setColor(Objects.requireNonNull(mStats.get(key)).color);
 
             ArrayList<IBarDataSet> dataSets = new ArrayList<>();
             dataSets.add(set1);
@@ -428,35 +424,32 @@ public abstract class StatsBase extends Fragment implements OnChartValueSelected
             BarData data = new BarData(dataSets);
             data.setValueTextSize(10f);
             data.setBarWidth(0.9f);
-            IValueFormatter f = new IValueFormatter() {
-                @Override
-                public String getFormattedValue(float value, Entry entry, int dataSetIndex, ViewPortHandler viewPortHandler) {
-                    DecimalFormat mFormat = new DecimalFormat("###,###,###,##0");
-                    return mFormat.format(value);
-                }
+            IValueFormatter f = (value, entry, dataSetIndex, viewPortHandler) -> {
+                DecimalFormat mFormat = new DecimalFormat("###,###,###,##0");
+                return mFormat.format(value);
             };
             data.setValueFormatter(f);
 
             chart.setData(data);
         }
 
-        mStats.get(key).chart.invalidate();
+        Objects.requireNonNull(mStats.get(key)).chart.invalidate();
     }
 
     void updateLists(String key) {
 
-        mStats.get(key).totalLabel.setText(String.format(getResources().getString(R.string.total_smallcaps), mStats.get(key).total));
+        Objects.requireNonNull(mStats.get(key)).totalLabel.setText(String.format(getResources().getString(R.string.total_smallcaps), Objects.requireNonNull(mStats.get(key)).total));
 
         for (String k : statsKeys) {
-            TableLayout statsTable = mStats.get(key).statsTables.get(k);
-            statsTable.removeAllViews();
+            TableLayout statsTable = Objects.requireNonNull(mStats.get(key)).statsTables.get(k);
+            Objects.requireNonNull(statsTable).removeAllViews();
 
-            Object[] kvps = mStats.get(key).lists.get(k).entrySet().toArray();
+            Object[] kvps = Objects.requireNonNull(Objects.requireNonNull(mStats.get(key)).lists.get(k)).entrySet().toArray();
             Arrays.sort(kvps, reverseComparator);
 
             int count = 1;
             for (Object entry : kvps) {
-                TableRow row = (TableRow) getActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
+                TableRow row = (TableRow) requireActivity().getLayoutInflater().inflate(R.layout.stats_table_row, new TableRow(this.view.getContext()), true);
 
                 ((TextView) row.findViewById(R.id.tableValue)).setText(((Map.Entry<String, Integer>) entry).getValue().toString());
                 ((TextView) row.findViewById(R.id.tableKey)).setText(((Map.Entry<String, Integer>) entry).getKey());

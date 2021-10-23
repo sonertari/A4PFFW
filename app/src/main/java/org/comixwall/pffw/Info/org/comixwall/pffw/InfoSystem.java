@@ -19,8 +19,9 @@
 
 package org.comixwall.pffw;
 
-import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -37,6 +38,7 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static org.comixwall.pffw.MainActivity.cache;
 import static org.comixwall.pffw.MainActivity.controller;
@@ -96,7 +98,7 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
         RecyclerView rvSymon = view.findViewById(R.id.recyclerViewSymon);
         rvSymon.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvSymon.setItemAnimator(new DefaultItemAnimator());
-        rvSymon.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvSymon.addItemDecoration(new RecyclerDivider(Objects.requireNonNull(requireActivity()), LinearLayoutManager.VERTICAL));
         mSymonAdapter = new ProcessRecyclerAdapter(mSymonList);
         rvSymon.setAdapter(mSymonAdapter);
         rvSymon.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -104,7 +106,7 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
         RecyclerView rvSymux = view.findViewById(R.id.recyclerViewSymux);
         rvSymux.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvSymux.setItemAnimator(new DefaultItemAnimator());
-        rvSymux.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvSymux.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         mSymuxAdapter = new ProcessRecyclerAdapter(mSymuxList);
         rvSymux.setAdapter(mSymuxAdapter);
         rvSymux.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -112,7 +114,7 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
         RecyclerView rvSystem = view.findViewById(R.id.recyclerViewSystem);
         rvSystem.setLayoutManager(new LinearLayoutManager(getActivity()));
         rvSystem.setItemAnimator(new DefaultItemAnimator());
-        rvSystem.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        rvSystem.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         mSystemAdapter = new ProcessRecyclerAdapter(mSystemList);
         rvSystem.setAdapter(mSystemAdapter);
         rvSystem.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -179,7 +181,7 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
 
     @Override
     public boolean executeTask() {
-        Boolean retval = true;
+        boolean retval = true;
         try {
             String output = controller.execute("symon", "IsRunning");
 
@@ -207,7 +209,7 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
             output = controller.execute("pf", "GetReloadRate");
 
             int timeout = Integer.parseInt(new JSONArray(output).get(0).toString());
-            mRefreshTimeout = timeout < 10 ? 10 : timeout;
+            mRefreshTimeout = Math.max(timeout, 10);
 
         } catch (Exception e) {
             mLastError = processException(e);
@@ -277,10 +279,8 @@ public class InfoSystem extends Fragment implements SwipeRefreshLayout.OnRefresh
         TextView tvOthers = view.findViewById(R.id.others);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvCommand.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvCommand.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvCommand.setMaxLines(lines);
@@ -343,7 +343,7 @@ class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter
 
     private final List<Process> procsList;
 
-    class ProcessViewHolder extends RecyclerView.ViewHolder {
+    static class ProcessViewHolder extends RecyclerView.ViewHolder {
         final TextView cpuMemTime;
         final TextView command;
         final TextView pid;
@@ -367,6 +367,7 @@ class ProcessRecyclerAdapter extends RecyclerView.Adapter<ProcessRecyclerAdapter
         this.procsList = list;
     }
 
+    @NonNull
     @Override
     public ProcessViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())

@@ -19,8 +19,9 @@
 
 package org.comixwall.pffw;
 
-import android.os.Build;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.DefaultItemAnimator;
@@ -99,7 +100,7 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
         RecyclerView recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addItemDecoration(new RecyclerDivider(getActivity(), LinearLayoutManager.VERTICAL));
+        recyclerView.addItemDecoration(new RecyclerDivider(requireActivity(), LinearLayoutManager.VERTICAL));
         mAdapter = new LogRecyclerAdapter(mLogsList);
         recyclerView.setAdapter(mAdapter);
         recyclerView.addOnItemTouchListener(new RecyclerTouchListener(getActivity(), this));
@@ -212,8 +213,8 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
 
     @Override
     public void postExecute(boolean result) {
-        ((MainActivity) getActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
-        mSelectedLogFileOpt = ((MainActivity) getActivity()).logFilePickerDialog.updateLogFileLists();
+        ((MainActivity) requireActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
+        mSelectedLogFileOpt = ((MainActivity) requireActivity()).logFilePickerDialog.updateLogFileLists();
 
         updateSelections();
 
@@ -338,10 +339,10 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
                 int id = v.getId();
 
                 if (id == R.id.logFile) {
-                    android.app.FragmentTransaction ft = getActivity().getFragmentManager().beginTransaction();
+                    android.app.FragmentTransaction ft = requireActivity().getFragmentManager().beginTransaction();
 
-                    ((MainActivity) getActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
-                    ((MainActivity) getActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
+                    ((MainActivity) requireActivity()).logFilePickerDialog.setArguments(mLogFile, mJsonLogFileList);
+                    ((MainActivity) requireActivity()).logFilePickerDialog.show(ft, "Selection Dialog");
                 } else {
                     // Navigation buttons
                     mButtonPressed = true;
@@ -362,10 +363,8 @@ public class LogsArchives extends Fragment implements SwipeRefreshLayout.OnRefre
         TextView tvSrcDst = view.findViewById(R.id.srcDst);
 
         int lines = 10;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-            if (tvLog.getMaxLines() != 1) {
-                lines = 1;
-            }
+        if (tvLog.getMaxLines() != 1) {
+            lines = 1;
         }
 
         tvLog.setMaxLines(lines);
@@ -420,7 +419,7 @@ class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.LogView
 
     private final List<Log> logsList;
 
-    class LogViewHolder extends RecyclerView.ViewHolder {
+    static class LogViewHolder extends RecyclerView.ViewHolder {
         final TextView number;
         final TextView dirIf;
         final TextView srcDst;
@@ -444,6 +443,7 @@ class LogRecyclerAdapter extends RecyclerView.Adapter<LogRecyclerAdapter.LogView
         this.logsList = list;
     }
 
+    @NonNull
     @Override
     public LogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())

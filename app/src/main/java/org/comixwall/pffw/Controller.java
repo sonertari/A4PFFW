@@ -30,13 +30,11 @@ import androidx.fragment.app.Fragment;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.channel.direct.Session;
-import net.schmizz.sshj.transport.verification.HostKeyVerifier;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.security.PublicKey;
 import java.security.Security;
 import java.util.concurrent.TimeUnit;
 
@@ -79,10 +77,6 @@ public class Controller extends Service {
     private static String mUser;
     private static String mPassword;
     private static String mHost;
-
-    public String getHost() {
-        return mHost;
-    }
 
     private static int mPort;
 
@@ -225,13 +219,7 @@ public class Controller extends Service {
             ssh = new SSHClient();
 
             // Avoid asking for key confirmation
-            HostKeyVerifier hostKeyVerifier = new HostKeyVerifier() {
-                @Override
-                public boolean verify(String hostname, int port, PublicKey key) {
-                    return true;
-                }
-            };
-            ssh.addHostKeyVerifier(hostKeyVerifier);
+            ssh.addHostKeyVerifier((h, p, k) -> true);
 
             logger.info("Controller ssh connect");
             ssh.connect(hostname, port);
@@ -258,7 +246,7 @@ public class Controller extends Service {
      * @throws Exception
      */
     private String runSSHCommand(String command) throws Exception {
-        String out = "";
+        String out;
 
         Session session = null;
         try {
