@@ -165,9 +165,13 @@ public class Login extends Fragment implements ControllerTask.ControllerTaskList
             FirebaseMessaging.getInstance().getToken().addOnCompleteListener(new OnCompleteListener<String>() {
                 @Override
                 public void onComplete(@NonNull Task<String> task) {
-                    token = task.getResult();
-                    // Controller sends the token before the next command it executes, and lowers this sendToken flag
-                    sendToken = true;
+                    try {
+                        token = task.getResult();
+                        // Controller sends the token before the next command it executes, and lowers this sendToken flag
+                        sendToken = true;
+                    } catch (Exception e) {
+                        mLastError = processException(e);
+                    }
                 }
             });
 
