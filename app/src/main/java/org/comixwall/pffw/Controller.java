@@ -30,12 +30,15 @@ import androidx.fragment.app.Fragment;
 import net.schmizz.sshj.SSHClient;
 import net.schmizz.sshj.common.IOUtils;
 import net.schmizz.sshj.connection.channel.direct.Session;
+import net.schmizz.sshj.transport.verification.HostKeyVerifier;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.security.PublicKey;
 import java.security.Security;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.comixwall.pffw.MainActivity.deleteToken;
@@ -219,7 +222,17 @@ public class Controller extends Service {
             ssh = new SSHClient();
 
             // Avoid asking for key confirmation
-            ssh.addHostKeyVerifier((h, p, k) -> true);
+            ssh.addHostKeyVerifier(new HostKeyVerifier() {
+                @Override
+                public boolean verify(String hostname, int port, PublicKey key) {
+                    return true;
+                }
+
+                @Override
+                public List<String> findExistingAlgorithms(String hostname, int port) {
+                    return null;
+                }
+            });
 
             logger.info("Controller ssh connect");
             ssh.connect(hostname, port);
